@@ -4,4 +4,5 @@ __all__ = ['hello']
 
 #Cell
 def hello():
-    return 'hello'
+    print("torch.cuda.is_available():", torch.cuda.is_available())
+    return "hello"

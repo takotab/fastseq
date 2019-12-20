@@ -8,35 +8,43 @@
 
 -->
 
-# Project name here
+# Fastseq
 
-> Summary description here.
+> A way to use fastai with sequence data
 
 
 This file will become your README and also the index of your documentation.
 
-## Install
-
-`pip install your_project_name`
-
 ## How to use
 
-Fill me in please! Don't forget code examples:
+Examples:
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
 ```python
-1+1
+hello()
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
 
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-8-a75d7781aaeb> in <module>
+    ----> 1 hello()
+    
+
+    ~/dev/fastseq/fastseq/core.py in hello()
+          5 #Cell
+          6 def hello():
+    ----> 7     print("torch.cuda.is_available():", torch.cuda.is_available())
+          8     return "hello"
 
 
-    2
-
+    NameError: name 'torch' is not defined
 
 
 </div>

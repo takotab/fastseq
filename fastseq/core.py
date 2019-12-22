@@ -3,6 +3,9 @@
 __all__ = ['hello']
 
 #Cell
+import torch
+
+#Cell
 def hello():
     print("torch.cuda.is_available():", torch.cuda.is_available())
     return "hello"

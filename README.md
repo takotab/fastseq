@@ -12,6 +12,36 @@
 
 > A way to use fastai with sequence data
 
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
+from fastai2.core import *
+```
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
+from fastcore.imports import *
+```
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
+sleep(1)
+```
+
+</div>
+
+</div>
 
 This file will become your README and also the index of your documentation.
 
@@ -33,7 +63,7 @@ hello()
 
     NameError                                 Traceback (most recent call last)
 
-    <ipython-input-8-a75d7781aaeb> in <module>
+    <ipython-input-12-a75d7781aaeb> in <module>
     ----> 1 hello()
     
 

@@ -1,6 +1,7 @@
 ---
 
 title: Fastseq
+
 keywords: fastai
 sidebar: home_sidebar
 
@@ -21,45 +22,6 @@ summary: "A way to use fastai with sequence data"
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastai2.core</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastcore.imports</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This file will become your README and also the index of your documentation.</p>
@@ -73,9 +35,24 @@ summary: "A way to use fastai with sequence data"
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastseq.core</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastseq.dataset</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastai2.basics</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Examples:</p>
+<p>Getting the data fastai style:</p>
 
 </div>
 </div>
@@ -85,7 +62,8 @@ summary: "A way to use fastai with sequence data"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hello</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">m4_daily</span><span class="p">)</span>
+<span class="n">path</span>
 </pre></div>
 
     </div>
@@ -97,21 +75,170 @@ summary: "A way to use fastai with sequence data"
 
 <div class="output_area">
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-12-a75d7781aaeb&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>hello<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">~/dev/fastseq/fastseq/core.py</span> in <span class="ansi-cyan-fg">hello</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg">#Cell</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-green-fg">def</span> hello<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">     </span>print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;torch.cuda.is_available():&#34;</span><span class="ansi-blue-fg">,</span> torch<span class="ansi-blue-fg">.</span>cuda<span class="ansi-blue-fg">.</span>is_available<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span>     <span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">&#34;hello&#34;</span>
 
-<span class="ansi-red-fg">NameError</span>: name &#39;torch&#39; is not defined</pre>
+<div class="output_text output_subarea output_execute_result">
+<pre>PosixPath(&#39;/home/tako/.fastai/data/m4_daily&#39;)</pre>
 </div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># df_train = pd.read_csv(path/&#39;train.csv&#39;)</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="o">/</span><span class="s1">&#39;val.csv&#39;</span><span class="p">)</span>
+<span class="n">df_test</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>V1</th>
+      <th>V2</th>
+      <th>V3</th>
+      <th>V4</th>
+      <th>V5</th>
+      <th>V6</th>
+      <th>V7</th>
+      <th>V8</th>
+      <th>V9</th>
+      <th>V10</th>
+      <th>V11</th>
+      <th>V12</th>
+      <th>V13</th>
+      <th>V14</th>
+      <th>V15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>D1</td>
+      <td>2039.20</td>
+      <td>2035.00</td>
+      <td>2051.80</td>
+      <td>2061.8</td>
+      <td>2063.50</td>
+      <td>2069.5</td>
+      <td>2054.00</td>
+      <td>2057.00</td>
+      <td>2062.80</td>
+      <td>2066.40</td>
+      <td>2067.40</td>
+      <td>2071.40</td>
+      <td>2083.80</td>
+      <td>2080.60</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>D2</td>
+      <td>2986.00</td>
+      <td>3001.20</td>
+      <td>2975.90</td>
+      <td>2996.1</td>
+      <td>2981.90</td>
+      <td>2985.5</td>
+      <td>2975.80</td>
+      <td>2956.20</td>
+      <td>2964.70</td>
+      <td>2989.00</td>
+      <td>2991.40</td>
+      <td>3024.90</td>
+      <td>3070.80</td>
+      <td>3076.90</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>D3</td>
+      <td>1120.70</td>
+      <td>1117.90</td>
+      <td>1115.10</td>
+      <td>1112.3</td>
+      <td>1109.50</td>
+      <td>1106.7</td>
+      <td>1103.90</td>
+      <td>1101.10</td>
+      <td>1098.30</td>
+      <td>1095.50</td>
+      <td>1092.70</td>
+      <td>1089.90</td>
+      <td>1087.10</td>
+      <td>1084.30</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>D4</td>
+      <td>1190.00</td>
+      <td>1162.00</td>
+      <td>1134.00</td>
+      <td>1106.0</td>
+      <td>1078.00</td>
+      <td>1050.0</td>
+      <td>1022.00</td>
+      <td>994.00</td>
+      <td>966.00</td>
+      <td>938.00</td>
+      <td>910.00</td>
+      <td>1428.00</td>
+      <td>1400.00</td>
+      <td>1372.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>D5</td>
+      <td>5904.67</td>
+      <td>5917.05</td>
+      <td>5922.58</td>
+      <td>5928.8</td>
+      <td>5935.29</td>
+      <td>6002.8</td>
+      <td>6009.47</td>
+      <td>6014.82</td>
+      <td>6020.19</td>
+      <td>6072.49</td>
+      <td>6077.72</td>
+      <td>6080.23</td>
+      <td>6082.75</td>
+      <td>6108.07</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
 </div>
 
 </div>

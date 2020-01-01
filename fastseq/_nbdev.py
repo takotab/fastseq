@@ -3,13 +3,14 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"hello": "00_core.ipynb",
-         "m4_base": "01_dataset.ipynb",
-         "URLs.m4_daily": "01_dataset.ipynb"}
+         "m4_base": "01_data.external.ipynb",
+         "URLs.m4_daily": "01_data.external.ipynb",
+         "TimeSeriesDataset": "02_data.load.ipynb"}
 
 modules = ["core.py",
-           "dataset.py"]
+           "data/external.py",
+           "data/load.py"]
 
 git_url = "https://github.com/takotab/fastseq/tree/master/"
-
 
 def custom_doc_links(name): return None

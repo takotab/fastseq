@@ -3,10 +3,13 @@
 __all__ = ['TimeSeriesDataset']
 
 # Cell
+
+# note this is still the https://github.com/MSRDL/Deep4Cast/blob/master/deep4cast/datasets.py needs some tweaks to work with fastai
+
 import numpy as np
 from torch.utils.data import Dataset
 
-from deep4cast import transforms
+# from deep4cast import transforms
 
 
 class TimeSeriesDataset(Dataset):

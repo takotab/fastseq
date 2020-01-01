@@ -14,7 +14,7 @@ entries:
       url: /core
     - output: web,pdf
       title: Title
-      url: /dataset
+      url: /data.load
     output: web
     title: fastseq
   output: web

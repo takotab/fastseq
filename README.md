@@ -22,6 +22,7 @@ This file will become your README and also the index of your documentation.
 ```python
 from fastseq.core import *
 from fastseq.data.external import *
+from fastseq.data.load import *
 from fastai2.basics import *
 ```
 

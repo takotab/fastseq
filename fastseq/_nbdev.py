@@ -5,7 +5,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"hello": "00_core.ipynb",
          "m4_base": "01_data.external.ipynb",
          "URLs.m4_daily": "01_data.external.ipynb",
-         "TimeSeriesDataset": "02_data.load.ipynb"}
+         "TimeSeriesDataset": "03_data.load.ipynb"}
 
 modules = ["core.py",
            "data/external.py",

@@ -110,7 +110,6 @@ class TimeSeriesDataset(Dataset):
         # Create the input and output for the sample
         sample = (X,y)
         if self.transform is not None:
-            print('applying transform')
             sample = self.transform(sample)
 
 #         # Static covariates can be attached

@@ -5,12 +5,15 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"hello": "00_core.ipynb",
          "m4_base": "01_data.external.ipynb",
          "URLs.m4_daily": "01_data.external.ipynb",
+         "TimeSeriesDataset": "03_data.load.ipynb",
          "pad_zeros": "03_data.load.ipynb",
-         "TimeSeriesDataset": "03_data.load.ipynb"}
+         "ConcreteDropout": "04_models.wavenet.ipynb",
+         "WaveNet": "04_models.wavenet.ipynb"}
 
 modules = ["core.py",
            "data/external.py",
-           "data/load.py"]
+           "data/load.py",
+           "models/wavenet.py"]
 
 git_url = "https://github.com/takotab/fastseq/tree/master/"
 

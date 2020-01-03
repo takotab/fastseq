@@ -25,24 +25,14 @@ summary: "summary"
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Dataset">Dataset<a class="anchor-link" href="#Dataset">&#182;</a></h1>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
@@ -56,7 +46,30 @@ summary: "summary"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TimeSeriesDataset" class="doc_header"><code>class</code> <code>TimeSeriesDataset</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/load.py#L17" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TimeSeriesDataset</code>(<strong><code>time_series</code></strong>, <strong><code>lookback</code></strong>, <strong><code>horizon</code></strong>, <strong><code>step</code></strong>, <strong><code>static_covs</code></strong>=<em><code>None</code></em>, <strong><code>thinning</code></strong>=<em><code>1.0</code></em>, <strong><code>transform</code></strong>=<em><code>None</code></em>, <strong><code>splits</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>Dataset</code></p>
+<h4 id="pad_zeros" class="doc_header"><code>pad_zeros</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/load.py#L19" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pad_zeros</code>(<strong><code>X</code></strong>, <strong><code>lenght</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="TimeSeriesDataset" class="doc_header"><code>class</code> <code>TimeSeriesDataset</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/load.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TimeSeriesDataset</code>(<strong><code>time_series</code></strong>, <strong><code>lookback</code></strong>, <strong><code>horizon</code></strong>, <strong><code>step</code></strong>, <strong><code>static_covs</code></strong>=<em><code>None</code></em>, <strong><code>thinning</code></strong>=<em><code>1.0</code></em>, <strong><code>transform</code></strong>=<em><code>None</code></em>) :: <code>Dataset</code></p>
 </blockquote>
 <p>Takes a list of time series and provides access to windowed subseries for
 training.
@@ -69,12 +82,8 @@ Arguments:</p>
 * cat_names (list): list of catigorical column names.
 * cont_names (list): list of continues colomn names.
 * y_names (list): list of names of the columns to predict.
-* splits (list): DOES NOT WORK
 * static_covs (list): Static covariates for each item in ``time_series`` list.
-* thinning (float): Fraction of examples to include.
-
-</code></pre>
-<p>Keywords for <code>fastai</code>'s <code>Tabular</code> are allowed (except <code>splits</code>).</p>
+* thinning (float): Fraction of examples to include.</code></pre>
 
 </div>
 
@@ -95,7 +104,7 @@ Arguments:</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">14</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">12</span>
 <span class="n">lookback</span> <span class="o">=</span> <span class="mi">128</span>
 </pre></div>
 
@@ -110,26 +119,13 @@ Arguments:</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">lenghts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">data_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">i</span><span class="o">+.</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">lenghts</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span>
-                            <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">t</span><span class="p">[:</span><span class="n">lenghts</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(),</span>
-                            <span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">lenghts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                           <span class="p">})</span><span class="o">.</span><span class="n">T</span>
-              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
-</pre></div>
+<span class="n">lenghts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">140</span><span class="p">,</span><span class="mi">140</span><span class="p">]</span>
+<span class="n">data_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="o">+.</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">l</span><span class="p">]),</span>
+              <span class="n">t</span><span class="p">[:</span><span class="n">l</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()),</span>
+             <span class="p">])</span>
+              <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lenghts</span><span class="p">)]</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data_train</span><span class="p">[:</span><span class="mi">10</span><span class="p">]])</span>
-<span class="n">data_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data_train</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -142,135 +138,9 @@ Arguments:</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[(3, 814), (3, 402), (3, 101), (3, 821), (3, 335), (3, 708), (3, 985), (3, 744), (3, 753), (3, 406)]
+<pre>[(2, 20), (2, 10), (2, 140), (2, 140)]
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>0</th>
-      <th>1</th>
-      <th>2</th>
-      <th>3</th>
-      <th>4</th>
-      <th>5</th>
-      <th>6</th>
-      <th>7</th>
-      <th>8</th>
-      <th>9</th>
-      <th>...</th>
-      <th>804</th>
-      <th>805</th>
-      <th>806</th>
-      <th>807</th>
-      <th>808</th>
-      <th>809</th>
-      <th>810</th>
-      <th>811</th>
-      <th>812</th>
-      <th>813</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>y</th>
-      <td>0.000000</td>
-      <td>0.420735</td>
-      <td>0.454649</td>
-      <td>0.070560</td>
-      <td>-0.378401</td>
-      <td>-0.479462</td>
-      <td>-0.139708</td>
-      <td>0.328493</td>
-      <td>0.494679</td>
-      <td>0.206059</td>
-      <td>...</td>
-      <td>-0.122597</td>
-      <td>0.341653</td>
-      <td>0.491788</td>
-      <td>0.189776</td>
-      <td>-0.286716</td>
-      <td>-0.499602</td>
-      <td>-0.253157</td>
-      <td>0.226040</td>
-      <td>0.497416</td>
-      <td>0.311471</td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td>0.000000</td>
-      <td>0.921934</td>
-      <td>1.843868</td>
-      <td>2.765802</td>
-      <td>3.687737</td>
-      <td>4.609671</td>
-      <td>5.531605</td>
-      <td>6.453539</td>
-      <td>7.375473</td>
-      <td>8.297407</td>
-      <td>...</td>
-      <td>741.235059</td>
-      <td>742.156994</td>
-      <td>743.078928</td>
-      <td>744.000862</td>
-      <td>744.922796</td>
-      <td>745.844730</td>
-      <td>746.766664</td>
-      <td>747.688598</td>
-      <td>748.610533</td>
-      <td>749.532467</td>
-    </tr>
-    <tr>
-      <th>z</th>
-      <td>-0.473028</td>
-      <td>1.027270</td>
-      <td>-0.126358</td>
-      <td>0.160514</td>
-      <td>-0.900765</td>
-      <td>0.487678</td>
-      <td>-1.606093</td>
-      <td>0.090843</td>
-      <td>-0.239143</td>
-      <td>0.303381</td>
-      <td>...</td>
-      <td>-2.506964</td>
-      <td>0.530389</td>
-      <td>-1.331837</td>
-      <td>-0.318450</td>
-      <td>0.717902</td>
-      <td>-0.758105</td>
-      <td>-0.509258</td>
-      <td>0.048217</td>
-      <td>0.576735</td>
-      <td>1.057404</td>
-    </tr>
-  </tbody>
-</table>
-<p>3 rows × 814 columns</p>
-</div>
-</div>
-
 </div>
 
 </div>
@@ -282,28 +152,13 @@ Arguments:</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_train</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ts_ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span>
     <span class="n">data_train</span><span class="p">,</span>
     <span class="n">lookback</span><span class="p">,</span>
     <span class="n">horizon</span><span class="p">,</span>
-    <span class="n">cont_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">],</span>
-    <span class="n">y_names</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span>
     <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">static_covs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>    
 <span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_train</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">data_train</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -316,54 +171,8 @@ Arguments:</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>36393
+<pre>Dropped 1/4 time series due to length.
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-107-a098acde99b9&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> print<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>data_train<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>data_train<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">&lt;ipython-input-101-0678d6c3a9a2&gt;</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, idx)</span>
-<span class="ansi-green-intense-fg ansi-bold">     86</span>             y <span class="ansi-blue-fg">=</span> ts<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">-</span>self<span class="ansi-blue-fg">.</span>horizon<span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     87</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 88</span><span class="ansi-red-fg">             </span>X <span class="ansi-blue-fg">=</span> ts<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span> lookback_id<span class="ansi-blue-fg">:</span>lookback_id <span class="ansi-blue-fg">+</span> self<span class="ansi-blue-fg">.</span>lookback<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     89</span>             y <span class="ansi-blue-fg">=</span> ts<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span> lookback_id <span class="ansi-blue-fg">+</span> self<span class="ansi-blue-fg">.</span>lookback<span class="ansi-blue-fg">:</span>lookback_id <span class="ansi-blue-fg">+</span> self<span class="ansi-blue-fg">.</span>lookback <span class="ansi-blue-fg">+</span> self<span class="ansi-blue-fg">.</span>horizon<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     90</span> 
-
-<span class="ansi-green-fg">~/dev/fastcore/fastcore/foundation.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, k)</span>
-<span class="ansi-green-intense-fg ansi-bold">    268</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> items<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>items <span class="ansi-blue-fg">=</span> items
-<span class="ansi-green-intense-fg ansi-bold">    269</span>     <span class="ansi-green-fg">def</span> __len__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>items<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 270</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> k<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>items<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">    271</span>     <span class="ansi-green-fg">def</span> __setitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> k<span class="ansi-blue-fg">,</span> v<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>items<span class="ansi-blue-fg">[</span>list<span class="ansi-blue-fg">(</span>k<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>k<span class="ansi-blue-fg">,</span>CollBase<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> k<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> v
-<span class="ansi-green-intense-fg ansi-bold">    272</span>     <span class="ansi-green-fg">def</span> __delitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> i<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">del</span><span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>items<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/dev/env3.7/lib/python3.7/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2993</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>columns<span class="ansi-blue-fg">.</span>nlevels <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   2994</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_getitem_multilevel<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">-&gt; 2995</span><span class="ansi-red-fg">             </span>indexer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>columns<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2996</span>             <span class="ansi-green-fg">if</span> is_integer<span class="ansi-blue-fg">(</span>indexer<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   2997</span>                 indexer <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>indexer<span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">~/dev/env3.7/lib/python3.7/site-packages/pandas/core/indexes/base.py</span> in <span class="ansi-cyan-fg">get_loc</span><span class="ansi-blue-fg">(self, key, method, tolerance)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2895</span>                 )
-<span class="ansi-green-intense-fg ansi-bold">   2896</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 2897</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_engine<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2898</span>             <span class="ansi-green-fg">except</span> KeyError<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   2899</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_engine<span class="ansi-blue-fg">.</span>get_loc<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_maybe_cast_indexer<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">pandas/_libs/index.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
-
-<span class="ansi-green-fg">pandas/_libs/index.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
-
-<span class="ansi-red-fg">TypeError</span>: &#39;(slice(None, None, None), slice(1, 129, None))&#39; is an invalid key</pre>
 </div>
 </div>
 
@@ -376,14 +185,10 @@ Arguments:</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create mini-batch data loader</span>
-<span class="n">dataloader_train</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
-    <span class="n">data_train</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span>
-<span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">ts_ds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;X&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">lookback</span><span class="p">))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_ds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">horizon</span><span class="p">))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_ds</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;X_stat&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts_ds</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>

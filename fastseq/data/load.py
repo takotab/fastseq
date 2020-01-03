@@ -25,6 +25,7 @@ def pad_zeros(X, lenght):
             )
 
 # Cell
+
 class TimeSeriesDataset(Dataset):
     """Takes a list of time series and provides access to windowed subseries for
     training.
@@ -107,12 +108,13 @@ class TimeSeriesDataset(Dataset):
             y = ts[:,lookback_id + self.lookback:lookback_id + self.lookback + self.horizon]
 
         # Create the input and output for the sample
-        sample = {'X': X, 'y': y}
+        sample = (X,y)
         if self.transform is not None:
+            print('applying transform')
             sample = self.transform(sample)
 
-        # Static covariates can be attached
-        if self.static_covs is not None:
-            sample['X_stat'] = self.static_covs[ts_id]
+#         # Static covariates can be attached
+#         if self.static_covs is not None:
+#             sample['X_stat'] = self.static_covs[ts_id]
 
         return sample

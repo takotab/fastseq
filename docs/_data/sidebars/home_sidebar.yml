@@ -15,6 +15,12 @@ entries:
     - output: web,pdf
       title: Title
       url: /data.load
+    - output: web,pdf
+      title: Transforms
+      url: /data.transforms
+    - output: web,pdf
+      title: Wavenet model
+      url: /models.wavenet
     output: web
     title: fastseq
   output: web

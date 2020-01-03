@@ -2,6 +2,8 @@
   "fastseq": {
     "Overview": "/",
     "Core functions": "/core",
-    "Title": "/data.load"
+    "Title": "/data.load",
+    "Transforms": "/data.transforms",
+    "Wavenet model": "/models.wavenet"
   }
 }

@@ -7,12 +7,15 @@ index = {"hello": "00_core.ipynb",
          "URLs.m4_daily": "01_data.external.ipynb",
          "TimeSeriesDataset": "03_data.load.ipynb",
          "pad_zeros": "03_data.load.ipynb",
-         "ConcreteDropout": "04_models.wavenet.ipynb",
-         "WaveNet": "04_models.wavenet.ipynb"}
+         "encodes": "04_data.transforms.ipynb",
+         "decodes": "04_data.transforms.ipynb",
+         "ConcreteDropout": "05_models.wavenet.ipynb",
+         "WaveNet": "05_models.wavenet.ipynb"}
 
 modules = ["core.py",
            "data/external.py",
            "data/load.py",
+           "data/transforms.py",
            "models/wavenet.py"]
 
 git_url = "https://github.com/takotab/fastseq/tree/master/"

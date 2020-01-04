@@ -48,13 +48,13 @@ class TimeSeriesDataset(Dataset):
                  step,
                  static_covs=None,
                  thinning=1.0,
-                 transform = None,
+                 transform = noop,
                 ):
         self.time_series = time_series
         self.lookback = lookback
         self.horizon = horizon
         self.step = step
-        self.transform = transform
+        self.transform = L(transform)
         self.static_covs = static_covs
 
         # Slice each time series into examples, assigning IDs to each
@@ -109,8 +109,8 @@ class TimeSeriesDataset(Dataset):
 
         # Create the input and output for the sample
         sample = (X,y)
-        if self.transform is not None:
-            sample = self.transform(sample)
+        for tmf in self.transform:
+            sample = tmf(sample)
 
 #         # Static covariates can be attached
 #         if self.static_covs is not None:

@@ -21,8 +21,6 @@ modules = ["core.py",
            "data/transforms.py",
            "models/wavenet.py"]
 
-doc_url = "https://takotab.github.io/fastseq/"
-
 git_url = "https://github.com/takotab/fastseq/tree/master/"
 
 def custom_doc_links(name): return None

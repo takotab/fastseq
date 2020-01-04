@@ -21,21 +21,6 @@ summary: "The WaveNet` architecture for time series forecasting. <https://arxiv.
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-  warnings.warn(msg)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
@@ -86,7 +71,7 @@ the 'channel_wise' argument.</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="WaveNet" class="doc_header"><code>class</code> <code>WaveNet</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/models/wavenet.py#L93" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>WaveNet</code>(<strong><code>input_channels</code></strong>, <strong><code>output_channels</code></strong>, <strong><code>horizon</code></strong>, <strong><code>hidden_channels</code></strong>=<em><code>64</code></em>, <strong><code>skip_channels</code></strong>=<em><code>64</code></em>, <strong><code>n_layers</code></strong>=<em><code>7</code></em>, <strong><code>n_blocks</code></strong>=<em><code>1</code></em>, <strong><code>dilation</code></strong>=<em><code>2</code></em>) :: <code>Module</code></p>
 </blockquote>
-<p>Implements <a href="/fastseq/models.wavenet#WaveNet"><code>WaveNet</code></a> architecture for time series forecasting. Inherits
+<p>Implements <a href="models.wavenet.html#WaveNet"><code>WaveNet</code></a> architecture for time series forecasting. Inherits
 from pytorch <code>Module &lt;https://pytorch.org/docs/stable/nn.html#torch.nn.Module&gt;</code>_.
 Vector forecasts are made via a fully-connected linear layer.
 References:</p>

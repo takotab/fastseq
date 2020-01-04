@@ -19,7 +19,7 @@ This file will become your README and also the index of your documentation.
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 from fastseq.core import *
 from fastseq.data.external import *
 from fastseq.data.load import *
@@ -34,7 +34,7 @@ Getting the data fastai style:
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 path = untar_data(URLs.m4_daily)
 path
 ```
@@ -55,7 +55,7 @@ path
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 # df_train = pd.read_csv(path/'train.csv')
 df_test = pd.read_csv(path/'val.csv')
 df_test.head()

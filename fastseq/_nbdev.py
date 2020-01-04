@@ -3,6 +3,8 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"ts_lists": "00_core.ipynb",
+         "ToElapsed": "00_core.ipynb",
+         "make_interval": "00_core.ipynb",
          "melted_ts_2_lists": "00_core.ipynb",
          "m4_base": "01_data.external.ipynb",
          "URLs.m4_daily": "01_data.external.ipynb",

@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"ts_lists": "00_core.ipynb",
+index = {"skip": "00_core.ipynb",
+         "ts_lists": "00_core.ipynb",
          "ToElapsed": "00_core.ipynb",
          "make_interval": "00_core.ipynb",
          "melted_ts_2_lists": "00_core.ipynb",
@@ -20,6 +21,8 @@ modules = ["core.py",
            "data/load.py",
            "data/transforms.py",
            "models/wavenet.py"]
+
+doc_url = "https://takotab.github.io/fastseq/"
 
 git_url = "https://github.com/takotab/fastseq/tree/master/"
 

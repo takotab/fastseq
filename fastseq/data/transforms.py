@@ -9,7 +9,8 @@ from fastai2.data.all import *
 # Cell
 @ToTensor
 def encodes(self,o):
-    return tensor(o)
+    print('float')
+    return tensor(o).float()
 @ToTensor
 def decodes(self,o):
     return np.array(o)

@@ -28,6 +28,13 @@ from fastseq.models.wavenet import *
 ```
 
 </div>
+<div class="output_area" markdown="1">
+
+    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+      warnings.warn(msg)
+
+
+</div>
 
 </div>
 
@@ -229,6 +236,26 @@ test = df_test.iloc[:, 1:].values
 <div class="input_area" markdown="1">
 
 ```python
+Cuda
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+
+
+
+    fastai2.data.transforms.Cuda
+
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
 train_dl = DataLoader(TimeSeriesDataset(ts_lists(train),
                                      lookback,
                                      horizon,
@@ -313,7 +340,7 @@ learn.lr_find()
 
     RuntimeError                              Traceback (most recent call last)
 
-    <ipython-input-20-bd8b18fd11a5> in <module>
+    <ipython-input-10-bd8b18fd11a5> in <module>
           1 from fastai2.callback.all import *
     ----> 2 learn.lr_find()
     
@@ -369,7 +396,7 @@ learn.lr_find()
         174     def forward(self, inputs):
         175         """Forward function."""
     --> 176         output, reg_e = self.encode(inputs)
-        177         output_mean, output_std, output_df, reg_d = self.decode(output)
+        177         output_df, reg_d = self.decode(output)
         178 
 
 

@@ -280,6 +280,35 @@ summary: "A way to use fastai with sequence data"
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Cuda</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>fastai2.data.transforms.Cuda</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">train</span><span class="p">),</span>
                                      <span class="n">lookback</span><span class="p">,</span>
                                      <span class="n">horizon</span><span class="p">,</span>
@@ -386,7 +415,7 @@ Receptive field size: 128.
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-20-bd8b18fd11a5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">&lt;ipython-input-10-bd8b18fd11a5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> fastai2<span class="ansi-blue-fg">.</span>callback<span class="ansi-blue-fg">.</span>all <span class="ansi-green-fg">import</span> <span class="ansi-blue-fg">*</span>
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>learn<span class="ansi-blue-fg">.</span>lr_find<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
@@ -435,7 +464,7 @@ Receptive field size: 128.
 <span class="ansi-green-intense-fg ansi-bold">    174</span>     <span class="ansi-green-fg">def</span> forward<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> inputs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
 <span class="ansi-green-intense-fg ansi-bold">    175</span>         <span class="ansi-blue-fg">&#34;&#34;&#34;Forward function.&#34;&#34;&#34;</span>
 <span class="ansi-green-fg">--&gt; 176</span><span class="ansi-red-fg">         </span>output<span class="ansi-blue-fg">,</span> reg_e <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>encode<span class="ansi-blue-fg">(</span>inputs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    177</span>         output_mean<span class="ansi-blue-fg">,</span> output_std<span class="ansi-blue-fg">,</span> output_df<span class="ansi-blue-fg">,</span> reg_d <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span>output<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    177</span>         output_df<span class="ansi-blue-fg">,</span> reg_d <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span>output<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">    178</span> 
 
 <span class="ansi-green-fg">~/dev/fastseq/fastseq/models/wavenet.py</span> in <span class="ansi-cyan-fg">encode</span><span class="ansi-blue-fg">(self, inputs)</span>

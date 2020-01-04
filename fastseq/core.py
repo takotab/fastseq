@@ -8,10 +8,13 @@ import pandas as pd
 
 # Cell
 def ts_lists(ts:np.ndarray)-> L:
-    """From a `ndarray` of shape (timeseries, max_time) to a list of timeseries with shape (1,time).
+    """Transforms a `np.ndarray` of shape (timeseries, max_time) to a list of timeseries with shape (1,time).
 
-    max_time = the lenght of the longest timeserie
-    time = the lenght of the non-nan values of that specific timeserie
+    where:
+
+    max_time = the length of the longest timeserie
+
+    time = the length of the non-nan values of that specific timeserie
     """
     lst = L()
     for time_series in ts:
@@ -19,7 +22,6 @@ def ts_lists(ts:np.ndarray)-> L:
     return lst
 
 # Cell
-
 class ToElapsed():
     changed = False
     def __call__(self, s):
@@ -42,9 +44,11 @@ def make_interval(
     max_splits=100000,
     callback_error=None,
 ) -> L(pd.DataFrame):
-    """Will check if `df.datetime` has interval of `interval` in seconds.
-
+    """Will check if column `to_split_col` in `df` has interval size of `interval`,
     if not will make it happen and return a list where this is done.
+
+    This works both when type of `to_split_col` is numeric or `pd.Timestamp`
+
     """
     tmf = ToElapsed()
     df[to_split_col] = tmf(df[to_split_col])
@@ -66,7 +70,7 @@ def make_interval(
         raise Exception(
             f"number of splits {len(not_hour)} > {max_splits}: \n{not_hour}"
         )
-    print(starts,ends)
+#     print(starts,ends)
     dfs = L()
     for start, end in zip(starts, ends):
         _df = df.iloc[start: end,:]
@@ -81,6 +85,5 @@ def melted_ts_2_lists(ts:pd.DataFrame, melted_col_name:str, **kwargs)->L:
     for c in set(ts[melted_col_name]):
         _df = ts[ts[melted_col_name] == c]
         r = make_interval(_df,**kwargs)
-        print([o.shape for o in r])
         dfs += r
     return dfs

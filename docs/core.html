@@ -66,9 +66,10 @@ summary: "API details."
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ts_lists" class="doc_header"><code>ts_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ts_lists</code>(<strong><code>ts</code></strong>:<code>ndarray</code>)</p>
 </blockquote>
-<p>From a <code>ndarray</code> of shape (timeseries, max_time) to a list of timeseries with shape (1,time).</p>
-<p>max_time = the lenght of the longest timeserie
-time = the lenght of the non-nan values of that specific timeserie</p>
+<p>Transforms a <code>np.ndarray</code> of shape (timeseries, max_time) to a list of timeseries with shape (1,time).</p>
+<p>where:</p>
+<p>max_time = the length of the longest timeserie</p>
+<p>time = the length of the non-nan values of that specific timeserie</p>
 
 </div>
 
@@ -83,17 +84,56 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">),</span>
-               <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">)</span>
-              <span class="p">])</span>
-<span class="n">ts</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">9.</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ts</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9.],
+       [ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8., nan]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(#2) [array([[0., 1., 2., 3., 4., 5., 6., 7., 8., 9.]]),array([[0., 1., 2., 3., 4., 5., 6., 7., 8.]])]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -116,7 +156,7 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ToElapsed" class="doc_header"><code>class</code> <code>ToElapsed</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L23" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToElapsed</code>()</p>
+<h2 id="ToElapsed" class="doc_header"><code>class</code> <code>ToElapsed</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToElapsed</code>()</p>
 </blockquote>
 
 </div>
@@ -132,9 +172,7 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span><span class="o">//</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970-1-1 01:00&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span><span class="o">//</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s</span>
 </pre></div>
 
     </div>
@@ -149,7 +187,31 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>False</pre>
+<pre>0    1970-01-01 00:00:00
+1    1970-01-01 01:00:00
+2    1970-01-01 02:00:00
+3    1970-01-01 03:00:00
+4    1970-01-01 04:00:00
+5    1970-01-01 05:00:00
+6    1970-01-01 06:00:00
+7    1970-01-01 07:00:00
+8    1970-01-01 08:00:00
+9    1970-01-01 09:00:00
+10   1970-01-01 10:00:00
+11   1970-01-01 11:00:00
+12   1970-01-01 12:00:00
+13   1970-01-01 13:00:00
+14   1970-01-01 14:00:00
+15   1970-01-01 15:00:00
+16   1970-01-01 16:00:00
+17   1970-01-01 17:00:00
+18   1970-01-01 18:00:00
+19   1970-01-01 19:00:00
+20   1970-01-01 20:00:00
+21   1970-01-01 21:00:00
+22   1970-01-01 22:00:00
+23   1970-01-01 23:00:00
+dtype: datetime64[ns]</pre>
 </div>
 
 </div>
@@ -164,16 +226,50 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmf</span> <span class="o">=</span> <span class="n">ToElapsed</span><span class="p">()</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">)])),</span>
-       <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))),</span>
-        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">)]))</span>
-
-<span class="n">test_eq_type</span><span class="p">(</span><span class="n">tmf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">)))[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970&#39;</span><span class="p">))</span>
+<span class="n">tmf</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0         0
+1      3600
+2      7200
+3     10800
+4     14400
+5     18000
+6     21600
+7     25200
+8     28800
+9     32400
+10    36000
+11    39600
+12    43200
+13    46800
+14    50400
+15    54000
+16    57600
+17    61200
+18    64800
+19    68400
+20    72000
+21    75600
+22    79200
+23    82800
+dtype: int64</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -183,15 +279,50 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmf</span> <span class="o">=</span> <span class="n">ToElapsed</span><span class="p">()</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))),</span>
-       <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))),</span>
-       <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span><span class="mi">3600</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tmf</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0    1970-01-01 00:00:00
+1    1970-01-01 01:00:00
+2    1970-01-01 02:00:00
+3    1970-01-01 03:00:00
+4    1970-01-01 04:00:00
+5    1970-01-01 05:00:00
+6    1970-01-01 06:00:00
+7    1970-01-01 07:00:00
+8    1970-01-01 08:00:00
+9    1970-01-01 09:00:00
+10   1970-01-01 10:00:00
+11   1970-01-01 11:00:00
+12   1970-01-01 12:00:00
+13   1970-01-01 13:00:00
+14   1970-01-01 14:00:00
+15   1970-01-01 15:00:00
+16   1970-01-01 16:00:00
+17   1970-01-01 17:00:00
+18   1970-01-01 18:00:00
+19   1970-01-01 19:00:00
+20   1970-01-01 20:00:00
+21   1970-01-01 21:00:00
+22   1970-01-01 22:00:00
+23   1970-01-01 23:00:00
+dtype: datetime64[ns]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -208,10 +339,11 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="make_interval" class="doc_header"><code>make_interval</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_interval</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>to_split_col</code></strong>:<code>str</code>=<em><code>'datetime'</code></em>, <strong><code>interval</code></strong>=<em><code>3600</code></em>, <strong><code>max_splits</code></strong>=<em><code>100000</code></em>, <strong><code>callback_error</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="make_interval" class="doc_header"><code>make_interval</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_interval</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>to_split_col</code></strong>:<code>str</code>=<em><code>'datetime'</code></em>, <strong><code>interval</code></strong>=<em><code>3600</code></em>, <strong><code>max_splits</code></strong>=<em><code>100000</code></em>, <strong><code>callback_error</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Will check if <code>df.datetime</code> has interval of <code>interval</code> in seconds.</p>
-<p>if not will make it happen and return a list where this is done.</p>
+<p>Will check if column <code>to_split_col</code> in <code>df</code> has interval size of <code>interval</code>,
+if not will make it happen and return a list where this is done.</p>
+<p>This works both when type of <code>to_split_col</code> is numeric or <code>pd.Timestamp</code></p>
 
 </div>
 
@@ -226,23 +358,7 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;dt&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
-                  <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
-                  <span class="p">})</span>
-<span class="n">df_end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;dt&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span>
-                  <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="p">,</span>
-                  <span class="p">})</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df_start</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_end</span><span class="p">)</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">make_interval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;dt&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">df_start</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">df_end</span><span class="p">)</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">df_start</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">df_end</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 
     </div>
@@ -254,10 +370,85 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[ 0 10] (#2) [10,15]
-</pre>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>dt</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>15</td>
+      <td>16</td>
+      <td>17</td>
+      <td>18</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
 </div>
+</div>
+
 </div>
 
 </div>
@@ -269,22 +460,8 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;datetime&#39;</span><span class="p">:[</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970-01-01&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)],</span>
-                  <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">48</span><span class="p">),</span>
-                  <span class="p">})</span>
-<span class="n">df_end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;datetime&#39;</span><span class="p">:[</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;1970-01-04&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">)],</span>
-                  <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">24</span><span class="p">),</span>
-                  <span class="p">})</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df_start</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_end</span><span class="p">)</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">make_interval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="mi">3600</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df_start</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df_end</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">df_start</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">df_end</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">make_interval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;dt&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -296,10 +473,174 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[ 0 48] (#2) [48,72]
-</pre>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dt</th>
+      <th>x</th>
+    </tr>
+    <tr>
+      <th>dt</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
 </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dt</th>
+      <th>x</th>
+    </tr>
+    <tr>
+      <th>dt</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
 </div>
 
 </div>
@@ -318,7 +659,7 @@ time = the lenght of the non-nan values of that specific timeserie</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="melted_ts_2_lists" class="doc_header"><code>melted_ts_2_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L79" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>melted_ts_2_lists</code>(<strong><code>ts</code></strong>:<code>DataFrame</code>, <strong><code>melted_col_name</code></strong>:<code>str</code>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="melted_ts_2_lists" class="doc_header"><code>melted_ts_2_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L83" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>melted_ts_2_lists</code>(<strong><code>ts</code></strong>:<code>DataFrame</code>, <strong><code>melted_col_name</code></strong>:<code>str</code>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -426,11 +767,144 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Fin">Fin<a class="anchor-link" href="#Fin">&#182;</a></h1>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev</span> <span class="kn">import</span> <span class="n">export</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">export</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;Config&#39;,
+ &#39;ConfigParser&#39;,
+ &#39;DocsTestClass&#39;,
+ &#39;IN_COLAB&#39;,
+ &#39;IN_IPYTHON&#39;,
+ &#39;IN_NOTEBOOK&#39;,
+ &#39;NotebookNotary&#39;,
+ &#39;Optional&#39;,
+ &#39;Param&#39;,
+ &#39;Path&#39;,
+ &#39;Process&#39;,
+ &#39;ProcessPoolExecutor&#39;,
+ &#39;Queue&#39;,
+ &#39;ReLibName&#39;,
+ &#39;TextWrapper&#39;,
+ &#39;Union&#39;,
+ &#39;_EmptyModule&#39;,
+ &#39;__all__&#39;,
+ &#39;__builtins__&#39;,
+ &#39;__cached__&#39;,
+ &#39;__doc__&#39;,
+ &#39;__file__&#39;,
+ &#39;__loader__&#39;,
+ &#39;__name__&#39;,
+ &#39;__package__&#39;,
+ &#39;__spec__&#39;,
+ &#39;_add2add&#39;,
+ &#39;_deal_import&#39;,
+ &#39;_not_private&#39;,
+ &#39;_notebook2script&#39;,
+ &#39;_re__all__def&#39;,
+ &#39;_re_all_def&#39;,
+ &#39;_re_baseurl&#39;,
+ &#39;_re_blank_export&#39;,
+ &#39;_re_class_func_def&#39;,
+ &#39;_re_default_exp&#39;,
+ &#39;_re_import&#39;,
+ &#39;_re_import1&#39;,
+ &#39;_re_index_custom&#39;,
+ &#39;_re_index_idx&#39;,
+ &#39;_re_index_mod&#39;,
+ &#39;_re_mod_export&#39;,
+ &#39;_re_obj_def&#39;,
+ &#39;_re_patch_func&#39;,
+ &#39;_re_typedispatch_func&#39;,
+ &#39;_re_version&#39;,
+ &#39;add_init&#39;,
+ &#39;add_new_defaults&#39;,
+ &#39;anno_parser&#39;,
+ &#39;args_from_prog&#39;,
+ &#39;bool_arg&#39;,
+ &#39;call_parse&#39;,
+ &#39;check_re&#39;,
+ &#39;collections&#39;,
+ &#39;compose&#39;,
+ &#39;concurrent&#39;,
+ &#39;core&#39;,
+ &#39;create_config&#39;,
+ &#39;create_mod_file&#39;,
+ &#39;enum&#39;,
+ &#39;export_names&#39;,
+ &#39;extra_add&#39;,
+ &#39;find_default_export&#39;,
+ &#39;get_nbdev_module&#39;,
+ &#39;glob&#39;,
+ &#39;importlib&#39;,
+ &#39;in_colab&#39;,
+ &#39;in_ipython&#39;,
+ &#39;in_notebook&#39;,
+ &#39;inspect&#39;,
+ &#39;is_export&#39;,
+ &#39;json&#39;,
+ &#39;last_index&#39;,
+ &#39;lru_cache&#39;,
+ &#39;nbformat&#39;,
+ &#39;notebook2script&#39;,
+ &#39;num_cpus&#39;,
+ &#39;os&#39;,
+ &#39;parallel&#39;,
+ &#39;partial&#39;,
+ &#39;pickle&#39;,
+ &#39;random&#39;,
+ &#39;re&#39;,
+ &#39;read_config_file&#39;,
+ &#39;read_nb&#39;,
+ &#39;relative_import&#39;,
+ &#39;reset_nbdev_module&#39;,
+ &#39;save_config_file&#39;,
+ &#39;save_nbdev_module&#39;,
+ &#39;set_trace&#39;,
+ &#39;shutil&#39;,
+ &#39;stat&#39;,
+ &#39;tempfile&#39;,
+ &#39;test_eq&#39;,
+ &#39;time&#39;,
+ &#39;update_baseurl&#39;,
+ &#39;update_version&#39;,
+ &#39;yaml&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 </div>
  

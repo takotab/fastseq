@@ -174,7 +174,7 @@ class WaveNet(torch.nn.Module):
     def forward(self, inputs):
         """Forward function."""
         output, reg_e = self.encode(inputs)
-        output_mean, output_std, output_df, reg_d = self.decode(output)
+        output_df, reg_d = self.decode(output)
 
         # Regularization
         regularizer = reg_e + reg_d
@@ -253,7 +253,7 @@ class WaveNet(torch.nn.Module):
         # Regularization terms
         regularizer = res_linear_mean + res_linear_std + res_linear_df
 
-        return output_mean, output_std, output_df, regularizer
+        return output_df, regularizer
 
     @property
     def n_parameters(self):

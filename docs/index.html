@@ -44,6 +44,7 @@ summary: "A way to use fastai with sequence data"
 <span class="kn">from</span> <span class="nn">fastseq.data.external</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">fastseq.data.load</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">fastai2.basics</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastseq.models.wavenet</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 
     </div>
@@ -93,7 +94,7 @@ summary: "A way to use fastai with sequence data"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># df_train = pd.read_csv(path/&#39;train.csv&#39;)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="o">/</span><span class="s1">&#39;train.csv&#39;</span><span class="p">,</span><span class="n">skiprows</span><span class="o">=</span><span class="n">skip</span><span class="p">)</span>
 <span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="o">/</span><span class="s1">&#39;val.csv&#39;</span><span class="p">)</span>
 <span class="n">df_test</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -240,6 +241,226 @@ summary: "A way to use fastai with sequence data"
 </div>
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">lookback</span> <span class="o">=</span> <span class="mi">128</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">train</span><span class="p">),</span>
+                                     <span class="n">lookback</span><span class="p">,</span>
+                                     <span class="n">horizon</span><span class="p">,</span>
+                                     <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">static_covs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+                                     <span class="n">transform</span> <span class="o">=</span> <span class="n">ToTensor</span><span class="p">()</span>
+                                    <span class="p">),</span>
+                   <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                   <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>                  
+                  <span class="p">)</span>
+
+<span class="n">test_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">test</span><span class="p">),</span>
+                                     <span class="n">lookback</span><span class="p">,</span>
+                                     <span class="n">horizon</span><span class="p">,</span>
+                                     <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">static_covs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+                                     <span class="n">transform</span> <span class="o">=</span> <span class="n">ToTensor</span><span class="p">()</span>
+                                    <span class="p">),</span>
+                   <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                   <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>                  
+                  <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">WaveNet</span><span class="p">(</span><span class="n">input_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">output_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span>
+                    
+               <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of model parameters: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Receptive field size: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">receptive_field_size</span><span class="p">))</span>
+
+<span class="c1"># # .. and the loss</span>
+<span class="c1"># loss = torch.distributions.StudentT</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Number of model parameters: 122672.
+Receptive field size: 128.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">DataBunch</span><span class="p">(</span><span class="n">train_dl</span><span class="p">,</span> <span class="n">test_dl</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_func</span><span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">accuracy</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastai2.callback.all</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">lr_find</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-20-bd8b18fd11a5&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">from</span> fastai2<span class="ansi-blue-fg">.</span>callback<span class="ansi-blue-fg">.</span>all <span class="ansi-green-fg">import</span> <span class="ansi-blue-fg">*</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>learn<span class="ansi-blue-fg">.</span>lr_find<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastai2/fastai2/callback/schedule.py</span> in <span class="ansi-cyan-fg">lr_find</span><span class="ansi-blue-fg">(self, start_lr, end_lr, num_it, stop_div, show_plot)</span>
+<span class="ansi-green-intense-fg ansi-bold">    194</span>     n_epoch <span class="ansi-blue-fg">=</span> num_it<span class="ansi-blue-fg">//</span>len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dbunch<span class="ansi-blue-fg">.</span>train_dl<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> <span class="ansi-cyan-fg">1</span>
+<span class="ansi-green-intense-fg ansi-bold">    195</span>     cb<span class="ansi-blue-fg">=</span>LRFinder<span class="ansi-blue-fg">(</span>start_lr<span class="ansi-blue-fg">=</span>start_lr<span class="ansi-blue-fg">,</span> end_lr<span class="ansi-blue-fg">=</span>end_lr<span class="ansi-blue-fg">,</span> num_it<span class="ansi-blue-fg">=</span>num_it<span class="ansi-blue-fg">,</span> stop_div<span class="ansi-blue-fg">=</span>stop_div<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 196</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">with</span> self<span class="ansi-blue-fg">.</span>no_logging<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span>n_epoch<span class="ansi-blue-fg">,</span> cbs<span class="ansi-blue-fg">=</span>cb<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    197</span>     <span class="ansi-green-fg">if</span> show_plot<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>recorder<span class="ansi-blue-fg">.</span>plot_lr_find<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastai2/fastai2/learner.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, n_epoch, lr, wd, cbs, reset_opt)</span>
+<span class="ansi-green-intense-fg ansi-bold">    286</span>                     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    287</span>                         self<span class="ansi-blue-fg">.</span>epoch<span class="ansi-blue-fg">=</span>epoch<span class="ansi-blue-fg">;</span>          self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;begin_epoch&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 288</span><span class="ansi-red-fg">                         </span>self<span class="ansi-blue-fg">.</span>_do_epoch_train<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    289</span>                         self<span class="ansi-blue-fg">.</span>_do_epoch_validate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    290</span>                     <span class="ansi-green-fg">except</span> CancelEpochException<span class="ansi-blue-fg">:</span>   self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_cancel_epoch&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastai2/fastai2/learner.py</span> in <span class="ansi-cyan-fg">_do_epoch_train</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    261</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    262</span>             self<span class="ansi-blue-fg">.</span>dl <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>dbunch<span class="ansi-blue-fg">.</span>train_dl<span class="ansi-blue-fg">;</span>                  self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;begin_train&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 263</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>all_batches<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    264</span>         <span class="ansi-green-fg">except</span> CancelTrainException<span class="ansi-blue-fg">:</span>                         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_cancel_train&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    265</span>         <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>                                             self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_train&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastai2/fastai2/learner.py</span> in <span class="ansi-cyan-fg">all_batches</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    239</span>     <span class="ansi-green-fg">def</span> all_batches<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    240</span>         self<span class="ansi-blue-fg">.</span>n_iter <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 241</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>one_batch<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>o<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    242</span> 
+<span class="ansi-green-intense-fg ansi-bold">    243</span>     <span class="ansi-green-fg">def</span> one_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> i<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/dev/fastai2/fastai2/learner.py</span> in <span class="ansi-cyan-fg">one_batch</span><span class="ansi-blue-fg">(self, i, b)</span>
+<span class="ansi-green-intense-fg ansi-bold">    245</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    246</span>             self<span class="ansi-blue-fg">.</span>_split<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>                                  self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;begin_batch&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 247</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>pred <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>model<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>                self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_pred&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    248</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span>
+<span class="ansi-green-intense-fg ansi-bold">    249</span>             self<span class="ansi-blue-fg">.</span>loss <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loss_func<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pred<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_loss&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/module.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *input, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>             result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_slow_forward<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>input<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>forward<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>input<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span>         <span class="ansi-green-fg">for</span> hook <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>_forward_hooks<span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    543</span>             hook_result <span class="ansi-blue-fg">=</span> hook<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> input<span class="ansi-blue-fg">,</span> result<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastseq/fastseq/models/wavenet.py</span> in <span class="ansi-cyan-fg">forward</span><span class="ansi-blue-fg">(self, inputs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    174</span>     <span class="ansi-green-fg">def</span> forward<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> inputs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    175</span>         <span class="ansi-blue-fg">&#34;&#34;&#34;Forward function.&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">--&gt; 176</span><span class="ansi-red-fg">         </span>output<span class="ansi-blue-fg">,</span> reg_e <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>encode<span class="ansi-blue-fg">(</span>inputs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    177</span>         output_mean<span class="ansi-blue-fg">,</span> output_std<span class="ansi-blue-fg">,</span> output_df<span class="ansi-blue-fg">,</span> reg_d <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>decode<span class="ansi-blue-fg">(</span>output<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    178</span> 
+
+<span class="ansi-green-fg">~/dev/fastseq/fastseq/models/wavenet.py</span> in <span class="ansi-cyan-fg">encode</span><span class="ansi-blue-fg">(self, inputs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    190</span>         <span class="ansi-red-fg"># Input layer</span>
+<span class="ansi-green-intense-fg ansi-bold">    191</span>         output<span class="ansi-blue-fg">,</span> res_conv_input <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>do_conv_input<span class="ansi-blue-fg">(</span>inputs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 192</span><span class="ansi-red-fg">         </span>output <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>conv_input<span class="ansi-blue-fg">(</span>output<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    193</span> 
+<span class="ansi-green-intense-fg ansi-bold">    194</span>         <span class="ansi-red-fg"># Loop over WaveNet layers and blocks</span>
+
+<span class="ansi-green-fg">~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/module.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *input, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>             result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_slow_forward<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>input<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>forward<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>input<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span>         <span class="ansi-green-fg">for</span> hook <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>_forward_hooks<span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    543</span>             hook_result <span class="ansi-blue-fg">=</span> hook<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> input<span class="ansi-blue-fg">,</span> result<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/conv.py</span> in <span class="ansi-cyan-fg">forward</span><span class="ansi-blue-fg">(self, input)</span>
+<span class="ansi-green-intense-fg ansi-bold">    200</span>                             _single(0), self.dilation, self.groups)
+<span class="ansi-green-intense-fg ansi-bold">    201</span>         return F.conv1d(input, self.weight, self.bias, self.stride,
+<span class="ansi-green-fg">--&gt; 202</span><span class="ansi-red-fg">                         self.padding, self.dilation, self.groups)
+</span><span class="ansi-green-intense-fg ansi-bold">    203</span> 
+<span class="ansi-green-intense-fg ansi-bold">    204</span> 
+
+<span class="ansi-red-fg">RuntimeError</span>: Input type (torch.cuda.DoubleTensor) and weight type (torch.cuda.FloatTensor) should be the same</pre>
+</div>
 </div>
 
 </div>

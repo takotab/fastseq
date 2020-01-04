@@ -24,21 +24,6 @@ summary: "API details."
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-  warnings.warn(msg)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -187,30 +172,9 @@ summary: "API details."
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0    1970-01-01 00:00:00
-1    1970-01-01 01:00:00
-2    1970-01-01 02:00:00
-3    1970-01-01 03:00:00
-4    1970-01-01 04:00:00
-5    1970-01-01 05:00:00
-6    1970-01-01 06:00:00
-7    1970-01-01 07:00:00
-8    1970-01-01 08:00:00
-9    1970-01-01 09:00:00
-10   1970-01-01 10:00:00
-11   1970-01-01 11:00:00
-12   1970-01-01 12:00:00
-13   1970-01-01 13:00:00
-14   1970-01-01 14:00:00
-15   1970-01-01 15:00:00
-16   1970-01-01 16:00:00
-17   1970-01-01 17:00:00
-18   1970-01-01 18:00:00
-19   1970-01-01 19:00:00
-20   1970-01-01 20:00:00
-21   1970-01-01 21:00:00
-22   1970-01-01 22:00:00
-23   1970-01-01 23:00:00
+<pre>0   1970-01-01 00:00:00
+1   1970-01-01 01:00:00
+2   1970-01-01 02:00:00
 dtype: datetime64[ns]</pre>
 </div>
 
@@ -241,30 +205,9 @@ dtype: datetime64[ns]</pre>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0         0
-1      3600
-2      7200
-3     10800
-4     14400
-5     18000
-6     21600
-7     25200
-8     28800
-9     32400
-10    36000
-11    39600
-12    43200
-13    46800
-14    50400
-15    54000
-16    57600
-17    61200
-18    64800
-19    68400
-20    72000
-21    75600
-22    79200
-23    82800
+<pre>0       0
+1    3600
+2    7200
 dtype: int64</pre>
 </div>
 
@@ -294,30 +237,9 @@ dtype: int64</pre>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0    1970-01-01 00:00:00
-1    1970-01-01 01:00:00
-2    1970-01-01 02:00:00
-3    1970-01-01 03:00:00
-4    1970-01-01 04:00:00
-5    1970-01-01 05:00:00
-6    1970-01-01 06:00:00
-7    1970-01-01 07:00:00
-8    1970-01-01 08:00:00
-9    1970-01-01 09:00:00
-10   1970-01-01 10:00:00
-11   1970-01-01 11:00:00
-12   1970-01-01 12:00:00
-13   1970-01-01 13:00:00
-14   1970-01-01 14:00:00
-15   1970-01-01 15:00:00
-16   1970-01-01 16:00:00
-17   1970-01-01 17:00:00
-18   1970-01-01 18:00:00
-19   1970-01-01 19:00:00
-20   1970-01-01 20:00:00
-21   1970-01-01 21:00:00
-22   1970-01-01 22:00:00
-23   1970-01-01 23:00:00
+<pre>0   1970-01-01 00:00:00
+1   1970-01-01 01:00:00
+2   1970-01-01 02:00:00
 dtype: datetime64[ns]</pre>
 </div>
 
@@ -461,7 +383,7 @@ if not will make it happen and return a list where this is done.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">make_interval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;dt&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 
     </div>
@@ -492,65 +414,44 @@ if not will make it happen and return a list where this is done.</p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th></th>
       <th>dt</th>
-      <th>x</th>
-    </tr>
-    <tr>
-      <th>dt</th>
-      <th></th>
-      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <th>dt</th>
       <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>2</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>3</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>4</th>
       <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>5</th>
       <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>6</th>
       <td>6</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>7</th>
       <td>7</td>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>8</th>
       <td>8</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>9</th>
       <td>9</td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
       <td>9</td>
     </tr>
   </tbody>
@@ -569,7 +470,7 @@ if not will make it happen and return a list where this is done.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 
     </div>
@@ -600,40 +501,29 @@ if not will make it happen and return a list where this is done.</p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th></th>
       <th>dt</th>
-      <th>x</th>
-    </tr>
-    <tr>
-      <th>dt</th>
-      <th></th>
-      <th></th>
+      <th>15</th>
+      <th>16</th>
+      <th>17</th>
+      <th>18</th>
+      <th>19</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>15</th>
+      <th>dt</th>
       <td>15</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>16</th>
       <td>16</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>17</th>
       <td>17</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>18</th>
       <td>18</td>
-      <td>3</td>
+      <td>19</td>
     </tr>
     <tr>
-      <th>19</th>
-      <td>19</td>
+      <th>x</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
       <td>4</td>
     </tr>
   </tbody>
@@ -697,7 +587,7 @@ if not will make it happen and return a list where this is done.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fd2dd3bfc90&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7efddbdc8ac8&gt;</pre>
 </div>
 
 </div>
@@ -743,163 +633,15 @@ if not will make it happen and return a list where this is done.</p>
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[0] (#1) [50]
-[ 0 50] (#2) [50,100]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/tako/dev/env37/lib/python3.7/site-packages/ipykernel_launcher.py:14: SettingWithCopyWarning: 
+<pre>/home/tako/dev/env3.7/lib/python3.7/site-packages/ipykernel_launcher.py:16: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  
+  app.launch_new_instance()
 </pre>
 </div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev</span> <span class="kn">import</span> <span class="n">export</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">export</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;Config&#39;,
- &#39;ConfigParser&#39;,
- &#39;DocsTestClass&#39;,
- &#39;IN_COLAB&#39;,
- &#39;IN_IPYTHON&#39;,
- &#39;IN_NOTEBOOK&#39;,
- &#39;NotebookNotary&#39;,
- &#39;Optional&#39;,
- &#39;Param&#39;,
- &#39;Path&#39;,
- &#39;Process&#39;,
- &#39;ProcessPoolExecutor&#39;,
- &#39;Queue&#39;,
- &#39;ReLibName&#39;,
- &#39;TextWrapper&#39;,
- &#39;Union&#39;,
- &#39;_EmptyModule&#39;,
- &#39;__all__&#39;,
- &#39;__builtins__&#39;,
- &#39;__cached__&#39;,
- &#39;__doc__&#39;,
- &#39;__file__&#39;,
- &#39;__loader__&#39;,
- &#39;__name__&#39;,
- &#39;__package__&#39;,
- &#39;__spec__&#39;,
- &#39;_add2add&#39;,
- &#39;_deal_import&#39;,
- &#39;_not_private&#39;,
- &#39;_notebook2script&#39;,
- &#39;_re__all__def&#39;,
- &#39;_re_all_def&#39;,
- &#39;_re_baseurl&#39;,
- &#39;_re_blank_export&#39;,
- &#39;_re_class_func_def&#39;,
- &#39;_re_default_exp&#39;,
- &#39;_re_import&#39;,
- &#39;_re_import1&#39;,
- &#39;_re_index_custom&#39;,
- &#39;_re_index_idx&#39;,
- &#39;_re_index_mod&#39;,
- &#39;_re_mod_export&#39;,
- &#39;_re_obj_def&#39;,
- &#39;_re_patch_func&#39;,
- &#39;_re_typedispatch_func&#39;,
- &#39;_re_version&#39;,
- &#39;add_init&#39;,
- &#39;add_new_defaults&#39;,
- &#39;anno_parser&#39;,
- &#39;args_from_prog&#39;,
- &#39;bool_arg&#39;,
- &#39;call_parse&#39;,
- &#39;check_re&#39;,
- &#39;collections&#39;,
- &#39;compose&#39;,
- &#39;concurrent&#39;,
- &#39;core&#39;,
- &#39;create_config&#39;,
- &#39;create_mod_file&#39;,
- &#39;enum&#39;,
- &#39;export_names&#39;,
- &#39;extra_add&#39;,
- &#39;find_default_export&#39;,
- &#39;get_nbdev_module&#39;,
- &#39;glob&#39;,
- &#39;importlib&#39;,
- &#39;in_colab&#39;,
- &#39;in_ipython&#39;,
- &#39;in_notebook&#39;,
- &#39;inspect&#39;,
- &#39;is_export&#39;,
- &#39;json&#39;,
- &#39;last_index&#39;,
- &#39;lru_cache&#39;,
- &#39;nbformat&#39;,
- &#39;notebook2script&#39;,
- &#39;num_cpus&#39;,
- &#39;os&#39;,
- &#39;parallel&#39;,
- &#39;partial&#39;,
- &#39;pickle&#39;,
- &#39;random&#39;,
- &#39;re&#39;,
- &#39;read_config_file&#39;,
- &#39;read_nb&#39;,
- &#39;relative_import&#39;,
- &#39;reset_nbdev_module&#39;,
- &#39;save_config_file&#39;,
- &#39;save_nbdev_module&#39;,
- &#39;set_trace&#39;,
- &#39;shutil&#39;,
- &#39;stat&#39;,
- &#39;tempfile&#39;,
- &#39;test_eq&#39;,
- &#39;time&#39;,
- &#39;update_baseurl&#39;,
- &#39;update_version&#39;,
- &#39;yaml&#39;]</pre>
-</div>
-
 </div>
 
 </div>

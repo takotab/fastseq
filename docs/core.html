@@ -21,9 +21,51 @@ summary: "API details."
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+  warnings.warn(msg)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+  warnings.warn(msg)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Preprocces-functions">Preprocces functions<a class="anchor-link" href="#Preprocces-functions">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="M4">M4<a class="anchor-link" href="#M4">&#182;</a></h2>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
@@ -37,7 +79,59 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="hello" class="doc_header"><code>hello</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L11" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>hello</code>()</p>
+<h4 id="ts_lists" class="doc_header"><code>ts_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ts_lists</code>(<strong><code>ts</code></strong>:<code>ndarray</code>)</p>
+</blockquote>
+<p>From a <code>ndarray</code> of shape (timeseries, max_time) to a list of timeseries with shape (1,time).</p>
+<p>max_time = the lenght of the longest timeserie
+time = the lenght of the non-nan values of that specific timeserie</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">),</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">)</span>
+              <span class="p">])</span>
+<span class="n">ts</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+
+<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">9.</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">ts_lists</span><span class="p">(</span><span class="n">ts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Gas-usage">Gas-usage<a class="anchor-link" href="#Gas-usage">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="melted_ts_2_lists" class="doc_header"><code>melted_ts_2_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>melted_ts_2_lists</code>(<strong><code>ts</code></strong>:<code>DataFrame</code>, <strong><code>split_on</code></strong>:<code>str</code>)</p>
 </blockquote>
 
 </div>
@@ -53,7 +147,12 @@ summary: "API details."
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="n">hello</span><span class="p">())</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;dt&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>
+                  <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">L</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span><span class="o">+</span><span class="n">L</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">50</span><span class="p">),</span>
+                  <span class="p">})</span>
+
+<span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">melted_ts_2_lists</span><span class="p">(</span><span class="n">df</span><span class="p">)),</span><span class="n">L</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">melted_ts_2_lists</span><span class="p">(</span><span class="n">df</span><span class="p">)),</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -65,15 +164,45 @@ summary: "API details."
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>torch.cuda.is_available(): True
-</pre>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">AssertionError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-18-4246e5a20ccd&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                   })
+<span class="ansi-green-intense-fg ansi-bold">      4</span> 
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>test_eq<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>melted_ts_2_lists<span class="ansi-blue-fg">(</span>df<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>L<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> test_eq<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>melted_ts_2_lists<span class="ansi-blue-fg">(</span>df<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/fastcore/fastcore/test.py</span> in <span class="ansi-cyan-fg">test_eq</span><span class="ansi-blue-fg">(a, b)</span>
+<span class="ansi-green-intense-fg ansi-bold">     30</span> <span class="ansi-green-fg">def</span> test_eq<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span>b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     31</span>     <span class="ansi-blue-fg">&#34;`test` that `a==b`&#34;</span>
+<span class="ansi-green-fg">---&gt; 32</span><span class="ansi-red-fg">     </span>test<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span>b<span class="ansi-blue-fg">,</span>equals<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;==&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     33</span> 
+<span class="ansi-green-intense-fg ansi-bold">     34</span> <span class="ansi-red-fg"># Cell</span>
+
+<span class="ansi-green-fg">~/dev/fastcore/fastcore/test.py</span> in <span class="ansi-cyan-fg">test</span><span class="ansi-blue-fg">(a, b, cmp, cname)</span>
+<span class="ansi-green-intense-fg ansi-bold">     20</span>     <span class="ansi-blue-fg">&#34;`assert` that `cmp(a,b)`; display inputs and `cname or cmp.__name__` if it fails&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">     21</span>     <span class="ansi-green-fg">if</span> cname <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span> cname<span class="ansi-blue-fg">=</span>cmp<span class="ansi-blue-fg">.</span>__name__
+<span class="ansi-green-fg">---&gt; 22</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">assert</span> cmp<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span>b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">f&#34;{cname}:\n{a}\n{b}&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">     23</span> 
+<span class="ansi-green-intense-fg ansi-bold">     24</span> <span class="ansi-red-fg"># Cell</span>
+
+<span class="ansi-red-fg">AssertionError</span>: ==:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+&lt;class &#39;fastcore.foundation.L&#39;&gt;</pre>
 </div>
 </div>
 
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Fin">Fin<a class="anchor-link" href="#Fin">&#182;</a></h1>
+</div>
+</div>
 </div>
 </div>
  

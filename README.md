@@ -30,7 +30,9 @@ from fastseq.models.wavenet import *
 </div>
 <div class="output_area" markdown="1">
 
-    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+    /home/tako/dev/env3.7/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+      warnings.warn(msg)
+    /home/tako/dev/env3.7/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
       warnings.warn(msg)
 
 
@@ -236,26 +238,6 @@ test = df_test.iloc[:, 1:].values
 <div class="input_area" markdown="1">
 
 ```python
-Cuda
-```
-
-</div>
-<div class="output_area" markdown="1">
-
-
-
-
-    fastai2.data.transforms.Cuda
-
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
 train_dl = DataLoader(TimeSeriesDataset(ts_lists(train),
                                      lookback,
                                      horizon,
@@ -274,7 +256,7 @@ test_dl = DataLoader(TimeSeriesDataset(ts_lists(test),
                                      horizon,
                                      step=1,
                                      static_covs = [1,2,2,2,2],
-                                     transform = ToTensor()
+                                     transform = [ToTensor(),Cuda()]
                                     ),
                    batch_size=64,
                    shuffle=False,
@@ -340,16 +322,16 @@ learn.lr_find()
 
     RuntimeError                              Traceback (most recent call last)
 
-    <ipython-input-10-bd8b18fd11a5> in <module>
+    <ipython-input-15-bd8b18fd11a5> in <module>
           1 from fastai2.callback.all import *
     ----> 2 learn.lr_find()
     
 
     ~/dev/fastai2/fastai2/callback/schedule.py in lr_find(self, start_lr, end_lr, num_it, stop_div, show_plot)
-        194     n_epoch = num_it//len(self.dbunch.train_dl) + 1
-        195     cb=LRFinder(start_lr=start_lr, end_lr=end_lr, num_it=num_it, stop_div=stop_div)
-    --> 196     with self.no_logging(): self.fit(n_epoch, cbs=cb)
-        197     if show_plot: self.recorder.plot_lr_find()
+        195     n_epoch = num_it//len(self.dbunch.train_dl) + 1
+        196     cb=LRFinder(start_lr=start_lr, end_lr=end_lr, num_it=num_it, stop_div=stop_div)
+    --> 197     with self.no_logging(): self.fit(n_epoch, cbs=cb)
+        198     if show_plot: self.recorder.plot_lr_find()
 
 
     ~/dev/fastai2/fastai2/learner.py in fit(self, n_epoch, lr, wd, cbs, reset_opt)
@@ -384,7 +366,7 @@ learn.lr_find()
         249             self.loss = self.loss_func(self.pred, *self.yb); self('after_loss')
 
 
-    ~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
+    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
         539             result = self._slow_forward(*input, **kwargs)
         540         else:
     --> 541             result = self.forward(*input, **kwargs)
@@ -408,7 +390,7 @@ learn.lr_find()
         194         # Loop over WaveNet layers and blocks
 
 
-    ~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
+    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
         539             result = self._slow_forward(*input, **kwargs)
         540         else:
     --> 541             result = self.forward(*input, **kwargs)
@@ -416,7 +398,7 @@ learn.lr_find()
         543             hook_result = hook(self, input, result)
 
 
-    ~/dev/env37/lib/python3.7/site-packages/torch/nn/modules/conv.py in forward(self, input)
+    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/conv.py in forward(self, input)
         200                             _single(0), self.dilation, self.groups)
         201         return F.conv1d(input, self.weight, self.bias, self.stride,
     --> 202                         self.padding, self.dilation, self.groups)
@@ -424,7 +406,7 @@ learn.lr_find()
         204 
 
 
-    RuntimeError: Input type (torch.cuda.DoubleTensor) and weight type (torch.cuda.FloatTensor) should be the same
+    RuntimeError: Expected object of scalar type Double but got scalar type Float for argument #2 'weight' in call to _thnn_conv2d_forward
 
 
 </div>

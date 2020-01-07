@@ -13,11 +13,20 @@ entries:
       title: Core functions
       url: /core
     - output: web,pdf
+      title: Data collection
+      url: /data.external
+    - output: web,pdf
       title: Title
+      url: /deep4cast_m4_example
+    - output: web,pdf
+      title: Data
       url: /data.load
     - output: web,pdf
       title: Transforms
       url: /data.transforms
+    - output: web,pdf
+      title: DNN model
+      url: /models.dnn
     - output: web,pdf
       title: Wavenet model
       url: /models.wavenet

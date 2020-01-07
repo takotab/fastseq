@@ -28,15 +28,6 @@ from fastseq.models.wavenet import *
 ```
 
 </div>
-<div class="output_area" markdown="1">
-
-    /home/tako/dev/env3.7/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-      warnings.warn(msg)
-    /home/tako/dev/env3.7/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-      warnings.warn(msg)
-
-
-</div>
 
 </div>
 
@@ -318,11 +309,15 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
+
+
+
+
     ---------------------------------------------------------------------------
 
     RuntimeError                              Traceback (most recent call last)
 
-    <ipython-input-15-bd8b18fd11a5> in <module>
+    <ipython-input-11-bd8b18fd11a5> in <module>
           1 from fastai2.callback.all import *
     ----> 2 learn.lr_find()
     

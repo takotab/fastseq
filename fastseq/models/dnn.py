@@ -50,8 +50,8 @@ class DNN(torch.nn.Module):
 
     def forward(self, inputs):
         """Forward function."""
-        hid = self.body(inputs)
-        return self.dnn(hid).view(hid.size(0),self.output_channels,-1)
+        hid = self.body(inputs.float())
+        return self.dnn(hid).view(hid.size(0),self.output_channels,-1).float()
 
     @property
     def n_parameters(self):

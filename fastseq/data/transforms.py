@@ -11,5 +11,5 @@ from fastai2.data.all import *
 def encodes(self,o):
     return tensor(o).float()
 @ToTensor
-def decodes(self,o):
+def decodes(self,o)->np.ndarray:
     return np.array(o)

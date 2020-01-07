@@ -24,8 +24,15 @@ from fastseq.core import *
 from fastseq.data.external import *
 from fastseq.data.load import *
 from fastai2.basics import *
-from fastseq.models.wavenet import *
+from fastseq.models.dnn import *
 ```
+
+</div>
+<div class="output_area" markdown="1">
+
+    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+      warnings.warn(msg)
+
 
 </div>
 
@@ -263,24 +270,19 @@ test_dl = DataLoader(TimeSeriesDataset(ts_lists(test),
 <div class="input_area" markdown="1">
 
 ```python
-model = WaveNet(input_channels=1,
-                output_channels=1,
-                horizon=horizon,
-                    
-               )
+model = DNN(input_channels=1,
+            output_channels=1,
+            horizon=horizon,
+            lookback = lookback
+           )
 
 print('Number of model parameters: {}.'.format(model.n_parameters))
-print('Receptive field size: {}.'.format(model.receptive_field_size))
-
-# # .. and the loss
-# loss = torch.distributions.StudentT
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
-    Number of model parameters: 122672.
-    Receptive field size: 128.
+    Number of model parameters: 114944.
 
 
 </div>
@@ -291,7 +293,7 @@ print('Receptive field size: {}.'.format(model.receptive_field_size))
 
 ```python
 data = DataBunch(train_dl, test_dl).cuda()
-learn = Learner(data, model, loss_func= F.mse_loss, opt_func= Adam, metrics=accuracy)
+learn = Learner(data, model, loss_func = F.mse_loss, opt_func= Adam, metrics=accuracy)
 ```
 
 </div>
@@ -309,99 +311,7 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
-
-
-
-
-    ---------------------------------------------------------------------------
-
-    RuntimeError                              Traceback (most recent call last)
-
-    <ipython-input-11-bd8b18fd11a5> in <module>
-          1 from fastai2.callback.all import *
-    ----> 2 learn.lr_find()
-    
-
-    ~/dev/fastai2/fastai2/callback/schedule.py in lr_find(self, start_lr, end_lr, num_it, stop_div, show_plot)
-        195     n_epoch = num_it//len(self.dbunch.train_dl) + 1
-        196     cb=LRFinder(start_lr=start_lr, end_lr=end_lr, num_it=num_it, stop_div=stop_div)
-    --> 197     with self.no_logging(): self.fit(n_epoch, cbs=cb)
-        198     if show_plot: self.recorder.plot_lr_find()
-
-
-    ~/dev/fastai2/fastai2/learner.py in fit(self, n_epoch, lr, wd, cbs, reset_opt)
-        286                     try:
-        287                         self.epoch=epoch;          self('begin_epoch')
-    --> 288                         self._do_epoch_train()
-        289                         self._do_epoch_validate()
-        290                     except CancelEpochException:   self('after_cancel_epoch')
-
-
-    ~/dev/fastai2/fastai2/learner.py in _do_epoch_train(self)
-        261         try:
-        262             self.dl = self.dbunch.train_dl;                  self('begin_train')
-    --> 263             self.all_batches()
-        264         except CancelTrainException:                         self('after_cancel_train')
-        265         finally:                                             self('after_train')
-
-
-    ~/dev/fastai2/fastai2/learner.py in all_batches(self)
-        239     def all_batches(self):
-        240         self.n_iter = len(self.dl)
-    --> 241         for o in enumerate(self.dl): self.one_batch(*o)
-        242 
-        243     def one_batch(self, i, b):
-
-
-    ~/dev/fastai2/fastai2/learner.py in one_batch(self, i, b)
-        245         try:
-        246             self._split(b);                                  self('begin_batch')
-    --> 247             self.pred = self.model(*self.xb);                self('after_pred')
-        248             if len(self.yb) == 0: return
-        249             self.loss = self.loss_func(self.pred, *self.yb); self('after_loss')
-
-
-    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
-        539             result = self._slow_forward(*input, **kwargs)
-        540         else:
-    --> 541             result = self.forward(*input, **kwargs)
-        542         for hook in self._forward_hooks.values():
-        543             hook_result = hook(self, input, result)
-
-
-    ~/dev/fastseq/fastseq/models/wavenet.py in forward(self, inputs)
-        174     def forward(self, inputs):
-        175         """Forward function."""
-    --> 176         output, reg_e = self.encode(inputs)
-        177         output_df, reg_d = self.decode(output)
-        178 
-
-
-    ~/dev/fastseq/fastseq/models/wavenet.py in encode(self, inputs)
-        190         # Input layer
-        191         output, res_conv_input = self.do_conv_input(inputs)
-    --> 192         output = self.conv_input(output)
-        193 
-        194         # Loop over WaveNet layers and blocks
-
-
-    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/module.py in __call__(self, *input, **kwargs)
-        539             result = self._slow_forward(*input, **kwargs)
-        540         else:
-    --> 541             result = self.forward(*input, **kwargs)
-        542         for hook in self._forward_hooks.values():
-        543             hook_result = hook(self, input, result)
-
-
-    ~/dev/env3.7/lib/python3.7/site-packages/torch/nn/modules/conv.py in forward(self, input)
-        200                             _single(0), self.dilation, self.groups)
-        201         return F.conv1d(input, self.weight, self.bias, self.stride,
-    --> 202                         self.padding, self.dilation, self.groups)
-        203 
-        204 
-
-
-    RuntimeError: Expected object of scalar type Double but got scalar type Float for argument #2 'weight' in call to _thnn_conv2d_forward
+![png](docs/images/output_11_0.png)
 
 
 </div>

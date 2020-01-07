@@ -2,8 +2,11 @@
   "fastseq": {
     "Overview": "/",
     "Core functions": "/core",
-    "Title": "/data.load",
+    "Data collection": "/data.external",
+    "Title": "/deep4cast_m4_example",
+    "Data": "/data.load",
     "Transforms": "/data.transforms",
+    "DNN model": "/models.dnn",
     "Wavenet model": "/models.wavenet"
   }
 }

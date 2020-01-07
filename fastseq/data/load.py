@@ -9,6 +9,7 @@ from fastcore.utils import *
 from fastcore.imports import *
 from fastai2.basics import *
 from fastai2.tabular.core import *
+from .transforms import *
 
 # Cell
 import numpy as np

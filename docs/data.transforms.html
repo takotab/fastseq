@@ -30,7 +30,7 @@ summary: "Basic function to process time-series data before assembling it in a `
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/tako/dev/env3.7/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
   warnings.warn(msg)
 </pre>
 </div>
@@ -108,6 +108,7 @@ summary: "Basic function to process time-series data before assembling it in a `
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmf</span> <span class="o">=</span> <span class="n">ToTensor</span><span class="p">()</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])),</span> <span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">float</span><span class="p">())</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">))),(</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="n">tmf</span><span class="o">.</span><span class="n">decode</span><span class="p">((</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">))),(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
 </pre></div>

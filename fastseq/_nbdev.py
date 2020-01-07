@@ -13,6 +13,7 @@ index = {"skip": "00_core.ipynb",
          "TimeSeriesDataset": "03_data.load.ipynb",
          "encodes": "04_data.transforms.ipynb",
          "decodes": "04_data.transforms.ipynb",
+         "DNN": "05_models.dnn.ipynb",
          "ConcreteDropout": "05_models.wavenet.ipynb",
          "WaveNet": "05_models.wavenet.ipynb"}
 
@@ -20,6 +21,7 @@ modules = ["core.py",
            "data/external.py",
            "data/load.py",
            "data/transforms.py",
+           "models/dnn.py",
            "models/wavenet.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"

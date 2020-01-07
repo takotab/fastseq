@@ -25,11 +25,14 @@ entries:
       title: Transforms
       url: /data.transforms
     - output: web,pdf
+      title: Wavenet model
+      url: /models.wavenet
+    - output: web,pdf
       title: DNN model
       url: /models.dnn
     - output: web,pdf
-      title: Wavenet model
-      url: /models.wavenet
+      title: Forecaster
+      url: /forecaster
     output: web
     title: fastseq
   output: web

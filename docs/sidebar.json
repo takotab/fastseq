@@ -6,7 +6,8 @@
     "Title": "/deep4cast_m4_example",
     "Data": "/data.load",
     "Transforms": "/data.transforms",
+    "Wavenet model": "/models.wavenet",
     "DNN model": "/models.dnn",
-    "Wavenet model": "/models.wavenet"
+    "Forecaster": "/forecaster"
   }
 }

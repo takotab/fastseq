@@ -16,7 +16,10 @@ index = {"skip": "00_core.ipynb",
          "ConcreteDropout": "05_models.wavenet.ipynb",
          "WaveNet": "05_models.wavenet.ipynb",
          "DNN": "06_models.dnn.ipynb",
-         "Forecaster": "07_forecaster.ipynb"}
+         "Forecaster": "07_forecaster.ipynb",
+         "mape": "08_metrics.ipynb",
+         "smape": "08_metrics.ipynb",
+         "mase": "08_metrics.ipynb"}
 
 modules = ["core.py",
            "data/external.py",

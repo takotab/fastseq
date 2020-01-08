@@ -33,6 +33,9 @@ entries:
     - output: web,pdf
       title: Forecaster
       url: /forecaster
+    - output: web,pdf
+      title: Metrics
+      url: /metrics
     output: web
     title: fastseq
   output: web

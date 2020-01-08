@@ -8,6 +8,7 @@
     "Transforms": "/data.transforms",
     "Wavenet model": "/models.wavenet",
     "DNN model": "/models.dnn",
-    "Forecaster": "/forecaster"
+    "Forecaster": "/forecaster",
+    "Metrics": "/metrics"
   }
 }

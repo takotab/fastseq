@@ -57,12 +57,13 @@ def smape(pred, truth, agg=None, **kwargs) -> np.array:
         * data_truth (``np.array``): Ground truth time series values (n_timeseries, n_variables, n_timesteps).
         * agg: Aggregation function applied to sampled predictions (defaults to ``np.median``).
     """
-    if pred.shape[:-3] != truth.shape:
-        raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
     if len(pred.shape)==4:
         agg = np.median if not agg else agg
         # Aggregate over samples
         pred = agg(pred, axis=0)
+
+    if pred.shape != truth.shape:
+        raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
 
     eps = 1e-16  # Need to make sure that denominator is not zero
     norm = 0.5 * (np.abs(pred) + np.abs(truth)) + eps

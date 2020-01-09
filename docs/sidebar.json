@@ -3,7 +3,6 @@
     "Overview": "/",
     "Core functions": "/core",
     "Data collection": "/data.external",
-    "Title": "/deep4cast_m4_example",
     "Data": "/data.load",
     "Transforms": "/data.transforms",
     "Wavenet model": "/models.wavenet",

@@ -95,6 +95,7 @@ print('Number of model parameters: {}.'.format(model.n_parameters))
 <div class="input_area" markdown="1">
 
 ```python
+# TODO make custom learner with custom model
 learn = Learner(dbunch, model, loss_func = F.mse_loss, opt_func= Adam, metrics=accuracy)
 ```
 
@@ -113,7 +114,15 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
-![png](docs/images/output_8_0.png)
+
+
+
+    /home/tako/dev/env37/lib/python3.7/site-packages/fastprogress/fastprogress.py:74: UserWarning: Your generator is empty.
+      warn("Your generator is empty.")
+
+
+
+![png](docs/images/output_8_2.png)
 
 
 </div>

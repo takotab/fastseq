@@ -26,6 +26,13 @@ from fastseq.models.dnn import *
 ```
 
 </div>
+<div class="output_area" markdown="1">
+
+    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+      warnings.warn(msg)
+
+
+</div>
 
 </div>
 
@@ -114,15 +121,7 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
-
-
-
-    /home/tako/dev/env37/lib/python3.7/site-packages/fastprogress/fastprogress.py:74: UserWarning: Your generator is empty.
-      warn("Your generator is empty.")
-
-
-
-![png](docs/images/output_8_2.png)
+![png](docs/images/output_8_0.png)
 
 
 </div>

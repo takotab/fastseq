@@ -163,10 +163,13 @@ def IndexsSplitter(train_idx, val_idx=None, test=None):
 
     Optionly if `test` will  in test set will also make test from val_idx to end.
     """
-    val_idx = ifnone(val_idx,len(items))
+    _val_idx = ifnone(val_idx,-1)
     do_test = ifnone(test, False)
-
     def _inner(items, **kwargs):
+        if _val_idx == -1:
+            val_idx = len(items)
+        else:
+            val_idx = _val_idx
         train = L(np.arange(0, train_idx), use_list=True)
         valid = L(np.arange(train_idx, val_idx), use_list=True)
         if do_test:
@@ -192,8 +195,9 @@ class TSDataBunch(DataBunch):
         lookback = ifnone(lookback, horizon * 3)
         test = concat_ts_list(train, test, lookback)
         train, valid = sep_last(train, valid_pct)
+        items = L(*train,*valid,*test)
         splits = IndexsSplitter(len(train),len(valid), True)(items)
-        dsrc = DataSource(L(*train,*valid,*test), splits=splits, dl_type=TSDataLoader)
+        dsrc = DataSource(items, splits=splits, dl_type=TSDataLoader)
         return dsrc.databunch(bs=16, horizon=horizon, lookback=lookback, step=step)
 
 #     @classmethod

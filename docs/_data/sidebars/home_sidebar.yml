@@ -31,9 +31,6 @@ entries:
       title: DNN model
       url: /models.dnn
     - output: web,pdf
-      title: Forecaster
-      url: /forecaster
-    - output: web,pdf
       title: Metrics
       url: /metrics
     output: web

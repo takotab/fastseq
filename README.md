@@ -20,19 +20,10 @@ This file will become your README and also the index of your documentation.
 <div class="input_area" markdown="1">
 
 ```python
-from fastseq.core import *
-from fastseq.data.external import *
-from fastseq.data.load import *
+from fastseq.all import *
 from fastai2.basics import *
 from fastseq.models.dnn import *
 ```
-
-</div>
-<div class="output_area" markdown="1">
-
-    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-      warnings.warn(msg)
-
 
 </div>
 
@@ -64,204 +55,16 @@ path
 <div class="input_area" markdown="1">
 
 ```python
-df_train = pd.read_csv(path/'train.csv',skiprows=skip)
-df_test = pd.read_csv(path/'val.csv')
-df_test.head()
+dbunch = TSDataBunch.from_folder(path, horizon = 14, nrows=100)
+dbunch.show_batch(max_n=6)
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
 
+![png](docs/images/output_5_0.png)
 
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>V1</th>
-      <th>V2</th>
-      <th>V3</th>
-      <th>V4</th>
-      <th>V5</th>
-      <th>V6</th>
-      <th>V7</th>
-      <th>V8</th>
-      <th>V9</th>
-      <th>V10</th>
-      <th>V11</th>
-      <th>V12</th>
-      <th>V13</th>
-      <th>V14</th>
-      <th>V15</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>D1</td>
-      <td>2039.20</td>
-      <td>2035.00</td>
-      <td>2051.80</td>
-      <td>2061.8</td>
-      <td>2063.50</td>
-      <td>2069.5</td>
-      <td>2054.00</td>
-      <td>2057.00</td>
-      <td>2062.80</td>
-      <td>2066.40</td>
-      <td>2067.40</td>
-      <td>2071.40</td>
-      <td>2083.80</td>
-      <td>2080.60</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>D2</td>
-      <td>2986.00</td>
-      <td>3001.20</td>
-      <td>2975.90</td>
-      <td>2996.1</td>
-      <td>2981.90</td>
-      <td>2985.5</td>
-      <td>2975.80</td>
-      <td>2956.20</td>
-      <td>2964.70</td>
-      <td>2989.00</td>
-      <td>2991.40</td>
-      <td>3024.90</td>
-      <td>3070.80</td>
-      <td>3076.90</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>D3</td>
-      <td>1120.70</td>
-      <td>1117.90</td>
-      <td>1115.10</td>
-      <td>1112.3</td>
-      <td>1109.50</td>
-      <td>1106.7</td>
-      <td>1103.90</td>
-      <td>1101.10</td>
-      <td>1098.30</td>
-      <td>1095.50</td>
-      <td>1092.70</td>
-      <td>1089.90</td>
-      <td>1087.10</td>
-      <td>1084.30</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>D4</td>
-      <td>1190.00</td>
-      <td>1162.00</td>
-      <td>1134.00</td>
-      <td>1106.0</td>
-      <td>1078.00</td>
-      <td>1050.0</td>
-      <td>1022.00</td>
-      <td>994.00</td>
-      <td>966.00</td>
-      <td>938.00</td>
-      <td>910.00</td>
-      <td>1428.00</td>
-      <td>1400.00</td>
-      <td>1372.00</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>D5</td>
-      <td>5904.67</td>
-      <td>5917.05</td>
-      <td>5922.58</td>
-      <td>5928.8</td>
-      <td>5935.29</td>
-      <td>6002.8</td>
-      <td>6009.47</td>
-      <td>6014.82</td>
-      <td>6020.19</td>
-      <td>6072.49</td>
-      <td>6077.72</td>
-      <td>6080.23</td>
-      <td>6082.75</td>
-      <td>6108.07</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-horizon = 12
-lookback = 128
-```
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-train = df_train.iloc[:, 1:].values
-test = df_test.iloc[:, 1:].values
-```
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-train_dl = DataLoader(TimeSeriesDataset(ts_lists(train),
-                                     lookback,
-                                     horizon,
-                                     step=1,
-                                     static_covs = [1,2,2,2,2],
-                                     transform = ToTensor()
-                                    ),
-                   batch_size=64,
-                   shuffle=True,
-                   pin_memory=True,
-                   num_workers=1,                  
-                  )
-
-test_dl = DataLoader(TimeSeriesDataset(ts_lists(test),
-                                     lookback,
-                                     horizon,
-                                     step=1,
-                                     static_covs = [1,2,2,2,2],
-                                     transform = [ToTensor(),Cuda()]
-                                    ),
-                   batch_size=64,
-                   shuffle=False,
-                   pin_memory=True,
-                   num_workers=1,                  
-                  )
-```
 
 </div>
 
@@ -272,8 +75,8 @@ test_dl = DataLoader(TimeSeriesDataset(ts_lists(test),
 ```python
 model = DNN(input_channels=1,
             output_channels=1,
-            horizon=horizon,
-            lookback = lookback
+            horizon=14,
+            lookback = 14*3
            )
 
 print('Number of model parameters: {}.'.format(model.n_parameters))
@@ -282,7 +85,7 @@ print('Number of model parameters: {}.'.format(model.n_parameters))
 </div>
 <div class="output_area" markdown="1">
 
-    Number of model parameters: 114944.
+    Number of model parameters: 43264.
 
 
 </div>
@@ -292,8 +95,7 @@ print('Number of model parameters: {}.'.format(model.n_parameters))
 <div class="input_area" markdown="1">
 
 ```python
-data = DataBunch(train_dl, test_dl).cuda()
-learn = Learner(data, model, loss_func = F.mse_loss, opt_func= Adam, metrics=accuracy)
+learn = Learner(dbunch, model, loss_func = F.mse_loss, opt_func= Adam, metrics=accuracy)
 ```
 
 </div>
@@ -311,7 +113,7 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
-![png](docs/images/output_11_0.png)
+![png](docs/images/output_8_0.png)
 
 
 </div>

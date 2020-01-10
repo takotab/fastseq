@@ -5,6 +5,7 @@ __all__ = ['encodes', 'decodes']
 # Cell
 from fastai2.torch_basics import *
 from fastai2.data.all import *
+from pyts.image import GramianAngularField, MarkovTransitionField, RecurrencePlot
 
 # Cell
 @ToTensor

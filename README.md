@@ -62,7 +62,7 @@ path
 <div class="input_area" markdown="1">
 
 ```python
-dbunch = TSDataBunch.from_folder(path, horizon = 14, nrows=100)
+dbunch = TSDataBunch.from_folder(path, horizon = 14, lookback = 72, nrows=1000)
 dbunch.show_batch(max_n=6)
 ```
 
@@ -80,30 +80,8 @@ dbunch.show_batch(max_n=6)
 <div class="input_area" markdown="1">
 
 ```python
-model = DNN(input_channels=1,
-            output_channels=1,
-            horizon=14,
-            lookback = 14*3
-           )
-
-print('Number of model parameters: {}.'.format(model.n_parameters))
-```
-
-</div>
-<div class="output_area" markdown="1">
-
-    Number of model parameters: 43264.
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
 # TODO make custom learner with custom model
-learn = Learner(dbunch, model, loss_func = F.mse_loss, opt_func= Adam, metrics=accuracy)
+learn = dnn_learner(dbunch)
 ```
 
 </div>
@@ -121,7 +99,61 @@ learn.lr_find()
 <div class="output_area" markdown="1">
 
 
-![png](docs/images/output_8_0.png)
+
+
+
+
+![png](docs/images/output_7_1.png)
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
+learn.fit(3, .1)
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>valid_loss</th>
+      <th>mae</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>463437.031250</td>
+      <td>165511936.000000</td>
+      <td>11429.174805</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1197044.250000</td>
+      <td>4634159.000000</td>
+      <td>1546.676880</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>915280.375000</td>
+      <td>17563298.000000</td>
+      <td>3099.394775</td>
+      <td>00:01</td>
+    </tr>
+  </tbody>
+</table>
 
 
 </div>

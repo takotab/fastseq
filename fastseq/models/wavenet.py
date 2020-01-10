@@ -281,5 +281,6 @@ def wavelet_learner(dbunch, output_channels=None, metrics=None, hidden_channels=
                     **kwargs
                    )
     dbunch.after_batch.add(LogTransform([0], offset=1.0))
-    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae, smape))#
+    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae, smape))
+
     return learn

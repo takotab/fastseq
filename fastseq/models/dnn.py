@@ -76,5 +76,5 @@ def dnn_learner(dbunch, output_channels=None, metrics=None, **kwargs):
         **kwargs
        )
 
-    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae) )
+    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae, smape) )
     return learn

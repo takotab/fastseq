@@ -10,7 +10,6 @@
     "Metrics": "/metrics",
     "Learner": "/learner",
     "CNN Learner": "/models.cnn.learner",
-    "CNN Transforms": "/models.cnn.transforms",
-    "Title": "/Databunch valid error"
+    "CNN Transforms": "/models.cnn.transforms"
   }
 }

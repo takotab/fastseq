@@ -39,9 +39,6 @@ entries:
     - output: web,pdf
       title: CNN Transforms
       url: /models.cnn.transforms
-    - output: web,pdf
-      title: Title
-      url: /Databunch valid error
     output: web
     title: fastseq
   output: web

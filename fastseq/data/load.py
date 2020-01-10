@@ -42,10 +42,10 @@ TSTensorSeqy.loss_func = MSELossFlat()
 # TODO maybe incl. start where the last one ended and therefor keep hidden state
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, **kwargs):
+    def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, device=None, **kwargs):
         self.items, self.horizon, self.lookback, self.step = items, horizon, lookback, step
         self.make_ids()
-        super().__init__(dataset=items, bs=bs, num_workers=num_workers, **kwargs)
+        super().__init__(dataset=items, bs=bs, num_workers=num_workers, after_batch=[Cuda(device)], **kwargs)
 
     def make_ids(self):
         # Slice each time series into examples, assigning IDs to each
@@ -139,7 +139,7 @@ class TSDataBunch(DataBunch):
         items = L(*train,*valid,*test)
         splits = IndexsSplitter(len(train),len(train)+len(valid), True)(items)
         dsrc = DataSource(items, noop, splits=splits, dl_type=TSDataLoader)
-        db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, **kwargs)
+        db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
         db.test_dl = dsrc.subset(2)
 #         TODO add with test_dl, currently give buges I guess
         return db

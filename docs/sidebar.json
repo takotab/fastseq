@@ -7,6 +7,10 @@
     "Transforms": "/data.transforms",
     "Wavenet model": "/models.wavenet",
     "DNN model": "/models.dnn",
-    "Metrics": "/metrics"
+    "Metrics": "/metrics",
+    "Learner": "/learner",
+    "CNN Learner": "/models.cnn.learner",
+    "CNN Transforms": "/models.cnn.transforms",
+    "Title": "/Databunch valid error"
   }
 }

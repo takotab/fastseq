@@ -30,6 +30,18 @@ entries:
     - output: web,pdf
       title: Metrics
       url: /metrics
+    - output: web,pdf
+      title: Learner
+      url: /learner
+    - output: web,pdf
+      title: CNN Learner
+      url: /models.cnn.learner
+    - output: web,pdf
+      title: CNN Transforms
+      url: /models.cnn.transforms
+    - output: web,pdf
+      title: Title
+      url: /Databunch valid error
     output: web
     title: fastseq
   output: web

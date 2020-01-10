@@ -29,27 +29,7 @@ def mape(data_samples, data_truth, agg=None, **kwargs) -> np.array:
     return np.mean(np.abs(data - data_truth) / norm, axis=(1, 2)) * 100.0
 
 # Cell
-def _smape(data_samples, data_truth, agg=None, **kwargs) -> np.array:
-    """Computes symmetric mean absolute percentage error (SMAPE) on the mean
-
-    Arguments:
-        * data_samples (``np.array``): Sampled predictions (n_samples, n_timeseries, n_variables, n_timesteps).
-        * data_truth (``np.array``): Ground truth time series values (n_timeseries, n_variables, n_timesteps).
-        * agg: Aggregation function applied to sampled predictions (defaults to ``np.median``).
-    """
-    if data_samples.shape[1:] != data_truth.shape:
-        raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
-    agg = np.median if not agg else agg
-
-    # Aggregate over samples
-    data = agg(data_samples, axis=0)
-
-    eps = 1e-16  # Need to make sure that denominator is not zero
-    norm = 0.5 * (np.abs(data) + np.abs(data_truth)) + eps
-
-    return np.mean(np.abs(data - data_truth) / norm, axis=(1, 2)) * 100
-
-def smape(pred, truth, agg=None, **kwargs) -> np.array:
+def smape(truth, pred, agg=None, **kwargs) -> np.array:
     """Computes symmetric mean absolute percentage error (SMAPE) on the mean
 
     Arguments:
@@ -57,18 +37,12 @@ def smape(pred, truth, agg=None, **kwargs) -> np.array:
         * data_truth (``np.array``): Ground truth time series values (n_timeseries, n_variables, n_timesteps).
         * agg: Aggregation function applied to sampled predictions (defaults to ``np.median``).
     """
-    if len(pred.shape)==4:
-        agg = np.median if not agg else agg
-        # Aggregate over samples
-        pred = agg(pred, axis=0)
-
     if pred.shape != truth.shape:
         raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
 
     eps = 1e-16  # Need to make sure that denominator is not zero
-    norm = 0.5 * (np.abs(pred) + np.abs(truth)) + eps
-
-    return np.mean(np.abs(pred - truth) / norm, axis=(1, 2)) * 100
+    norm = 0.5 * (torch.abs(pred) + torch.abs(truth)) + eps
+    return torch.mean(torch.abs(pred - truth) / norm) * 100
 
 # Cell
 def _mase(data_samples,

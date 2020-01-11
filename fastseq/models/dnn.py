@@ -7,6 +7,7 @@ from fastcore.utils import *
 from fastcore.imports import *
 from fastai2.basics import *
 from fastai2.callback.hook import num_features_model
+from fastai2.callback.all import *
 
 # Cell
 class DNN(torch.nn.Module):
@@ -38,12 +39,13 @@ class DNN(torch.nn.Module):
         self.hidden_channels = hidden_channels
 
         # Set up first layer for input
-        conv_input = torch.nn.Conv1d(
-            in_channels=input_channels,
-            out_channels=hidden_channels,
-            kernel_size=ks,
-            padding=(ks-1)//2
-        )
+        conv_input = ConvLayer(input_channels, hidden_channels, ks=ks, ndim=1)
+#         conv_input = torch.nn.Conv1d(
+#             in_channels=input_channels,
+#             out_channels=hidden_channels,
+#             kernel_size=ks,
+#             padding=(ks-1)//2
+#         )
 
         # Set up nonlinear output layers
         self.body = nn.Sequential(conv_input,Flatten())
@@ -76,5 +78,5 @@ def dnn_learner(dbunch, output_channels=None, metrics=None, **kwargs):
         **kwargs
        )
 
-    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae, smape) )
+    learn = Learner(dbunch, model, loss_func=F.mse_loss, opt_func= Adam, metrics=L(metrics)+L(mae, smape))
     return learn

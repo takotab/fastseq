@@ -42,10 +42,15 @@ TSTensorSeqy.loss_func = MSELossFlat()
 # TODO maybe incl. start where the last one ended and therefor keep hidden state
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, device=None, **kwargs):
+    def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, after_batch=None, device=None,
+                 after_item = None, **kwargs):
         self.items, self.horizon, self.lookback, self.step = items, horizon, lookback, step
-        self.make_ids()
-        super().__init__(dataset=items, bs=bs, num_workers=num_workers, after_batch=[Cuda(device)], **kwargs)
+        n = self.make_ids()
+        after_batch = ifnone(after_batch, Cuda(device))
+        after_item = ifnone(after_item, noop)
+        super().__init__(dataset=items, bs=bs, num_workers=num_workers, after_batch=after_batch,
+                         after_item=after_item, **kwargs)
+        self.n = n
 
     def make_ids(self):
         # Slice each time series into examples, assigning IDs to each
@@ -72,7 +77,7 @@ class TSDataLoader(TfmdDL):
             print("Dropped {}/{} time series due to length.".format(
                     n_dropped, len(self.items)))
         # Store the number of training examples
-        self.n = int(self._ids.__len__() )
+        return int(self._ids.__len__() )
 
     def get_id(self,idx):
         # Get time series
@@ -140,6 +145,6 @@ class TSDataBunch(DataBunch):
         splits = IndexsSplitter(len(train),len(train)+len(valid), True)(items)
         dsrc = DataSource(items, noop, splits=splits, dl_type=TSDataLoader)
         db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
-        db.test_dl = dsrc.subset(2)
+        db.test_dl = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, device=device)
 #         TODO add with test_dl, currently give buges I guess
         return db

@@ -36,6 +36,14 @@ index = {"TSeries": "00_core.ipynb",
          "mape": "08_metrics.ipynb",
          "smape": "08_metrics.ipynb",
          "mase": "08_metrics.ipynb",
+         "Block": "10_models.nbeats.ipynb",
+         "GenericBlock": "10_models.nbeats.ipynb",
+         "SeasonalityBlock": "10_models.nbeats.ipynb",
+         "TrendBlock": "10_models.nbeats.ipynb",
+         "NBeatsNet": "10_models.nbeats.ipynb",
+         "seasonality_model": "10_models.nbeats.ipynb",
+         "trend_model": "10_models.nbeats.ipynb",
+         "linspace": "10_models.nbeats.ipynb",
          "adapt_conv": "20_models.cnn.learner.ipynb",
          "prep_data": "21_models.cnn.transforms.ipynb"}
 
@@ -47,6 +55,7 @@ modules = ["core.py",
            "models/dnn.py",
            "metrics.py",
            "learner.py",
+           "models/nbeats.py",
            "models/cnn/learner.py",
            "models/cnn/transfroms.py"]
 

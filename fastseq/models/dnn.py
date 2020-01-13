@@ -66,6 +66,9 @@ class DNN(torch.nn.Module):
 
 
 # Cell
+from fastai2.basics import *
+from ..all import *
+
 @delegates(DNN.__init__)
 def dnn_learner(dbunch, output_channels=None, metrics=None, **kwargs):
     "Build a dnn style learner"

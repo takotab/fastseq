@@ -44,13 +44,22 @@ TSTensorSeqy.loss_func = MSELossFlat()
 class TSDataLoader(TfmdDL):
     def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, after_batch=None, device=None,
                  after_item = None, **kwargs):
-        self.items, self.horizon, self.lookback, self.step = items, horizon, lookback, step
+        self.horizon, self.lookback, self.step = horizon, lookback, step
+        self.items = self.norm_items(items)
         n = self.make_ids()
         after_batch = ifnone(after_batch, Cuda(device))
         after_item = ifnone(after_item, noop)
         super().__init__(dataset=items, bs=bs, num_workers=num_workers, after_batch=after_batch,
                          after_item=after_item, **kwargs)
         self.n = n
+    def norm_items(self,items):
+        items = items.map(tensor)
+        r=L()
+        for i,ts in enumerate(items):
+            ts = ts.float()
+            ts = (ts - torch.mean(ts.float(), -1, keepdim = True))/(torch.std(ts.float(), -1, keepdim = True)+1e-8)
+            r.append(ts)
+        return r
 
     def make_ids(self):
         # Slice each time series into examples, assigning IDs to each

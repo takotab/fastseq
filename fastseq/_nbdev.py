@@ -50,6 +50,7 @@ index = {"TSeries": "00_core.ipynb",
          "TrendBlock": "10_models.nbeats.ipynb",
          "TrendBlock(units": "10_models.nbeats.ipynb",
          "NBeatsNet": "10_models.nbeats.ipynb",
+         "nbeats_learner": "10_models.nbeats.ipynb",
          "adapt_conv": "20_models.cnn.learner.ipynb",
          "prep_data": "21_models.cnn.transforms.ipynb"}
 

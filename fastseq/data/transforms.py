@@ -16,9 +16,12 @@ def decodes(self,o)->np.ndarray:
     return np.array(o)
 
 # Cell
-from ..all import *
+from ..core import *
 
 class SampleNorm(Transform):
-    as_item = True
-    def encodes(self, o:TSeries):
-        return (o - o.mean(-1,keepdim = True))/(o.std(-1,keepdim=True) + 1e-8)
+    def __init__(self, mean=None, std=None, axes=(0,2,3)): self.mean,self.std,self.axes = mean,std,axes
+
+    def encodes(self, o):
+        print('encodes',o[0])
+        m, s = o[0].mean(-1,keepdim = True), o[0].std(-1,keepdim = True)
+        return (o[0] - m)/(o[0] + 1e-8),(o[1] - m)/(o[1] + 1e-8)

@@ -14,45 +14,30 @@ URLs.m4_daily = f'{m4_base}m4_daily.tgz'
 
 # Cell
 
-def dummy_data_generator(backcast_length, forecast_length, signal_type='seasonality', random=False, batch_size=32):
-    def get_x_y():
-        lin_space = np.linspace(-backcast_length, forecast_length, backcast_length + forecast_length)
+def dummy_data_generator(lookback, horizon, signal_type='seasonality', nrows=5, random = True, batch_size=32):
+    def get_datapoint():
+        lin_space = np.linspace(-lookback, horizon, lookback + horizon)
         if random:
-            offset = np.random.standard_normal() * 0.1
+            offset = np.random.standard_normal() * .10
         else:
             offset = 1
+
         if signal_type == 'trend':
             a = lin_space + offset
         elif signal_type == 'seasonality':
             a = np.cos(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)
             a += np.cos(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
-            a += lin_space * offset + np.random.rand() * 0.1
+#             a += np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
+#             a -= np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
+            a += lin_space * offset + np.random.rand() * 10
         elif signal_type == 'cos':
             a = np.cos(2 * np.pi * lin_space)
         else:
             raise Exception('Unknown signal type.')
+        return a[None,:]
 
-        x = a[:backcast_length]
-        y = a[backcast_length:]
+    data = L()
+    for i in range(nrows):
+        data.append(get_datapoint())
 
-        min_x, max_x = np.minimum(np.min(x), 0), np.max(np.abs(x))
-
-        x -= min_x
-        y -= min_x
-
-        x /= max_x
-        y /= max_x
-
-        return x, y
-
-    def gen():
-        while True:
-            xx = []
-            yy = []
-            for i in range(batch_size):
-                x, y = get_x_y()
-                xx.append(x)
-                yy.append(y)
-            yield np.array(xx), np.array(yy)
-
-    return gen()
+    return data

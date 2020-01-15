@@ -39,17 +39,14 @@ class DNN(torch.nn.Module):
         self.hidden_channels = hidden_channels
 
         # Set up first layer for input
-        conv_input = ConvLayer(input_channels, hidden_channels, ks=ks, ndim=1)
-#         conv_input = torch.nn.Conv1d(
-#             in_channels=input_channels,
-#             out_channels=hidden_channels,
-#             kernel_size=ks,
-#             padding=(ks-1)//2
-#         )
-
+        conv_input = ConvLayer(input_channels, hidden_channels//4, ks=ks, ndim=1, stride = 2)
+        conv_2 = ConvLayer(hidden_channels//4, hidden_channels//2, ks=ks, ndim=1, stride = 2)
+        conv_3 = ConvLayer(hidden_channels//2, hidden_channels, ks=ks, ndim=1, stride = 2)
+#         adaptive_pool()
         # Set up nonlinear output layers
-        self.body = nn.Sequential(conv_input,Flatten())
-        self.dnn = LinBnDrop((hidden_channels*lookback),horizon*output_channels)
+        self.body = nn.Sequential(conv_input,conv_2, conv_3, Flatten())
+        out = int((hidden_channels/8)*lookback)
+        self.dnn = LinBnDrop(out,horizon*output_channels)
 
     def forward(self, inputs):
         """Forward function."""

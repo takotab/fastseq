@@ -59,7 +59,7 @@ class TSTensorSeqy(TensorSeq):
     @classmethod
     def create(cls, t)->None:
         "Convert an array or a list of points `t` to a `Tensor`"
-        return cls(tensor(t).view(-1, 1).float())
+        return cls(tensor(t).float())
 
     def show(self, ctx=None, **kwargs):
         if 'figsize' in kwargs:

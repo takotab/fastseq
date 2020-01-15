@@ -29,7 +29,7 @@ def mape(data_samples, data_truth, agg=None, **kwargs) -> np.array:
     return np.mean(np.abs(data - data_truth) / norm, axis=(1, 2)) * 100.0
 
 # Cell
-def smape(truth, pred, agg=None, **kwargs) -> np.array:
+def smape(truth, pred, agg=None, reduction=None) -> tensor:
     """Computes symmetric mean absolute percentage error (SMAPE) on the mean
 
     Arguments:
@@ -42,7 +42,10 @@ def smape(truth, pred, agg=None, **kwargs) -> np.array:
 
     eps = 1e-16  # Need to make sure that denominator is not zero
     norm = 0.5 * (torch.abs(pred) + torch.abs(truth)) + eps
-    return torch.mean(torch.abs(pred - truth) / norm) * 100
+    ret = (torch.abs(pred - truth) / norm) * 100
+    if reduction != 'none':
+        ret = torch.mean(ret) if reduction == 'mean' else torch.sum(ret)
+    return ret
 
 # Cell
 def _mase(data_samples,

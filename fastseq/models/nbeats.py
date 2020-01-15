@@ -214,7 +214,6 @@ class NBeatsNet(Module):
                 b, f = self.stacks[stack_id][block_id](backcast)
                 backcast = backcast.to(self.device) - b
                 forecast = forecast.to(self.device) + f
-
         return forecast[:,None,:]
 
 

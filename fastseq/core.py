@@ -77,12 +77,13 @@ class TSTensorSeqy(TensorSeq):
 TSTensorSeqy.loss_func = MSELossFlat()
 
 # Cell
+from fastai2.vision.data import *
+
 @delegates(subplots)
-def show_graphs(arrays, rows=1, titles=None, **kwargs):
+def show_graphs(arrays, rows=None, cols=None, figsize=None, titles=None, **kwargs):
     "Show all images `arrays` as subplots with `rows` using `titles`"
-    cols = int(math.ceil(len(arrays)/rows))
     if titles is None: titles = [None]*len(arrays)
-    axs = subplots(rows,cols,**kwargs)[1].flat
+    axs = get_grid(len(arrays), rows=rows, cols=cols, add_vert=1, figsize=figsize)
     for a,t,ax in zip(arrays, titles, axs):
         ctx = show_graph(a[0], ax=ax, title=t)
         for y in a[1:]:

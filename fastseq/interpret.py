@@ -11,10 +11,7 @@ from .models.nbeats import *
 # Cell
 @typedispatch
 def plot_top_losses(x:TSTensorSeq, y:TSTensorSeqy, *args, **kwargs):
-    print(x.shape,y.shape, [o.shape for o in args if type(o) == torch.Tensor])
-#     ctx = x.show()
-    a = [(_x,TSTensorSeqy(_y,x_len = x.shape[-1], m = 'g'), TSTensorSeqy(pred,x_len = x.shape[-1], m = 'r'))
+    print(x.shape,y.shape, args)
+    a = [(_x,TSTensorSeqy(_y, x_len = x.shape[-1], m = 'g'), TSTensorSeqy(pred,x_len = x.shape[-1], m = 'r'))
                 for _x, _y, pred in zip(x, y, args[2])]
-    show_graphs(a, titles=[str(o) for o in args[3]])
-#     ctx = y.show(ctx=ctx)
-#     ctx = pred.show(marker='r')
+    show_graphs(a, titles=[str(o.data) for o in args[3]])

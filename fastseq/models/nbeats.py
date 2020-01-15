@@ -156,12 +156,12 @@ class NBeatsNet(Module):
         lookback=10,
         thetas_dims=(2, 8),
         share_weights_in_stack=True,
-        hidden_layer_units= [200,100],
+        layers= [200,100],
     ):
         super(NBeatsNet, self).__init__()
         self.horizon = horizon
         self.lookback = lookback
-        self.hidden_layer_units = hidden_layer_units
+        self.layers = layers
         self.nb_blocks_per_stack = nb_blocks_per_stack
         self.share_weights_in_stack = share_weights_in_stack
         self.stack_types = stack_types
@@ -184,7 +184,7 @@ class NBeatsNet(Module):
                 block = blocks[-1]  # pick up the last one when we share weights.
             else:
                 block = block_init(
-                    self.hidden_layer_units,
+                    self.layers,
                     self.thetas_dim[stack_id],
                     self.device,
                     self.lookback,

@@ -8,6 +8,7 @@ from .external import *
 from fastcore.utils import *
 from fastcore.imports import *
 from fastai2.basics import *
+from fastai2.data.transforms import *
 from fastai2.tabular.core import *
 from .transforms import *
 
@@ -20,22 +21,24 @@ from torch.utils.data import Dataset, DataLoader
 # TODO maybe incl. start where the last one ended and therefor keep hidden state
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, items, horizon, lookback=72, step=1, bs=64,  num_workers=0, after_batch=None, device=None,
-                 after_item = None, **kwargs):
+    def __init__(self, items, horizon, lookback=72, step=1, bs=64, norm=True,
+                 num_workers=0, after_batch=None, device=None, after_item = None, **kwargs):
         self.horizon, self.lookback, self.step = horizon, lookback, step
-        self.items = self.norm_items(items)
+        self.items = self.norm_items(items, norm)
         n = self.make_ids()
-        after_batch = ifnone(after_batch, Cuda(device))
+        after_batch = ifnone(after_batch, noop)
         after_item = ifnone(after_item, noop)
         super().__init__(dataset=items, bs=bs, num_workers=num_workers, after_batch=after_batch,
                          after_item=after_item, **kwargs)
         self.n = n
-    def norm_items(self,items):
+
+    def norm_items(self, items, norm):
         items = items.map(tensor)
         r=L()
         for i,ts in enumerate(items):
             ts = ts.float()
-            ts = (ts - torch.mean(ts.float(), -1, keepdim = True))/(torch.std(ts.float(), -1, keepdim = True)+1e-8)
+            if norm:
+                ts = (ts - torch.mean(ts.float(), -1, keepdim = True))/(torch.std(ts.float(), -1, keepdim = True)+1e-8)
             r.append(ts)
         return r
 
@@ -43,6 +46,7 @@ class TSDataLoader(TfmdDL):
         # Slice each time series into examples, assigning IDs to each
         last_id = 0
         n_dropped = 0
+        n_needs_padding = 0
         self._ids = {}
         for i, ts in enumerate(self.items):
             if isinstance(ts,tuple):
@@ -54,15 +58,21 @@ class TSDataLoader(TfmdDL):
                 continue
             # For short time series zero pad the input
             if ts.shape[-1] < self.lookback + self.horizon:
+                n_needs_padding += 1
                 num_examples = 1
             for j in range(num_examples):
                 self._ids[last_id + j] = (i, j * self.step)
             last_id += num_examples
 
-            # Inform user about time series that were too short
+        # Inform user about time series that were too short
         if n_dropped > 0:
             print("Dropped {}/{} time series due to length.".format(
                     n_dropped, len(self.items)))
+
+        # Inform user about time series that were short
+        if n_needs_padding > 0:
+            print("Need to pad {}/{} time series due to length.".format(
+                    n_needs_padding, len(self.items)))
         # Store the number of training examples
         return int(self._ids.__len__() )
 
@@ -154,7 +164,7 @@ def make_test_pct(items:L(), pct:float):
 class TSDataBunch(DataBunch):
     @classmethod
     @delegates(DataBunch.__init__)
-    def from_folder(cls, path, valid_pct=.2, seed=None, horizon=None, lookback=None, step=1, device=None,
+    def from_folder(cls, path, valid_pct=.5, seed=None, horizon=None, lookback=None, step=1, device=None,
                    nrows=None, skiprows=None, **kwargs):
         """Create from M-compition style in `path` with `train`,`test` csv-files.
 
@@ -169,19 +179,20 @@ class TSDataBunch(DataBunch):
 
     @classmethod
     @delegates(DataBunch.__init__)
-    def from_items(cls, items:L, horizon:int, path:Path='.', valid_pct=.2, seed=None, lookback=None, step=1,
+    def from_items(cls, items:L, horizon:int, path:Path='.', valid_pct=.5, seed=None, lookback=None, step=1,
                    device=None, **kwargs):
         """Create an list of time series.
 
         The `DataLoader` for the test set will be save as an attribute under `test_dl`
         """
-        lookback = ifnone(lookback, horizon * 3)
+        lookback = ifnone(lookback, horizon * 4)
         items, test = make_test(items, horizon, lookback, keep_lookback = True)
-        train, valid = make_test_pct(items, valid_pct)
+        train, valid = make_test(items, int(lookback*valid_pct), lookback, keep_lookback = True)
         items = L(*train,*valid,*test)
         splits = IndexsSplitter(len(train),len(train)+len(valid), True)(items)
         dsrc = DataSource(items, noop, splits=splits, dl_type=TSDataLoader)
         db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
         db.test_dl = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, device=device)
+        print(f"Train:{db.train_dl.n}; Valid: {db.valid_dl.n}; Test {db.test_dl.n}")
 #         TODO add with test_dl, currently give buges
         return db

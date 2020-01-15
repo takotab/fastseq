@@ -44,7 +44,7 @@ class DNN(torch.nn.Module):
         conv_3 = ConvLayer(hidden_channels//2, hidden_channels, ks=ks, ndim=1, stride = 2)
 #         adaptive_pool()
         # Set up nonlinear output layers
-        self.body = nn.Sequential(conv_input,conv_2, conv_3, Flatten())
+        self.body = nn.Sequential(conv_input, conv_2, conv_3, Flatten())
         out = int((hidden_channels/8)*lookback)
         self.dnn = LinBnDrop(out,horizon*output_channels)
 

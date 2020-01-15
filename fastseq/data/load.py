@@ -120,6 +120,16 @@ def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,rows=None, cols=Non
 
 
 # Cell
+@typedispatch
+def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9, **kwargs):
+    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
+    for i in range(len(samples[0])):
+        ctxs = [b.show(ctx=c, **kwargs) for b,c,_ in zip(samples.itemgot(i),ctxs,range(max_n))]
+    for i in range(len(outs[0])):
+        ctxs = [TSTensorSeqy(b ,m='*r', label='pred').show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
+    return ctxs
+
+# Cell
 def TSBlock():
     return TransformBlock(dl_type=TSDataLoader,)
 
@@ -174,7 +184,7 @@ class TSDataBunch(DataBunch):
         items = concat_ts_list(train, test)
         horizon = ifnone(horizon, len(test[0]))
         lookback = ifnone(lookback, horizon * 3)
-        return cls.from_items(items, horizon, lookback = lookback, path=path, step = step, device = device)
+        return cls.from_items(items, horizon, lookback = lookback, path=path, step = step, device = device, **kwargs)
 
 
     @classmethod
@@ -190,7 +200,7 @@ class TSDataBunch(DataBunch):
         train, valid = make_test(items, int(lookback*valid_pct), lookback, keep_lookback = True)
         items = L(*train,*valid,*test)
         splits = IndexsSplitter(len(train),len(train)+len(valid), True)(items)
-        dsrc = DataSource(items, noop, splits=splits, dl_type=TSDataLoader)
+        dsrc = DataSource(items, noop, splits=splits, dl_type = TSDataLoader)
         db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
         db.test_dl = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, device=device)
         print(f"Train:{db.train_dl.n}; Valid: {db.valid_dl.n}; Test {db.test_dl.n}")

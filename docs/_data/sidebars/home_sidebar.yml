@@ -28,11 +28,17 @@ entries:
       title: DNN model
       url: /models.dnn
     - output: web,pdf
+      title: Interpret
+      url: /interpret
+    - output: web,pdf
       title: Metrics
       url: /metrics
     - output: web,pdf
       title: Learner
       url: /learner
+    - output: web,pdf
+      title: N-Beats model
+      url: /models.nbeats
     - output: web,pdf
       title: CNN Learner
       url: /models.cnn.learner

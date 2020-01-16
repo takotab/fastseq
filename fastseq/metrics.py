@@ -42,7 +42,7 @@ def smape(truth, pred, agg=None, reduction=None) -> tensor:
 
     eps = 1e-16  # Need to make sure that denominator is not zero
     norm = 0.5 * (torch.abs(pred) + torch.abs(truth)) + eps
-    ret = (torch.abs(pred - truth) / norm) * 100
+    ret = (torch.abs(pred - truth) / norm)
     if reduction != 'none':
         ret = torch.mean(ret) if reduction == 'mean' else torch.sum(ret)
     return ret

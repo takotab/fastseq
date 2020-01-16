@@ -22,7 +22,8 @@ This file will become your README and also the index of your documentation.
 ```python
 from fastseq.all import *
 from fastai2.basics import *
-from fastseq.models.dnn import *
+from fastseq.models.nbeats import *
+from fastseq.data.external import *
 ```
 
 </div>
@@ -41,36 +42,19 @@ Getting the data fastai style:
 <div class="input_area" markdown="1">
 
 ```python
-path = untar_data(URLs.m4_daily)
-path
+items = dummy_data_generator(50, 10, nrows=1000)
+data = TSDataBunch.from_items(items, horizon = 7)
+data.show_batch()
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
+    Train:5000; Valid: 8000; Test 1000
 
 
 
-    Path('/home/tako/.fastai/data/m4_daily')
-
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-dbunch = TSDataBunch.from_folder(path, horizon = 14, lookback = 72, nrows=1000)
-dbunch.show_batch(max_n=6)
-```
-
-</div>
-<div class="output_area" markdown="1">
-
-
-![png](docs/images/output_5_0.png)
+![png](docs/images/output_4_1.png)
 
 
 </div>
@@ -81,7 +65,7 @@ dbunch.show_batch(max_n=6)
 
 ```python
 # TODO make custom learner with custom model
-learn = dnn_learner(dbunch)
+learn = nbeats_learner(data)
 ```
 
 </div>
@@ -103,7 +87,7 @@ learn.lr_find()
 
 
 
-![png](docs/images/output_7_1.png)
+![png](docs/images/output_6_1.png)
 
 
 </div>
@@ -113,7 +97,8 @@ learn.lr_find()
 <div class="input_area" markdown="1">
 
 ```python
-learn.fit(3, .1)
+learn.fit_one_cycle(10, 2e-3)
+learn.recorder.plot_loss()
 ```
 
 </div>
@@ -127,33 +112,129 @@ learn.fit(3, .1)
       <th>train_loss</th>
       <th>valid_loss</th>
       <th>mae</th>
+      <th>smape</th>
+      <th>mse_loss</th>
       <th>time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>0</td>
-      <td>463437.031250</td>
-      <td>165511936.000000</td>
-      <td>11429.174805</td>
-      <td>00:01</td>
+      <td>7.987509</td>
+      <td>1.405302</td>
+      <td>0.972781</td>
+      <td>831.637634</td>
+      <td>1.404471</td>
+      <td>00:07</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>1197044.250000</td>
-      <td>4634159.000000</td>
-      <td>1546.676880</td>
-      <td>00:01</td>
+      <td>4.172364</td>
+      <td>2.946396</td>
+      <td>1.275216</td>
+      <td>953.840759</td>
+      <td>2.945442</td>
+      <td>00:07</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>915280.375000</td>
-      <td>17563298.000000</td>
-      <td>3099.394775</td>
-      <td>00:01</td>
+      <td>4.205298</td>
+      <td>1.827061</td>
+      <td>0.931817</td>
+      <td>554.108154</td>
+      <td>1.826507</td>
+      <td>00:07</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>5.215362</td>
+      <td>1.653857</td>
+      <td>0.926697</td>
+      <td>599.112671</td>
+      <td>1.653258</td>
+      <td>00:07</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>2.404902</td>
+      <td>1.368180</td>
+      <td>0.849797</td>
+      <td>559.373230</td>
+      <td>1.367620</td>
+      <td>00:07</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>1.283748</td>
+      <td>0.564452</td>
+      <td>0.569135</td>
+      <td>535.169922</td>
+      <td>0.563917</td>
+      <td>00:07</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0.556387</td>
+      <td>0.692982</td>
+      <td>0.619801</td>
+      <td>536.428772</td>
+      <td>0.692445</td>
+      <td>00:08</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0.361346</td>
+      <td>0.552994</td>
+      <td>0.567599</td>
+      <td>540.136230</td>
+      <td>0.552454</td>
+      <td>00:08</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.226773</td>
+      <td>0.698564</td>
+      <td>0.629553</td>
+      <td>552.179565</td>
+      <td>0.698012</td>
+      <td>00:08</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>0.174508</td>
+      <td>0.632865</td>
+      <td>0.595756</td>
+      <td>535.850708</td>
+      <td>0.632329</td>
+      <td>00:08</td>
     </tr>
   </tbody>
 </table>
+
+
+
+![png](docs/images/output_7_1.png)
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```python
+learn.show_results(2,max_n=9)
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+
+
+
+
+
+![png](docs/images/output_8_1.png)
 
 
 </div>

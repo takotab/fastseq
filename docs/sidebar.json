@@ -7,8 +7,10 @@
     "Transforms": "/data.transforms",
     "Wavenet model": "/models.wavenet",
     "DNN model": "/models.dnn",
+    "Interpret": "/interpret",
     "Metrics": "/metrics",
     "Learner": "/learner",
+    "N-Beats model": "/models.nbeats",
     "CNN Learner": "/models.cnn.learner",
     "CNN Transforms": "/models.cnn.transforms"
   }

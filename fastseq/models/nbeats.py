@@ -285,7 +285,7 @@ from fastai2.basics import *
 from ..all import *
 
 @delegates(NBeatsNet.__init__)
-def nbeats_learner(dbunch:TSDataBunch, output_channels=None, metrics=None,cbs=None, alpha=0., beta=0., **kwargs):
+def nbeats_learner(dbunch:TSDataBunch, output_channels=None, metrics=None,cbs=None, alpha=0., beta=0., loss_func=None, **kwargs):
     "Build a N-Beats style learner"
     model = NBeatsNet(
         device = dbunch.train_dl.device,
@@ -294,6 +294,6 @@ def nbeats_learner(dbunch:TSDataBunch, output_channels=None, metrics=None,cbs=No
         **kwargs
        )
 #     model = model.to(dbunch.train_dl.device)
-    loss_fnc = CombinedLoss(F.mse_loss, smape ,ratio = {'smape':.000001})
-    learn = Learner(dbunch, model, loss_func=loss_fnc, opt_func= Adam, metrics=L(metrics)+L(mae, smape, F.mse_loss), cbs=L(NBeatsTrainer(alpha,beta))+L(cbs))
+    loss_func = ifnone(loss_func, CombinedLoss(F.mse_loss, smape, ratio = {'smape':.0005}))
+    learn = Learner(dbunch, model, loss_func=loss_func, opt_func= Adam, metrics=L(metrics)+L(mae, smape, F.mse_loss), cbs=L(NBeatsTrainer(alpha,beta))+L(cbs))
     return learn

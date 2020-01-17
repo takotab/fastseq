@@ -34,9 +34,8 @@ class Block(Module):
         _layers = [LinBnDrop(sizes[i], sizes[i+1], bn=self.use_bn, p=p, act=a)
                        for i,(p,a) in enumerate(zip(ps, actns))]
         self.layers = nn.Sequential(*_layers)
-
         if self.share_thetas:
-            self.theta_f_fc = self.theta_b_fc = LinBnDrop(self.layers[-1], self.thetas_dim)
+            self.theta_f_fc = self.theta_b_fc = LinBnDrop(sizes[-1], self.thetas_dim)
         else:
             self.theta_b_fc = LinBnDrop(sizes[-1], self.thetas_dim)
             self.theta_f_fc = LinBnDrop(sizes[-1], self.thetas_dim)
@@ -69,8 +68,9 @@ def bias_model(thetas, t):
 
 class BiasBlock(Block):
     def __init__(
-        self, layers:L, device, thetas_dim=1, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False
+        self, layers:L, device, thetas_dim=1, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None
     ):
+        share_thetas=True
         assert thetas_dim == 1, f"thetas_dim for BaisBlock must be 1, is now {thetas_dim}"
         store_attr(self,"device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         self.layers=L(self.layers[-1])
@@ -84,7 +84,7 @@ class LinearD(nn.Linear):
 
 class GenericBlock(Block):
     def __init__(
-        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False, y_range=[-.5,.5]
+        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5]
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         super().__init__(LinearD(self.thetas_dim, self.horizon),LinearD(self.thetas_dim, self.lookback))
@@ -159,7 +159,7 @@ class NBeatsNet(Module):
     def __init__(
         self,
         device,
-        stack_types=('bias', 'trend', 'bias', 'seaonality'),
+        stack_types=('bias', 'trend', 'seaonality'),
         nb_blocks_per_stack=3,
         horizon=5,
         lookback=10,

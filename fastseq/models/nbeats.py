@@ -287,7 +287,7 @@ class NBeatsTrainer(Callback):
         self.metrics['theta'] += value.clone().cpu().detach()
 
         # backwards
-        value = self.learn.loss_func(self.b.float(), *self.xb) * (1/self.learn.lh)
+        value = self.learn.loss_func(self.b.float(), *self.xb, reduction='mean') * (1/self.learn.lh)
         if self.b_loss != 0.:
             self.learn.loss += self.b_loss * value.mean()
         self.metrics['b_loss'] += value.sum().clone().detach()

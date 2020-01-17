@@ -10,8 +10,22 @@ from .models.nbeats import *
 
 # Cell
 @typedispatch
-def plot_top_losses(x:TSTensorSeq, y:TSTensorSeqy, *args, **kwargs):
-    print(x.shape,y.shape, args)
-    a = [(_x,TSTensorSeqy(_y, x_len = x.shape[-1], m = 'g'), TSTensorSeqy(pred,x_len = x.shape[-1], m = 'r'))
-                for _x, _y, pred in zip(x, y, args[2])]
-    show_graphs(a, titles=[str(o.data) for o in args[3]])
+def plot_top_losses(x:TSTensorSeq, y:TSTensorSeqy, *args, b={}, f={},
+                    rows=None, cols=None, figsize=None, **kwargs):
+
+    figsize = (2*3, x.shape[0]*3+0) if figsize is None else figsize
+    _, axs = plt.subplots(x.shape[0], 2, figsize=figsize, sharey='row')
+    axs = axs.flatten()
+    normal = np.arange(0,x.shape[0]*2,2)
+    for i, (_x, _y, pred, t) in enumerate(zip(x, y, args[2], args[3])):
+        ax = axs[i*2]
+        a = (_x,TSTensorSeqy(_y, x_len = x.shape[-1], m = '-g'), TSTensorSeqy(pred,x_len = x.shape[-1], m = '-*r'))
+        ctx = show_graph(a[0], ax=ax, title=str(t.data))
+        for y in a[1:]:
+            ctx = y.show(ctx=ctx)
+        ax = axs[i*2 + 1]
+        for k_f, k_b, c in zip(f.keys(),b.keys(), ['y','k','g','r','b']):
+            ax = TSTensorSeqy(f[k_f][i,:],x_len = x.shape[-1], m = '-*'+c, label = k_f).show(ctx=ax)
+            ax = TSTensorSeqy(b[k_b][i,:], m = '-*'+c, label= k_b).show(ctx=ax)
+            ax.legend(bbox_to_anchor=(1.3, 1.05))
+

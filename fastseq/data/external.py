@@ -14,7 +14,8 @@ URLs.m4_daily = f'{m4_base}m4_daily.tgz'
 
 # Cell
 
-def dummy_data_generator(lookback, horizon, signal_type='seasonality', nrows=5, random = True, batch_size=32):
+def dummy_data_generator(lookback, horizon, signal_type='seasonality', nrows=5, random = True, batch_size=32, seed = 42):
+    np.random.seed = seed
     def get_datapoint():
         lin_space = np.linspace(-lookback, horizon, lookback + horizon)
         if random:

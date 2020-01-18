@@ -41,101 +41,30 @@ def smape(truth, pred, agg=None, reduction=None) -> tensor:
         raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
 
     eps = 1e-16  # Need to make sure that denominator is not zero
-    norm = 0.5 * (torch.abs(pred) + torch.abs(truth)) + eps
-    ret = (torch.abs(pred - truth) / norm)
-    if reduction != 'none':
+    norm = (torch.abs(pred) + torch.abs(truth)) + eps
+    ret = (2 * torch.abs(pred - truth) / norm).mean(-1)
+
+    if reduction != None:
         ret = torch.mean(ret) if reduction == 'mean' else torch.sum(ret)
     return ret
 
 # Cell
-def _mase(data_samples,
-         data_truth,
-         data_insample,
-         frequencies,
-         agg=None,
-         **kwargs) -> np.array:
+
+def mase(insample, y_test, y_hat_test, freq, reduction=None):
     """Computes mean absolute scaled error (MASE) as in the `M4 competition
     <https://www.m4.unic.ac.cy/wp-content/uploads/2018/03/M4-Competitors-Guide.pdf>`_.
     Arguments:
-        * data_samples (``np.array``): Sampled predictions (n_samples, n_timeseries, n_variables, n_timesteps).
-        * data_truth (``np.array``): Ground truth time series values (n_timeseries, n_variables, n_timesteps).
-        * data_insample (``np.array``): In-sample time series data (n_timeseries, n_variables, n_timesteps).
-        * frequencies (list): Frequencies to be used when calculating the naive forecast.
-        * agg: Aggregation function applied to sampled predictions (defaults to ``np.median``).
+        *
+
     """
-    if data_samples.shape[1:] != data_truth.shape:
-        raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
-    agg = np.median if not agg else agg
-
+    eps = 1e-16  # Need to make sure that denominator is not zero
     # Calculate mean absolute for forecast and naive forecast per time series
-    errs, naive_errs = [], []
-    for i in range(data_samples.shape[1]):
-        ts_sample = data_samples[:, i]
-        ts_truth = data_truth[i]
-        ts = data_insample[i]
-        freq = int(frequencies[i])
+    err = torch.abs(y_test - y_hat_test)
 
-        data = agg(ts_sample, axis=0)
-
-        # Build mean absolute error
-        err = np.mean(np.abs(data - ts_truth))
-
-        # naive forecast is calculated using insample
-        t_in = ts.shape[-1]
-        naive_forecast = ts[:, :t_in-freq]
-        naive_target = ts[:, freq:]
-        err_naive = np.mean(np.abs(naive_target - naive_forecast))
-
-        errs.append(err)
-        naive_errs.append(err_naive)
-
-    errs = np.array(errs)
-    naive_errs = np.array(naive_errs)
-
-    return errs / naive_errs
-
-def mase(data_samples,
-         data_truth,
-         data_insample,
-         frequencies,
-         agg=None,
-         **kwargs) -> np.array:
-    """Computes mean absolute scaled error (MASE) as in the `M4 competition
-    <https://www.m4.unic.ac.cy/wp-content/uploads/2018/03/M4-Competitors-Guide.pdf>`_.
-    Arguments:
-        * data_samples (``np.array``): Sampled predictions (n_samples, n_timeseries, n_variables, n_timesteps).
-        * data_truth (``np.array``): Ground truth time series values (n_timeseries, n_variables, n_timesteps).
-        * data_insample (``np.array``): In-sample time series data (n_timeseries, n_variables, n_timesteps).
-        * frequencies (list): Frequencies to be used when calculating the naive forecast.
-        * agg: Aggregation function applied to sampled predictions (defaults to ``np.median``).
-    """
-    if data_samples.shape[1:] != data_truth.shape:
-        raise ValueError('Last three dimensions of data_samples and data_truth need to be compatible')
-    if len(data_samples.shape)==4:
-        agg = np.median if not agg else agg
-        data_samples = agg(data_samples,
-                           axis = 0)
-
-    # Calculate mean absolute for forecast and naive forecast per time series
-    errs, naive_errs = [], []
-    for i in range(data_samples.shape[0]):
-        ts_sample = data_samples[i]
-        ts_truth = data_truth[i]
-        ts = data_insample[i]
-        freq = int(frequencies[i])
-        # Build mean absolute error
-        err = np.mean(np.abs(ts_sample - ts_truth))
-
-        # naive forecast is calculated using insample
-        t_in = ts.shape[-1]
-        naive_forecast = ts[:, :t_in-freq]
-        naive_target = ts[:, freq:]
-        err_naive = np.mean(np.abs(naive_target - naive_forecast))
-
-        errs.append(err)
-        naive_errs.append(err_naive)
-
-    errs = np.array(errs)
-    naive_errs = np.array(naive_errs)
-
-    return errs / naive_errs
+    naive_forecast = insample[:, :-freq]
+    naive_target = insample[:, freq:]
+    naive_err = torch.abs(naive_target - naive_forecast).mean(-1)[:,None]
+    ret = torch.div(err, naive_err+eps).mean(-1)
+    if reduction is not None:
+        ret = torch.mean(ret,-1) if reduction == 'mean' else torch.sum(ret,-1)
+    return ret

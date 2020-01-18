@@ -122,7 +122,7 @@ def trend_model(thetas, t):
 
 class TrendBlock(Block):
     def __init__(
-        self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False, y_range=[-.5,.5]
+        self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False, y_range=[-.05,.05]
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         super().__init__(trend_model)
@@ -166,7 +166,7 @@ class NBeatsNet(Module):
         horizon=5,
         lookback=10,
         thetas_dim=None,
-        share_weights_in_stack=True,
+        share_weights_in_stack=False,
         layers= [200,100],
     ):
         super(NBeatsNet, self).__init__()
@@ -280,7 +280,7 @@ class NBeatsTrainer(Callback):
         value=tensor([0.])
         for key in self.out.keys():
             if 'bias' not in key and 'total' not in key:
-                v = self.out[key]['theta'].float().pow(2).sum()
+                v = self.out[key]['theta'].float().pow(2).mean()
                 if self.theta != 0.:
                     self.learn.loss += self.theta * v.item()
                 value = value + v
@@ -292,7 +292,8 @@ class NBeatsTrainer(Callback):
             self.learn.loss += self.b_loss * value.mean()
         self.metrics['b_loss'] += value.sum().clone().detach()
 
-
+    def theta_means(self):
+        print({key:self.out[key]['theta'].float().mean(0) for key in self.out.keys() if 'total' not in key})
 
 # Cell
 def CombinedLoss(*losses, ratio:dict=None):

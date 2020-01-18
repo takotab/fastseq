@@ -13,25 +13,25 @@
 > A way to use fastai with sequence data
 
 
-This file will become your README and also the index of your documentation.
+## Installing
+
+Please install [fastai2](https://dev.fast.ai/#Installing) according to the instructions.
+
+Then install Fastseq by:
+```
+pip install -e .
+```
 
 ## How to use
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 from fastseq.all import *
 from fastai2.basics import *
 from fastseq.models.nbeats import *
 from fastseq.data.external import *
 ```
-
-</div>
-<div class="output_area" markdown="1">
-
-    /home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:85: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
-      warnings.warn(msg)
-
 
 </div>
 
@@ -41,20 +41,34 @@ Getting the data fastai style:
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
-items = dummy_data_generator(50, 10, nrows=1000)
-data = TSDataBunch.from_items(items, horizon = 7)
+```
+path = untar_data(URLs.m4_daily)
+data = TSDataBunch.from_folder(path, horizon = 14,nrows = 30,step=3)
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+    Train:7562; Valid: 90; Test 30
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```
+# items = dummy_data_generator(50, 10, nrows=1000)
+# data = TSDataBunch.from_items(items, horizon = 7)
 data.show_batch()
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
-    Train:5000; Valid: 8000; Test 1000
 
-
-
-![png](docs/images/output_4_1.png)
+![png](docs/images/output_5_0.png)
 
 
 </div>
@@ -63,9 +77,10 @@ data.show_batch()
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 # TODO make custom learner with custom model
-learn = nbeats_learner(data)
+learn = nbeats_learner(data, b_loss=.2,
+                       loss_func= CombinedLoss(F.mse_loss, smape, ratio = {'smape':.1}))
 ```
 
 </div>
@@ -74,7 +89,7 @@ learn = nbeats_learner(data)
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 from fastai2.callback.all import *
 learn.lr_find()
 ```
@@ -87,7 +102,7 @@ learn.lr_find()
 
 
 
-![png](docs/images/output_6_1.png)
+![png](docs/images/output_7_1.png)
 
 
 </div>
@@ -96,8 +111,8 @@ learn.lr_find()
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
-learn.fit_one_cycle(10, 2e-3)
+```
+learn.fit_one_cycle(1, 2e-3)
 learn.recorder.plot_loss()
 ```
 
@@ -114,98 +129,21 @@ learn.recorder.plot_loss()
       <th>mae</th>
       <th>smape</th>
       <th>mse_loss</th>
+      <th>theta</th>
+      <th>b_loss</th>
       <th>time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>0</td>
-      <td>7.987509</td>
-      <td>1.405302</td>
-      <td>0.972781</td>
-      <td>831.637634</td>
-      <td>1.404471</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>4.172364</td>
-      <td>2.946396</td>
-      <td>1.275216</td>
-      <td>953.840759</td>
-      <td>2.945442</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>4.205298</td>
-      <td>1.827061</td>
-      <td>0.931817</td>
-      <td>554.108154</td>
-      <td>1.826507</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>5.215362</td>
-      <td>1.653857</td>
-      <td>0.926697</td>
-      <td>599.112671</td>
-      <td>1.653258</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>2.404902</td>
-      <td>1.368180</td>
-      <td>0.849797</td>
-      <td>559.373230</td>
-      <td>1.367620</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>1.283748</td>
-      <td>0.564452</td>
-      <td>0.569135</td>
-      <td>535.169922</td>
-      <td>0.563917</td>
-      <td>00:07</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>0.556387</td>
-      <td>0.692982</td>
-      <td>0.619801</td>
-      <td>536.428772</td>
-      <td>0.692445</td>
-      <td>00:08</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>0.361346</td>
-      <td>0.552994</td>
-      <td>0.567599</td>
-      <td>540.136230</td>
-      <td>0.552454</td>
-      <td>00:08</td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>0.226773</td>
-      <td>0.698564</td>
-      <td>0.629553</td>
-      <td>552.179565</td>
-      <td>0.698012</td>
-      <td>00:08</td>
-    </tr>
-    <tr>
-      <td>9</td>
-      <td>0.174508</td>
-      <td>0.632865</td>
-      <td>0.595756</td>
-      <td>535.850708</td>
-      <td>0.632329</td>
+      <td>253.582031</td>
+      <td>252.472183</td>
+      <td>6.555329</td>
+      <td>1907.065674</td>
+      <td>50.684994</td>
+      <td>0.982327</td>
+      <td>55.402950</td>
       <td>00:08</td>
     </tr>
   </tbody>
@@ -213,7 +151,7 @@ learn.recorder.plot_loss()
 
 
 
-![png](docs/images/output_7_1.png)
+![png](docs/images/output_8_1.png)
 
 
 </div>
@@ -222,7 +160,7 @@ learn.recorder.plot_loss()
 <div class="codecell" markdown="1">
 <div class="input_area" markdown="1">
 
-```python
+```
 learn.show_results(2,max_n=9)
 ```
 
@@ -234,7 +172,76 @@ learn.show_results(2,max_n=9)
 
 
 
-![png](docs/images/output_8_1.png)
+![png](docs/images/output_9_1.png)
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```
+from fastai2.interpret import *
+from fastseq.interpret import *
+```
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```
+interp = NBeatsInterpretation.from_learner(learn)
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+
+
+
+
+</div>
+
+</div>
+<div class="codecell" markdown="1">
+<div class="input_area" markdown="1">
+
+```
+interp.plot_top_losses(9)
+```
+
+</div>
+<div class="output_area" markdown="1">
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-50-776eb7830b8b> in <module>
+    ----> 1 interp.plot_top_losses(9)
+    
+
+    ~/dev/fastseq/fastseq/interpret.py in plot_top_losses(self, k, largest, **kwargs)
+         30         losses,idx = self.top_losses(k, largest)
+         31         total_b = self.dct.pop('total_b')[idx, :]
+    ---> 32         backwards = {block+'_b':self.dct[block]['b'][idx,:] for block in self.dct}
+         33         forwards = {block+'_f':self.dct[block]['f'][idx,:] for block in self.dct}
+         34 
+
+
+    ~/dev/fastseq/fastseq/interpret.py in <dictcomp>(.0)
+         30         losses,idx = self.top_losses(k, largest)
+         31         total_b = self.dct.pop('total_b')[idx, :]
+    ---> 32         backwards = {block+'_b':self.dct[block]['b'][idx,:] for block in self.dct}
+         33         forwards = {block+'_f':self.dct[block]['f'][idx,:] for block in self.dct}
+         34 
+
+
+    NameError: name 'l_dct' is not defined
 
 
 </div>

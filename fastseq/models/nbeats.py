@@ -66,14 +66,17 @@ class Block(Module):
 
 # Cell
 def bias_model(thetas, t):
-    return t[None,:].float() * thetas
+    r= torch.mm(t[None,:].float().T,thetas[:,0][None,:]).T
+    if thetas.shape[-1]==2:
+        return r+thetas[:,1][:,None]
+    return r
 
 class BiasBlock(Block):
     def __init__(
-        self, layers:L, device, thetas_dim=1, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None
+        self, layers:L, device, thetas_dim=2, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None
     ):
         share_thetas=True
-        assert thetas_dim == 1, f"thetas_dim for BaisBlock must be 1, is now {thetas_dim}"
+        assert thetas_dim <= 2, f"thetas_dim for BaisBlock must be < than 2, is now {thetas_dim}"
         store_attr(self,"device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         self.layers=L(self.layers[-1])
         super().__init__(bias_model)
@@ -170,7 +173,7 @@ class NBeatsNet(Module):
         layers= [200,100],
     ):
         super(NBeatsNet, self).__init__()
-        thetas_dim = ifnone(thetas_dim,[3 if 'bias' not in o else 1 for o in stack_types  ])
+        thetas_dim = ifnone(thetas_dim,[3 if 'bias' not in o else 2 for o in stack_types  ])
         stack_types= L(stack_types)
         store_attr(self,'device,horizon,lookback,layers,nb_blocks_per_stack,share_weights_in_stack,stack_types,thetas_dim,device')
         self.stacks = []
@@ -287,7 +290,7 @@ class NBeatsTrainer(Callback):
         self.metrics['theta'] += value.clone().cpu().detach()
 
         # backwards
-        value = self.learn.loss_func(self.b.float(), *self.xb, reduction='mean') * (1/self.learn.lh)
+        value = self.learn.loss_func(self.b.float(), *self.xb, reduction='mean') #* (1/self.learn.lh)
         if self.b_loss != 0.:
             self.learn.loss += self.b_loss * value.mean()
         self.metrics['b_loss'] += value.sum().clone().detach()

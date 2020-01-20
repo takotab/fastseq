@@ -290,13 +290,16 @@ class NBeatsTrainer(Callback):
         self.metrics['theta'] += value.clone().cpu().detach()
 
         # backwards
-        value = self.learn.loss_func(self.b.float(), *self.xb, reduction='mean') #* (1/self.learn.lh)
+        value = self.learn.loss_func(self.b.float(), *self.xb, reduction='mean')
         if self.b_loss != 0.:
             self.learn.loss += self.b_loss * value.mean()
         self.metrics['b_loss'] += value.sum().clone().detach()
 
-    def theta_means(self):
-        print({key:self.out[key]['theta'].float().mean(0) for key in self.out.keys() if 'total' not in key})
+    def theta_means(self, df=True):
+        ret ={key:self.out[key]['theta'].float().mean(0).cpu().data for key in self.out.keys() if 'total' not in key}
+        if df:
+            return pd.DataFrame(ret)
+        return ret
 
 # Cell
 def CombinedLoss(*losses, ratio:dict=None):
@@ -337,7 +340,7 @@ def nbeats_learner(dbunch:TSDataBunch, output_channels=None, metrics=None,cbs=No
 
     loss_func = ifnone(loss_func, CombinedLoss(F.mse_loss, smape, ratio = {'smape':.0005}))
     learn = Learner(dbunch, model, loss_func=loss_func, opt_func= Adam,
-                    metrics=L(metrics)+L(mae, smape, F.mse_loss, mase, NBeatsTheta(), NBeatsBackwards()),
+                    metrics=L(metrics)+L(mae, smape, F.mse_loss, NBeatsTheta(), NBeatsBackwards()),
                     cbs=L(NBeatsTrainer(theta, b_loss))+L(cbs)
                    )
     learn.lh = (learn.dbunch.train_dl.lookback/learn.dbunch.train_dl.horizon)

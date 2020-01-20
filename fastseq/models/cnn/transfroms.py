@@ -5,7 +5,7 @@ __all__ = ['prep_data']
 # Cell
 from fastai2.torch_basics import *
 from fastai2.data.all import *
-from pyts.image import GramianAngularField, MarkovTransitionField, RecurrencePlot
+# from pyts.image import GramianAngularField, MarkovTransitionField, RecurrencePlot
 
 # Cell
 def prep_data(cmap='rainbow', method='GASF', image_size=224):

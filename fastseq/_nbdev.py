@@ -31,9 +31,6 @@ index = {"TSeries": "00_core.ipynb",
          "TSDataBunch": "03_data.load.ipynb",
          "encodes": "04_data.transforms.ipynb",
          "decodes": "04_data.transforms.ipynb",
-         "ConcreteDropout": "05_models.wavenet.ipynb",
-         "WaveNet": "05_models.wavenet.ipynb",
-         "wavelet_learner": "05_models.wavenet.ipynb",
          "DNN": "06_models.dnn.ipynb",
          "dnn_learner": "06_models.dnn.ipynb",
          "NBeatsInterpretation": "07_interpret.ipynb",
@@ -60,22 +57,18 @@ index = {"TSeries": "00_core.ipynb",
          "NBeatsBackwards": "10_models.nbeats.ipynb",
          "NBeatsTrainer": "10_models.nbeats.ipynb",
          "CombinedLoss": "10_models.nbeats.ipynb",
-         "nbeats_learner": "10_models.nbeats.ipynb",
-         "adapt_conv": "20_models.cnn.learner.ipynb",
-         "prep_data": "21_models.cnn.transforms.ipynb"}
+         "nbeats_learner": "10_models.nbeats.ipynb"}
 
 modules = ["core.py",
            "data/external.py",
            "data/load.py",
            "data/transforms.py",
-           "models/wavenet.py",
            "models/dnn.py",
            "interpret.py",
            "metrics.py",
            "learner.py",
-           "models/nbeats.py",
-           "models/cnn/learner.py",
-           "models/cnn/transfroms.py"]
+           "alt_readme.py",
+           "models/nbeats.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"
 

@@ -109,7 +109,7 @@ def seasonality_model(thetas, t):
 
 class SeasonalityBlock(Block):
     def __init__(
-        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False,y_range=[-.5,.5]
+        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=True,y_range=[-.5,.5]
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         super().__init__(seasonality_model )
@@ -125,7 +125,7 @@ def trend_model(thetas, t):
 
 class TrendBlock(Block):
     def __init__(
-        self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=False, y_range=[-.05,.05]
+        self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True, bn_final=False, ps:L=None, share_thetas=True, y_range=[-.05,.05]
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas" )
         super().__init__(trend_model)

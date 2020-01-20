@@ -30,7 +30,7 @@ class Block(Module):
     def __init__(self, fnc_f, fnc_b=None):
         sizes = [self.lookback] + self.layers
         ps = ifnone(self.ps, L([0])*len(self.layers))
-        actns = [nn.ReLU(inplace=True) for _ in range(len(sizes)-2)] + [None]
+        actns = [nn.ReLU(inplace=True) for _ in range(len(sizes)-2)] + [None] # TODO swish
         _layers = [LinBnDrop(sizes[i], sizes[i+1], bn=self.use_bn, p=p, act=a)
                        for i,(p,a) in enumerate(zip(ps, actns))]
         self.layers = nn.Sequential(*_layers)
@@ -57,7 +57,7 @@ class Block(Module):
         theta_f = self.apply_range(self.theta_f_fc(x)) * att
         backcast = self.fnc_b(theta_b, self.backcast_linspace)
         forecast = self.fnc_f(theta_f, self.forecast_linspace)
-        return {'b':backcast,'f': forecast, 'theta': theta_b + theta_f}
+        return {'b':backcast,'f': forecast, 'theta': theta_b + theta_f, 'attention': att}
 
     def apply_range(self, x):
         if self.y_range is None:
@@ -133,11 +133,6 @@ class TrendBlock(Block):
 
 # Cell
 
-# blocks= defaultdict(GenericBlock)
-# blocks.update({"seasonality": SeasonalityBlock,
-#          "trend": TrendBlock,
-#          "generic": GenericBlock})
-# blocks_int= {i:v for i,v in enumerate(blocks.items())}
 # not pritty but still works better
 def select_block(o):
     if isinstance(o,int):
@@ -282,7 +277,7 @@ class NBeatsTrainer(Callback):
         # theta
         value=tensor([0.])
         for key in self.out.keys():
-            if 'bias' not in key and 'total' not in key:
+            if 'bias' not in key and 'total' not in key and 'att' not in key:
                 v = self.out[key]['theta'].float().pow(2).mean()
                 if self.theta != 0.:
                     self.learn.loss += self.theta * v.item()
@@ -300,6 +295,17 @@ class NBeatsTrainer(Callback):
         if df:
             return pd.DataFrame(ret)
         return ret
+
+    def attention(self,df=True):
+        dct = {}
+        for k,v in learn.n_beats_trainer.out.items():
+            if isinstance(k,str):
+                if 'seasonality' in k or 'trend' in k:
+                    dct[k+'mean']=[v['attention'].mean().cpu().numpy()]
+                    dct[k+'std']=[v['attention'].std().cpu().numpy()]
+        if df:
+            return pd.DataFrame(dct)
+        return dct
 
 # Cell
 def CombinedLoss(*losses, ratio:dict=None):

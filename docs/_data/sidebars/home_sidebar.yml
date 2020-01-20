@@ -22,9 +22,6 @@ entries:
       title: Transforms
       url: /data.transforms
     - output: web,pdf
-      title: Wavenet model
-      url: /models.wavenet
-    - output: web,pdf
       title: DNN model
       url: /models.dnn
     - output: web,pdf
@@ -37,14 +34,11 @@ entries:
       title: Learner
       url: /learner
     - output: web,pdf
+      title: Fastseq Alt readme
+      url: /alt
+    - output: web,pdf
       title: N-Beats model
       url: /models.nbeats
-    - output: web,pdf
-      title: CNN Learner
-      url: /models.cnn.learner
-    - output: web,pdf
-      title: CNN Transforms
-      url: /models.cnn.transforms
     output: web
     title: fastseq
   output: web

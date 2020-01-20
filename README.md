@@ -24,7 +24,7 @@ Getting the data fastai style:
 
 ```python
 path = untar_data(URLs.m4_daily)
-data = TSDataBunch.from_folder(path, horizon = 14,nrows = 300,step=3)
+data = TSDataBunch.from_folder(path, horizon = 14, nrows = 300,step=3)
 ```
 
     Train:68161; Valid: 900; Test 300
@@ -42,8 +42,8 @@ data.show_batch()
 
 ```python
 # TODO make custom learner with custom model
-learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality"), b_loss=.4,
-                       loss_func= CombinedLoss(F.mse_loss, smape, ratio = {'smape':.05})
+learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality"), b_loss=.4, nb_blocks_per_stack=5,
+                       loss_func=CombinedLoss(F.mse_loss, smape, ratio = {'smape':.05})
                       )
 ```
 
@@ -61,7 +61,7 @@ learn.lr_find()
 
 
 ```python
-learn.fit_one_cycle(3, 1e-3)
+learn.fit_one_cycle(3, 1e-4)
 learn.recorder.plot_loss()
 ```
 
@@ -83,36 +83,36 @@ learn.recorder.plot_loss()
   <tbody>
     <tr>
       <td>0</td>
-      <td>4.525622</td>
-      <td>4.018864</td>
-      <td>0.773341</td>
-      <td>1.091936</td>
-      <td>0.995230</td>
-      <td>3.933015</td>
-      <td>33.663334</td>
-      <td>01:08</td>
+      <td>11.667146</td>
+      <td>10.400988</td>
+      <td>0.726101</td>
+      <td>0.982751</td>
+      <td>0.925580</td>
+      <td>5.981860</td>
+      <td>132.845291</td>
+      <td>01:32</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>2.175433</td>
-      <td>1.932836</td>
-      <td>0.729152</td>
-      <td>1.042686</td>
-      <td>0.878769</td>
-      <td>4.470623</td>
-      <td>12.260767</td>
-      <td>01:09</td>
+      <td>7.654520</td>
+      <td>10.266610</td>
+      <td>0.698656</td>
+      <td>1.001247</td>
+      <td>0.811926</td>
+      <td>7.290051</td>
+      <td>128.003708</td>
+      <td>01:30</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>3.739684</td>
-      <td>4.743078</td>
-      <td>0.727991</td>
-      <td>1.004584</td>
-      <td>0.873061</td>
-      <td>4.947448</td>
-      <td>48.929226</td>
-      <td>01:10</td>
+      <td>6.745286</td>
+      <td>10.285508</td>
+      <td>0.723681</td>
+      <td>0.960909</td>
+      <td>0.882981</td>
+      <td>7.249493</td>
+      <td>126.368530</td>
+      <td>01:30</td>
     </tr>
   </tbody>
 </table>
@@ -123,7 +123,7 @@ learn.recorder.plot_loss()
 
 
 ```python
-learn.show_results(1,max_n=9)
+learn.show_results(2,max_n=9)
 ```
 
 
@@ -150,7 +150,7 @@ interp = NBeatsInterpretation.from_learner(learn)
 
 
 ```python
-interp.plot_top_losses(9)
+interp.plot_top_losses(3)
 ```
 
 

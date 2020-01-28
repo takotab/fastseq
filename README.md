@@ -24,7 +24,7 @@ Getting the data fastai style:
 
 ```python
 path = untar_data(URLs.m4_daily)
-data = TSDataBunch.from_folder(path, horizon = 14, nrows = 300,step=3)
+data = TSDataLoaders.from_folder(path, horizon = 14, nrows = 300,step=3)
 ```
 
     Train:68161; Valid: 900; Test 300
@@ -32,7 +32,7 @@ data = TSDataBunch.from_folder(path, horizon = 14, nrows = 300,step=3)
 
 ```python
 # items = dummy_data_generator(50, 10, nrows=1000)
-# data = TSDataBunch.from_items(items, horizon = 7)
+# data = TSDataLoaders.from_items(items, horizon = 7)
 data.show_batch()
 ```
 

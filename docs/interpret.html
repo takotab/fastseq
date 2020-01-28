@@ -31,7 +31,7 @@ summary: "Interpret the results of a model"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">items</span> <span class="o">=</span> <span class="n">dummy_data_generator</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">dbunch</span> <span class="o">=</span> <span class="n">TSDataBunch</span><span class="o">.</span><span class="n">from_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">dbunch</span> <span class="o">=</span> <span class="n">TSDataLoaders</span><span class="o">.</span><span class="n">from_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
 <span class="n">dbunch</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">max_n</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 </pre></div>
 

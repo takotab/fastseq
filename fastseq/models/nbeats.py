@@ -335,7 +335,7 @@ from fastai2.basics import *
 from ..all import *
 
 @delegates(NBeatsNet.__init__)
-def nbeats_learner(dbunch:TSDataBunch, output_channels=None, metrics=None,cbs=None, theta=0., b_loss=0., loss_func=None, **kwargs):
+def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=None, theta=0., b_loss=0., loss_func=None, **kwargs):
     "Build a N-Beats style learner"
     model = NBeatsNet(
         device = dbunch.train_dl.device,

@@ -1,3 +1,3 @@
-from .data.load import *
+from .data.all import *
 from .metrics import *
 from .core import *

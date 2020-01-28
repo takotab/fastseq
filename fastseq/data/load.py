@@ -171,9 +171,9 @@ def make_test_pct(items:L(), pct:float):
     return train, val
 
 # Cell
-class TSDataBunch(DataBunch):
+class TSDataBunch(DataLoaders):
     @classmethod
-    @delegates(DataBunch.__init__)
+    @delegates(DataLoaders.__init__)
     def from_folder(cls, path, valid_pct=.5, seed=None, horizon=None, lookback=None, step=1, device=None,
                    nrows=None, skiprows=None, **kwargs):
         """Create from M-compition style in `path` with `train`,`test` csv-files.
@@ -188,7 +188,7 @@ class TSDataBunch(DataBunch):
 
 
     @classmethod
-    @delegates(DataBunch.__init__)
+    @delegates(DataLoaders.__init__)
     def from_items(cls, items:L, horizon:int, path:Path='.', valid_pct=.5, seed=None, lookback=None, step=1,
                    device=None, **kwargs):
         """Create an list of time series.
@@ -200,8 +200,8 @@ class TSDataBunch(DataBunch):
         train, valid = make_test(items, int(lookback*valid_pct), lookback, keep_lookback = True)
         items = L(*train,*valid,*test)
         splits = IndexsSplitter(len(train),len(train)+len(valid), True)(items)
-        dsrc = DataSource(items, noop, splits=splits, dl_type = TSDataLoader)
-        db = dsrc.databunch(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
+        dsrc = Datasets(items, noop, splits=splits, dl_type = TSDataLoader)
+        db = dsrc.dataloaders(horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
         db.test_dl = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, device=device)
         print(f"Train:{db.train_dl.n}; Valid: {db.valid_dl.n}; Test {db.test_dl.n}")
 #         TODO add with test_dl, currently give buges

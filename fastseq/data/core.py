@@ -56,7 +56,7 @@ class TSDataLoaders(DataLoaders):
                    nrows=None, skiprows=None, incl_test = True, path:Path='.', device=None, **kwargs):
         """Create from M-compition style in `path` with `train`,`test` csv-files.
 
-        The `DataLoader` for the test set will be save as an attribute under `test_dl`
+        The `DataLoader` for the test set will be save as an attribute under `test`
         """
         train, test = get_ts_files(data_path, nrows=nrows, skiprows=skiprows)
         items = concat_ts_list(train, test).map(tensor)
@@ -71,7 +71,7 @@ class TSDataLoaders(DataLoaders):
                    incl_test = True, path:Path='.', device=None, **kwargs):
         """Create an list of time series.
 
-        The `DataLoader` for the test set will be save as an attribute under `test_dl`
+        The `DataLoader` for the test set will be save as an attribute under `test`
         """
         lookback = ifnone(lookback, horizon * 4)
         if incl_test:

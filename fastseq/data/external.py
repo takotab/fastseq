@@ -13,8 +13,7 @@ m4_base = "https://motionnet-m4-dataset.s3.eu-central-1.amazonaws.com/"
 URLs.m4_daily = f'{m4_base}m4_daily.tgz'
 
 # Cell
-
-def dummy_data_generator(lookback, horizon, signal_type='seasonality', nrows=5, random = True, batch_size=32, seed = 42):
+def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', nrows:int=5, random = True, batch_size=32, seed = 42):
     np.random.seed = seed
     def get_datapoint():
         lin_space = np.linspace(-lookback, horizon, lookback + horizon)

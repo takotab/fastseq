@@ -20,7 +20,7 @@ import pandas as pd
 class TSDataLoader(TfmdDL):
     def __init__(self, dataset, horizon, lookback=72, step=1, **kwargs):
         self.horizon, self.lookback, self.step = horizon, lookback, step
-        self.dataset = dataset
+        self.dataset = [o.float() for o in L(dataset).map(tensor)]
         n = self.make_ids()
         super().__init__(dataset=self.dataset, **kwargs)
         self.n = n

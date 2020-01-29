@@ -13,7 +13,7 @@ pip install -e .
 
 ## How to use
 
-```python
+```
 from fastseq.all import *
 from fastai2.basics import *
 from fastseq.models.nbeats import *
@@ -22,7 +22,7 @@ from fastseq.data.external import *
 
 Getting the data fastai style:
 
-```python
+```
 path = untar_data(URLs.m4_daily)
 data = TSDataLoaders.from_folder(path, horizon = 14, nrows = 300,step=3)
 ```
@@ -30,7 +30,7 @@ data = TSDataLoaders.from_folder(path, horizon = 14, nrows = 300,step=3)
     Train:68161; Valid: 900; Test 300
 
 
-```python
+```
 data.show_batch()
 ```
 
@@ -41,7 +41,7 @@ data.show_batch()
 ![png](docs/images/output_5_1.png)
 
 
-```python
+```
 # TODO make custom learner with custom model
 learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality"), b_loss=.4, nb_blocks_per_stack=5,
                        loss_func=CombinedLoss(F.mse_loss, smape, ratio = {'smape':.05})
@@ -79,7 +79,7 @@ learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality
     AttributeError: train_dl
 
 
-```python
+```
 from fastai2.callback.all import *
 learn.lr_find()
 ```
@@ -97,7 +97,7 @@ learn.lr_find()
     NameError: name 'learn' is not defined
 
 
-```python
+```
 learn.fit_one_cycle(3, 1e-4, cbs=cbs)
 learn.recorder.plot_loss()
 ```
@@ -158,7 +158,7 @@ learn.recorder.plot_loss()
 
 
 
-```python
+```
 learn.show_results(2,max_n=9)
 ```
 
@@ -172,12 +172,12 @@ learn.show_results(2,max_n=9)
 
 ## Interperation
 
-```python
+```
 from fastai2.interpret import *
 from fastseq.interpret import *
 ```
 
-```python
+```
 interp = NBeatsInterpretation.from_learner(learn)
 ```
 
@@ -185,7 +185,7 @@ interp = NBeatsInterpretation.from_learner(learn)
 
 
 
-```python
+```
 interp.plot_top_losses(3)
 ```
 

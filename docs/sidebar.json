@@ -6,10 +6,9 @@
     "Data Load": "/data.load",
     "Data Core": "/data.core",
     "Transforms": "/data.transforms",
-    "Metrics": "/metrics",
-    "N-Beats model": "/models.nbeats",
+    "N-Beats model": "/nbeats.models",
     "Interpret": "/interpret",
-    "Fastseq Alt readme": "/alt",
-    "Data": "/data.loadpandas"
+    "Metrics": "/metrics",
+    "N-Beats metrics": "/nbeats.metrics"
   }
 }

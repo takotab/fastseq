@@ -3,13 +3,13 @@
     "Overview": "/",
     "Core functions": "/core",
     "Data collection": "/data.external",
-    "Data": "/data.load",
+    "Data Load": "/data.load",
+    "Data Core": "/data.core",
     "Transforms": "/data.transforms",
-    "DNN model": "/models.dnn",
-    "Interpret": "/interpret",
     "Metrics": "/metrics",
-    "Learner": "/learner",
+    "N-Beats model": "/models.nbeats",
+    "Interpret": "/interpret",
     "Fastseq Alt readme": "/alt",
-    "N-Beats model": "/models.nbeats"
+    "Data": "/data.loadpandas"
   }
 }

@@ -16,29 +16,29 @@ entries:
       title: Data collection
       url: /data.external
     - output: web,pdf
-      title: Data
+      title: Data Load
       url: /data.load
+    - output: web,pdf
+      title: Data Core
+      url: /data.core
     - output: web,pdf
       title: Transforms
       url: /data.transforms
     - output: web,pdf
-      title: DNN model
-      url: /models.dnn
+      title: Metrics
+      url: /metrics
+    - output: web,pdf
+      title: N-Beats model
+      url: /models.nbeats
     - output: web,pdf
       title: Interpret
       url: /interpret
     - output: web,pdf
-      title: Metrics
-      url: /metrics
-    - output: web,pdf
-      title: Learner
-      url: /learner
-    - output: web,pdf
       title: Fastseq Alt readme
       url: /alt
     - output: web,pdf
-      title: N-Beats model
-      url: /models.nbeats
+      title: Data
+      url: /data.loadpandas
     output: web
     title: fastseq
   output: web

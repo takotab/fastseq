@@ -13,7 +13,7 @@ entries:
       title: Core functions
       url: /core
     - output: web,pdf
-      title: Data collection
+      title: Data Collection
       url: /data.external
     - output: web,pdf
       title: Data Load

@@ -2,7 +2,7 @@
   "fastseq": {
     "Overview": "/",
     "Core functions": "/core",
-    "Data collection": "/data.external",
+    "Data Collection": "/data.external",
     "Data Load": "/data.load",
     "Data Core": "/data.core",
     "Transforms": "/data.transforms",

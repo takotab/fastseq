@@ -31,13 +31,14 @@ data = TSDataLoaders.from_folder(path, horizon = 14, nrows = 300,step=3)
 
 
 ```python
-# items = dummy_data_generator(50, 10, nrows=1000)
-# data = TSDataLoaders.from_items(items, horizon = 7)
 data.show_batch()
 ```
 
+    Train:5000; Valid: 8000; Test 1000
 
-![png](docs/images/output_5_0.png)
+
+
+![png](docs/images/output_5_1.png)
 
 
 ```python
@@ -47,24 +48,78 @@ learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality
                       )
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-8-df9d82c254a7> in <module>
+          1 # TODO make custom learner with custom model
+          2 learn = nbeats_learner(data,layers=[512, 512], stack_types=("trend","seasonality"), b_loss=.4, nb_blocks_per_stack=5,
+    ----> 3                        loss_func=CombinedLoss(F.mse_loss, smape, ratio = {'smape':.05})
+          4                       )
+
+
+    ~/dev/fastseq/fastseq/models/nbeats.py in nbeats_learner(dbunch, output_channels, metrics, cbs, theta, b_loss, loss_func, **kwargs)
+        339     "Build a N-Beats style learner"
+        340     model = NBeatsNet(
+    --> 341         device = dbunch.train_dl.device,
+        342         horizon = dbunch.train_dl.horizon,
+        343         lookback = dbunch.train_dl.lookback,
+
+
+    ~/dev/fastcore/fastcore/foundation.py in __getattr__(self, k)
+        221             attr = getattr(self,self._default,None)
+        222             if attr is not None: return getattr(attr, k)
+    --> 223         raise AttributeError(k)
+        224     def __dir__(self): return custom_dir(self, self._dir() if self._xtra is None else self._dir())
+        225 #     def __getstate__(self): return self.__dict__
+
+
+    AttributeError: train_dl
+
+
 ```python
 from fastai2.callback.all import *
 learn.lr_find()
 ```
 
 
+    ---------------------------------------------------------------------------
 
+    NameError                                 Traceback (most recent call last)
 
+    <ipython-input-9-bd8b18fd11a5> in <module>
+          1 from fastai2.callback.all import *
+    ----> 2 learn.lr_find()
+    
 
-
-![png](docs/images/output_7_1.png)
+    NameError: name 'learn' is not defined
 
 
 ```python
-learn.fit_one_cycle(3, 1e-4)
+learn.fit_one_cycle(3, 1e-4, cbs=cbs)
 learn.recorder.plot_loss()
 ```
 
+
+
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+                background: #F44336;
+            }
+        </style>
+      <progress value='0' class='' max='3', style='width:300px; height:20px; vertical-align: middle;'></progress>
+      0.00% [0/3 00:00<00:00]
+    </div>
 
 <table border="1" class="dataframe">
   <thead>
@@ -81,45 +136,26 @@ learn.recorder.plot_loss()
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>0</td>
-      <td>11.667146</td>
-      <td>10.400988</td>
-      <td>0.726101</td>
-      <td>0.982751</td>
-      <td>0.925580</td>
-      <td>5.981860</td>
-      <td>132.845291</td>
-      <td>01:32</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>7.654520</td>
-      <td>10.266610</td>
-      <td>0.698656</td>
-      <td>1.001247</td>
-      <td>0.811926</td>
-      <td>7.290051</td>
-      <td>128.003708</td>
-      <td>01:30</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>6.745286</td>
-      <td>10.285508</td>
-      <td>0.723681</td>
-      <td>0.960909</td>
-      <td>0.882981</td>
-      <td>7.249493</td>
-      <td>126.368530</td>
-      <td>01:30</td>
-    </tr>
   </tbody>
-</table>
+</table><p>
 
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+                background: #F44336;
+            }
+        </style>
+      <progress value='185' class='' max='1065', style='width:300px; height:20px; vertical-align: middle;'></progress>
+      17.37% [185/1065 00:15<01:13 7.6649]
+    </div>
 
-
-![png](docs/images/output_8_1.png)
 
 
 ```python

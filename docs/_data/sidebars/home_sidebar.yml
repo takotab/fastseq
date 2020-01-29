@@ -25,20 +25,17 @@ entries:
       title: Transforms
       url: /data.transforms
     - output: web,pdf
-      title: Metrics
-      url: /metrics
-    - output: web,pdf
       title: N-Beats model
-      url: /models.nbeats
+      url: /nbeats.models
     - output: web,pdf
       title: Interpret
       url: /interpret
     - output: web,pdf
-      title: Fastseq Alt readme
-      url: /alt
+      title: Metrics
+      url: /metrics
     - output: web,pdf
-      title: Data
-      url: /data.loadpandas
+      title: N-Beats metrics
+      url: /nbeats.metrics
     output: web
     title: fastseq
   output: web

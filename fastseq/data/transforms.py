@@ -5,6 +5,7 @@ __all__ = ['NormalizeTS']
 # Cell
 from fastai2.torch_basics import *
 from fastai2.data.all import *
+
 # from pyts.image import GramianAngularField, MarkovTransitionField, RecurrencePlot
 
 # Cell
@@ -12,9 +13,24 @@ class NormalizeTS(ItemTransform):
     "Normalize the Time-Series."
     def __init__(self,):
         self.m, self.s = 0, 0
+
     def encodes(self, o):
         self.m, self.s = torch.mean(o[0],-1,keepdim=True), o[0].std(-1,keepdim=True)+1e-7
         return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
-        return Tuple([o[i]*self.s+self.m for i in range(len(o))])
+        print([a.is_cuda for a in o], self.m.is_cuda)
+        if o[0].is_cuda:
+            self.m, self.s = to_device(self.m,'cuda'), to_device(self.s,'cuda')
+            if sum([a.is_cuda for a in o]) != len(o):
+                o = Tuple([to_device(a,'cuda') for a in o])
+        else:
+            if sum([a.is_cuda==False for a in o]) != len(o):
+                o = Tuple([to_cpu(a) for a in o])
+            self.m, self.s = to_cpu(self.m), to_cpu(self.s)
+
+        print([a.is_cuda for a in o], self.m.is_cuda)
+
+        return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
+
+

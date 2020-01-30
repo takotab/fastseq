@@ -56,7 +56,7 @@ class Block(Module):
         theta_f = self.apply_range(self.theta_f_fc(x)) * att
         backcast = self.fnc_b(theta_b, self.backcast_linspace)
         forecast = self.fnc_f(theta_f, self.forecast_linspace)
-        return {'b':backcast,'f': forecast, 'theta': theta_b + theta_f, 'attention': att}
+        return {'b':backcast,'f': forecast, 'theta': att*(theta_b + theta_f), 'attention': att}
 
     def apply_range(self, x):
         if self.y_range is None:

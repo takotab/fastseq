@@ -61,9 +61,9 @@ summary: "A basic architecture for time series forecasting."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsTheta" class="doc_header"><code>class</code> <code>NBeatsTheta</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/metrics.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsTheta</code>() :: <code>Callback</code></p>
+<h2 id="NBeatsTheta" class="doc_header"><code>class</code> <code>NBeatsTheta</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/metrics.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsTheta</code>() :: <code>Metric</code></p>
 </blockquote>
-<p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
+<p>The sqaure of the <code>theta</code> for every block.</p>
 
 </div>
 
@@ -125,23 +125,23 @@ summary: "A basic architecture for time series forecasting."
   <tbody>
     <tr>
       <td>0</td>
-      <td>9.483101</td>
-      <td>29.125875</td>
-      <td>0.309634</td>
+      <td>5.241432</td>
+      <td>0.869343</td>
+      <td>0.049956</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>6.771714</td>
-      <td>10.524466</td>
-      <td>0.258932</td>
+      <td>3.196145</td>
+      <td>0.274113</td>
+      <td>0.050000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>4.820271</td>
-      <td>1.625215</td>
-      <td>0.140535</td>
+      <td>2.211596</td>
+      <td>0.653569</td>
+      <td>0.346030</td>
       <td>00:00</td>
     </tr>
   </tbody>
@@ -186,9 +186,8 @@ summary: "A basic architecture for time series forecasting."
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span><span class="mi">10</span>
 <span class="n">items</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">550</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">110</span><span class="p">,</span><span class="o">-</span><span class="mi">56</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">TSDataLoaders</span><span class="o">.</span><span class="n">from_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">after_batch</span> <span class="o">=</span> <span class="n">NormalizeTS</span><span class="p">()</span>
-                               <span class="p">)</span>
-
-<span class="n">mdl</span> <span class="o">=</span> <span class="n">NBeatsNet</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">stack_types</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;trend&#39;</span><span class="p">,</span><span class="s1">&#39;seaonality&#39;</span><span class="p">),</span> <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">)</span>
+                             <span class="p">)</span>
+<span class="n">mdl</span> <span class="o">=</span> <span class="n">NBeatsNet</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">)</span>
 <span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span>
 <span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mdl</span><span class="p">,</span> <span class="n">loss_func</span><span class="o">=</span><span class="n">loss_func</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">NBeatsBackwards</span><span class="p">()],</span>
                 <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">NBeatsTrainer</span><span class="p">())</span>
@@ -207,52 +206,14 @@ summary: "A basic architecture for time series forecasting."
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Train:89; Valid: 33; Test 3
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-13-6d639892ec7d&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">4</span>
+<span class="ansi-red-fg">    bs=32)</span>
+     ^
+<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: left;">
-      <th>epoch</th>
-      <th>train_loss</th>
-      <th>valid_loss</th>
-      <th>b_loss</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0</td>
-      <td>8.142207</td>
-      <td>15.177962</td>
-      <td>5.737937</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>5.951160</td>
-      <td>10.393651</td>
-      <td>6.248781</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>4.511688</td>
-      <td>0.583673</td>
-      <td>3.075855</td>
-      <td>00:00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 </div>
 
 </div>
@@ -299,163 +260,16 @@ summary: "A basic architecture for time series forecasting."
 <span class="n">data</span> <span class="o">=</span> <span class="n">TSDataLoaders</span><span class="o">.</span><span class="n">from_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">after_batch</span> <span class="o">=</span> <span class="n">NormalizeTS</span><span class="p">()</span>
                                <span class="p">)</span>
 <span class="n">stack_types</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;trend&#39;</span><span class="p">,</span><span class="s1">&#39;seaonality&#39;</span><span class="p">)</span>
-<span class="n">mdl</span> <span class="o">=</span> <span class="n">NBeatsNet</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">stack_types</span><span class="o">=</span><span class="n">stack_types</span><span class="p">,</span> <span class="n">nb_blocks_per_stack</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">)</span>
-<span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span>
-<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mdl</span><span class="p">,</span> <span class="n">loss_func</span><span class="o">=</span><span class="n">loss_func</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span> <span class="n">Adam</span><span class="p">,</span> 
-                <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">NBeatsTrainer</span><span class="p">(),</span><span class="n">NBeatsAttention</span><span class="p">()</span>
-                     <span class="p">)</span>
-               <span class="p">)</span>
-
-<span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">n_beats_attention</span><span class="o">.</span><span class="n">att</span><span class="p">()</span>
-<span class="n">df</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Train:89; Valid: 33; Test 3
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: left;">
-      <th>epoch</th>
-      <th>train_loss</th>
-      <th>valid_loss</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0</td>
-      <td>7.643333</td>
-      <td>12.760280</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>7.018129</td>
-      <td>0.826835</td>
-      <td>00:00</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>5.923955</td>
-      <td>0.319152</td>
-      <td>00:00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>trend0_0</th>
-      <th>seaonality1_0</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>att_mean</th>
-      <td>1.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>att_std</th>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsTheta" class="doc_header"><code>class</code> <code>NBeatsTheta</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/metrics.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsTheta</code>() :: <code>Callback</code></p>
-</blockquote>
-<p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span><span class="mi">10</span>
-<span class="n">items</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">550</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:],</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">110</span><span class="p">,</span><span class="o">-</span><span class="mi">56</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">TSDataLoaders</span><span class="o">.</span><span class="n">from_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">after_batch</span> <span class="o">=</span> <span class="n">NormalizeTS</span><span class="p">()</span>
-                               <span class="p">)</span>
-<span class="n">stack_types</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;trend&#39;</span><span class="p">,</span><span class="s1">&#39;seaonality&#39;</span><span class="p">)</span>
 <span class="n">thetas_dim</span><span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">mdl</span> <span class="o">=</span> <span class="n">NBeatsNet</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">stack_types</span><span class="o">=</span><span class="n">stack_types</span><span class="p">,</span> <span class="n">nb_blocks_per_stack</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="n">lookback</span><span class="p">,</span> <span class="n">thetas_dim</span><span class="o">=</span><span class="n">thetas_dim</span><span class="p">)</span>
 <span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span>
 <span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mdl</span><span class="p">,</span> <span class="n">loss_func</span><span class="o">=</span><span class="n">loss_func</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span> <span class="n">Adam</span><span class="p">,</span> 
-                <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">NBeatsTrainer</span><span class="p">(),</span><span class="n">NBeatsTheta</span><span class="p">()</span>
+                <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">NBeatsTrainer</span><span class="p">(),</span> <span class="n">NBeatsAttention</span><span class="p">()</span>
                      <span class="p">)</span>
                <span class="p">)</span>
 
 <span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">n_beats_theta</span><span class="o">.</span><span class="n">means</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">n_beats_attention</span><span class="o">.</span><span class="n">means</span><span class="p">()</span>
 <span class="n">df</span>
 </pre></div>
 
@@ -490,20 +304,20 @@ summary: "A basic architecture for time series forecasting."
   <tbody>
     <tr>
       <td>0</td>
-      <td>14.895495</td>
-      <td>145.378387</td>
+      <td>22.125904</td>
+      <td>5.970752</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>23.739845</td>
-      <td>21.062042</td>
+      <td>30.452126</td>
+      <td>4.298546</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>17.533102</td>
-      <td>129.050461</td>
+      <td>24.662178</td>
+      <td>3.319638</td>
       <td>00:00</td>
     </tr>
   </tbody>
@@ -541,8 +355,8 @@ summary: "A basic architecture for time series forecasting."
   <tbody>
     <tr>
       <th>theta_0_mean</th>
-      <td>-0.09999997</td>
-      <td>-1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>theta_0_std</th>
@@ -551,7 +365,7 @@ summary: "A basic architecture for time series forecasting."
     </tr>
     <tr>
       <th>theta_1_mean</th>
-      <td>-0.09999997</td>
+      <td>0.0</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -561,7 +375,7 @@ summary: "A basic architecture for time series forecasting."
     </tr>
     <tr>
       <th>theta_2_mean</th>
-      <td>-0.09999997</td>
+      <td>0.0</td>
       <td>NaN</td>
     </tr>
     <tr>
@@ -571,18 +385,23 @@ summary: "A basic architecture for time series forecasting."
     </tr>
     <tr>
       <th>theta_3_mean</th>
-      <td>-0.09913775</td>
+      <td>0.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>theta_3_std</th>
-      <td>4.636702e-08</td>
+      <td>0.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>att_mean</th>
-      <td>1.0</td>
-      <td>1.0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>att_std</th>
+      <td>0</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>

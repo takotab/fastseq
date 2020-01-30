@@ -42,12 +42,13 @@ index = {"TSeries": "00_core.ipynb",
          "NBeatsTheta": "06_nbeats.metrics.ipynb",
          "NBeatsBackwards": "06_nbeats.metrics.ipynb",
          "NBeatsAttention": "06_nbeats.metrics.ipynb",
-         "NBeatsInterpretation": "07_interpret.ipynb",
-         "add_stack": "07_interpret.ipynb",
-         "mape": "10_metrics.ipynb",
-         "smape": "10_metrics.ipynb",
-         "SMAPELossFlat": "10_metrics.ipynb",
-         "mase": "10_metrics.ipynb"}
+         "nbeats_learner": "07_nbeats.learner.ipynb",
+         "NBeatsInterpretation": "10_interpret.ipynb",
+         "add_stack": "10_interpret.ipynb",
+         "mape": "11_metrics.ipynb",
+         "smape": "11_metrics.ipynb",
+         "SMAPELossFlat": "11_metrics.ipynb",
+         "mase": "11_metrics.ipynb"}
 
 modules = ["core.py",
            "data/external.py",
@@ -56,8 +57,8 @@ modules = ["core.py",
            "data/transforms.py",
            "nbeats/model.py",
            "nbeats/metrics.py",
-           "interpret.py",
            "nbeats/learner.py",
+           "interpret.py",
            "metrics.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"

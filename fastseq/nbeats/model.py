@@ -83,6 +83,7 @@ class BiasBlock(Block):
 
 # Cell
 class LinearD(nn.Linear):
+    """"""
     def forward(self, x, *args, **kwargs):
         return super().forward(x)
 

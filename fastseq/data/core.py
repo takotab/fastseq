@@ -76,13 +76,13 @@ class TSDataLoaders(DataLoaders):
         lookback = ifnone(lookback, horizon * 4)
         if incl_test:
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
-        train, valid = make_test(items, int(lookback*valid_pct), lookback, keep_lookback = True)
+        train, valid = make_test(items, max(lookback+horizon,int(lookback*valid_pct)), lookback, keep_lookback = True)
 
         db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, **kwargs) for items in [train,valid]], path=path, device=device)
         if device is None:
             db.cuda()
         if incl_test:
-            db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step)
+            db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, name='test')
             print(f"Train:{db.train.n}; Valid: {db.valid.n}; Test {db.test.n}")
         else:
             print(f"Train:{db.train.n}; Valid: {db.valid.n}")

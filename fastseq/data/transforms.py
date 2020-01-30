@@ -19,7 +19,6 @@ class NormalizeTS(ItemTransform):
         return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
-        print([a.is_cuda for a in o], self.m.is_cuda)
         if o[0].is_cuda:
             self.m, self.s = to_device(self.m,'cuda'), to_device(self.s,'cuda')
             if sum([a.is_cuda for a in o]) != len(o):
@@ -28,8 +27,6 @@ class NormalizeTS(ItemTransform):
             if sum([a.is_cuda==False for a in o]) != len(o):
                 o = Tuple([to_cpu(a) for a in o])
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
-
-        print([a.is_cuda for a in o], self.m.is_cuda)
 
         return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
 

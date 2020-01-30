@@ -25,12 +25,6 @@ summary: "A basic architecture for time series forecasting."
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Blocks">Blocks<a class="anchor-link" href="#Blocks">&#182;</a></h2>
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
@@ -152,6 +146,27 @@ summary: "A basic architecture for time series forecasting."
 
 
 <div class="output_markdown rendered_html output_subarea ">
+<h2 id="GenericBlock" class="doc_header"><code>class</code> <code>GenericBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GenericBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>thetas_dim</code></strong>:<code>int</code>, <strong><code>device</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.5, 0.5]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
+</blockquote>
+<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
 <h2 id="LinearD" class="doc_header"><code>class</code> <code>LinearD</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L85" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LinearD</code>(<strong><code>in_features</code></strong>, <strong><code>out_features</code></strong>, <strong><code>bias</code></strong>=<em><code>True</code></em>) :: <code>Linear</code></p>
 </blockquote>
 <p>Applies a linear transformation to the incoming data: :math:<code>y = xA^T + b</code></p>
@@ -194,27 +209,6 @@ torch.Size([128, 30])</code></pre>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="GenericBlock" class="doc_header"><code>class</code> <code>GenericBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GenericBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>thetas_dim</code></strong>:<code>int</code>, <strong><code>device</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.5, 0.5]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
-</blockquote>
-<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -242,8 +236,9 @@ torch.Size([128, 30])</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="seasonality_model" class="doc_header"><code>seasonality_model</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>seasonality_model</code>(<strong><code>thetas</code></strong>, <strong><code>t</code></strong>)</p>
+<h2 id="SeasonalityBlock" class="doc_header"><code>class</code> <code>SeasonalityBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L109" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SeasonalityBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>thetas_dim</code></strong>:<code>int</code>, <strong><code>device</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.5, 0.5]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
 </blockquote>
+<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
 </div>
 
@@ -262,9 +257,8 @@ torch.Size([128, 30])</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SeasonalityBlock" class="doc_header"><code>class</code> <code>SeasonalityBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L109" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SeasonalityBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>thetas_dim</code></strong>:<code>int</code>, <strong><code>device</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.5, 0.5]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
+<h4 id="seasonality_model" class="doc_header"><code>seasonality_model</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>seasonality_model</code>(<strong><code>thetas</code></strong>, <strong><code>t</code></strong>)</p>
 </blockquote>
-<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
 </div>
 
@@ -302,8 +296,9 @@ torch.Size([128, 30])</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="trend_model" class="doc_header"><code>trend_model</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L118" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>trend_model</code>(<strong><code>thetas</code></strong>, <strong><code>t</code></strong>)</p>
+<h2 id="TrendBlock" class="doc_header"><code>class</code> <code>TrendBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L125" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TrendBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>device</code></strong>, <strong><code>thetas_dim</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.05, 0.05]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
 </blockquote>
+<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
 </div>
 
@@ -322,9 +317,8 @@ torch.Size([128, 30])</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TrendBlock" class="doc_header"><code>class</code> <code>TrendBlock</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L125" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TrendBlock</code>(<strong><code>layers</code></strong>:<code>L</code>, <strong><code>device</code></strong>, <strong><code>thetas_dim</code></strong>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>use_bn</code></strong>=<em><code>True</code></em>, <strong><code>bn_final</code></strong>=<em><code>False</code></em>, <strong><code>ps</code></strong>:<code>L</code>=<em><code>None</code></em>, <strong><code>share_thetas</code></strong>=<em><code>True</code></em>, <strong><code>y_range</code></strong>=<em><code>[-0.05, 0.05]</code></em>) :: <a href="/fastseq/nbeats.models#Block"><code>Block</code></a></p>
+<h4 id="trend_model" class="doc_header"><code>trend_model</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L118" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>trend_model</code>(<strong><code>thetas</code></strong>, <strong><code>t</code></strong>)</p>
 </blockquote>
-<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
 </div>
 

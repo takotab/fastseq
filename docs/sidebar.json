@@ -6,9 +6,12 @@
     "Data Load": "/data.load",
     "Data Core": "/data.core",
     "Transforms": "/data.transforms",
-    "N-Beats model": "/nbeats.models",
+    "N-Beats": {
+      "Model": "/nbeats.models",
+      "Metrics": "/nbeats.metrics",
+      "Learner": "/nbeats.learner",
+    },
     "Interpret": "/interpret",
-    "Metrics": "/metrics",
-    "N-Beats metrics": "/nbeats.metrics"
+    "Metrics": "/metrics"
   }
 }

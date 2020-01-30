@@ -159,7 +159,7 @@ class NBeatsNet(Module):
     def __init__(
         self,
         device,
-        stack_types=('bias', 'trend', 'seaonality'),
+        stack_types=('trend', 'seaonality'),
         nb_blocks_per_stack=3,
         horizon=5,
         lookback=10,

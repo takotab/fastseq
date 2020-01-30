@@ -8,10 +8,6 @@ from fastcore.all import *
 from fastai2.basics import *
 import pandas as pd
 import numpy as np
-# try:
-#     from motionnet_office.plot import *
-# except:
-#     pass
 
 # Cell
 class TSeries(TensorBase):pass

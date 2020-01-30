@@ -231,5 +231,6 @@ class NBeatsTrainer(Callback):
 
     def after_pred(self):
         self.pred[2]['total_b'] = self.pred[1]
+        # TODO add total_b_loss to self.out
         self.out = concat_dct(self.pred[2], self.out)
         self.learn.pred = self.pred[0]

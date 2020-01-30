@@ -167,7 +167,7 @@ summary: "A basic architecture for time series forecasting."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LinearD" class="doc_header"><code>class</code> <code>LinearD</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L85" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LinearD</code>(<strong><code>in_features</code></strong>, <strong><code>out_features</code></strong>, <strong><code>bias</code></strong>=<em><code>True</code></em>) :: <code>Linear</code></p>
+<h4 id="LinearD" class="doc_header"><code>class</code> <code>LinearD</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>LinearD</code>(<strong><code>in_features</code></strong>, <strong><code>out_features</code></strong>, <strong><code>bias</code></strong>=<em><code>True</code></em>) :: <code>Linear</code></p>
 </blockquote>
 <p>Applies a linear transformation to the incoming data: :math:<code>y = xA^T + b</code></p>
 <p>Args:
@@ -350,26 +350,6 @@ torch.Size([128, 30])</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="select_block" class="doc_header"><code>select_block</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L136" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>select_block</code>(<strong><code>o</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
@@ -414,9 +394,29 @@ torch.Size([128, 30])</code></pre>
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>torch.Size([64, 1, 5]) torch.Size([64, 1, 10])
-[(&#39;seaonality0_0&#39;, tensor([ 0.0062, -0.0015,  0.0153], grad_fn=&lt;MeanBackward1&gt;)), (&#39;seaonality0_1&#39;, tensor([ 0.0067,  0.0042, -0.0009], grad_fn=&lt;MeanBackward1&gt;)), (&#39;seaonality0_2&#39;, tensor([ 0.0006, -0.0035,  0.0229], grad_fn=&lt;MeanBackward1&gt;))]
+[(&#39;seaonality0_0&#39;, tensor([-0.0405,  0.0088,  0.0009], grad_fn=&lt;MeanBackward1&gt;)), (&#39;seaonality0_1&#39;, tensor([-0.0087, -0.0011, -0.0017], grad_fn=&lt;MeanBackward1&gt;)), (&#39;seaonality0_2&#39;, tensor([ 0.0073, -0.0105, -0.0020], grad_fn=&lt;MeanBackward1&gt;))]
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="select_block" class="doc_header"><code>select_block</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/model.py#L136" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>select_block</code>(<strong><code>o</code></strong>)</p>
+</blockquote>
+
+</div>
+
 </div>
 
 </div>

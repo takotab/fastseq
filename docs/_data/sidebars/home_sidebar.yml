@@ -31,11 +31,11 @@ entries:
       title: N-Beats metrics
       url: /nbeats.metrics
     - output: web,pdf
-      title: Interpret
-      url: /interpret
-    - output: web,pdf
       title: N-Beats Learner
       url: /nbeats.learner
+    - output: web,pdf
+      title: Interpret
+      url: /interpret
     - output: web,pdf
       title: Metrics
       url: /metrics

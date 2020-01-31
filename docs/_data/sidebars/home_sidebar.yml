@@ -22,9 +22,6 @@ entries:
       title: Data Core
       url: /data.core
     - output: web,pdf
-      title: Transforms
-      url: /data.transforms
-    - output: web,pdf
       title: N-Beats model
       url: /nbeats.models
     - output: web,pdf
@@ -35,7 +32,7 @@ entries:
       url: /nbeats.learner
     - output: web,pdf
       title: Interpret
-      url: /interpret
+      url: /nbeats.interpret
     - output: web,pdf
       title: Metrics
       url: /metrics

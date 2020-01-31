@@ -13,8 +13,7 @@ m4_base = "https://motionnet-m4-dataset.s3.eu-central-1.amazonaws.com/"
 URLs.m4_daily = f'{m4_base}m4_daily.tgz'
 
 # Cell
-def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', nrows:int=5, random = True, batch_size=32, seed = 42):
-#     np.random.seed = seed
+def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', nrows:int=5, random = True, batch_size=32):
     def get_datapoint():
         lin_space = np.linspace(-lookback, horizon, lookback + horizon)
         if random:
@@ -25,8 +24,8 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
         if signal_type == 'trend':
             a = lin_space + offset
         elif signal_type == 'seasonality':
-            a = np.cos(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)
-            a += np.cos(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
+            a = np.cos(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)* np.random.standard_normal() * .5
+            a += np.cos(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)* np.random.standard_normal() * .5
 #             a += np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
 #             a -= np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
             a += lin_space * offset + np.random.rand() * 10

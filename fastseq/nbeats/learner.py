@@ -22,6 +22,7 @@ from .model import *
 @delegates(NBeatsNet.__init__)
 def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=None, theta=0., b_loss=0., loss_func=None, **kwargs):
     "Build a N-Beats style learner"
+    dbunch.after_batch.add(NormalizeTS())
     model = NBeatsNet(
         device = dbunch.train.device,
         horizon = dbunch.train.horizon,
@@ -31,7 +32,7 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
 
     loss_func = ifnone(loss_func, F.mse_loss)
     learn = Learner(dbunch, model, loss_func=loss_func, opt_func= Adam,
-                    metrics=L(metrics)+L(mae, smape,NBeatsBackwards()),
+                    metrics=L(metrics)+L(mae, smape, NBeatsBackwards(),NBeatsTheta()),
                     cbs=L(NBeatsTrainer(),NBeatsAttention())+L(cbs)
                    )
     learn.lh = (dbunch.train.lookback/dbunch.train.horizon)

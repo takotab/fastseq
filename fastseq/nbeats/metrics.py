@@ -46,9 +46,8 @@ class NBeatsBackwards(Metric):
     def reset(self):           self.total,self.count = 0.,0
     def accumulate(self, learn):
         bs = find_bs(learn.yb)
-        b = learn.n_beats_trainer.out['total_b']
-        value = learn.loss_func(b.float(), *learn.xb, reduction='mean')
-        self.total += to_detach(value)*bs
+        b = learn.n_beats_trainer.out['total_b_loss']
+        self.total += to_detach(b).mean()*bs
         self.count += bs
     @property
     def value(self): return self.total/self.count if self.count != 0 else None

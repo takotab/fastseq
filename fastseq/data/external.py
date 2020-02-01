@@ -26,8 +26,8 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
         elif signal_type == 'seasonality':
             a = np.cos(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)* np.random.standard_normal() * .5
             a += np.cos(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)* np.random.standard_normal() * .5
-#             a += np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
-#             a -= np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
+            a += np.sin(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)
+            a -= np.sin(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)
             a += lin_space * offset + np.random.rand() * 10
         elif signal_type == 'cos':
             a = np.cos(2 * np.pi * lin_space)

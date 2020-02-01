@@ -14,11 +14,14 @@ from fastai2.tabular.core import *
 # Cell
 class NormalizeTS(ItemTransform):
     "Normalize the Time-Series."
-    def __init__(self,):
+    def __init__(self, verbose=False):
+        self.verbose = verbose
         self.m, self.s = 0, 0
 
     def encodes(self, o):
         self.m, self.s = torch.mean(o[0],-1,keepdim=True), o[0].std(-1,keepdim=True)+1e-7
+        if self.verbose:
+            print('encodes',type(o),[a.shape for a in o])
         return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
@@ -30,7 +33,8 @@ class NormalizeTS(ItemTransform):
             if sum([a.is_cuda==False for a in o]) != len(o):
                 o = Tuple([to_cpu(a) for a in o])
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
-
+        if self.verbose:
+            print('decodes',type(o),[a.shape for a in o], 'shape m/s',self.m.shape)
         return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
 
 

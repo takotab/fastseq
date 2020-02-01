@@ -30,12 +30,12 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
        )
 
     loss_func = ifnone(loss_func, F.mse_loss)
+    cbs = L(cbs)
+    if b_loss != 0:
+        cbs.append(NBeatsBLoss(b_loss))
     learn = Learner(dbunch, model, loss_func=loss_func, opt_func= Adam,
-                    metrics=L(metrics)+L(mae, smape, NBeatsBackwards(), NBeatsTheta()
-                                        )
-                    ,
-                    cbs=L(NBeatsTrainer(),NBeatsAttention()
-                         )+L(cbs)
+                    metrics=L(metrics)+L(mae, smape, NBeatsBackwards(), NBeatsTheta()),
+                    cbs=L(NBeatsTrainer(),NBeatsAttention())+cbs
                    )
     learn.lh = (dbunch.train.lookback/dbunch.train.horizon)
     return learn

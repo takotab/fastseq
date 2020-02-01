@@ -415,7 +415,47 @@ summary: "API details."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="concat_dct" class="doc_header"><code>concat_dct</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>concat_dct</code>(<strong><code>new_dct</code></strong>, <strong><code>expand_dct</code></strong>)</p>
+<h4 id="first_item" class="doc_header"><code>first_item</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L93" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>first_item</code>(<strong><code>lst</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">first_item</span><span class="p">(</span><span class="n">l</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">first_item</span><span class="p">(</span><span class="n">l</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="concat_dct" class="doc_header"><code>concat_dct</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>concat_dct</code>(<strong><code>new_dct</code></strong>, <strong><code>expand_dct</code></strong>)</p>
 </blockquote>
 <p>Concatanates <code>torch.tensor</code>'s in <code>new_dct</code> to the same <code>key</code> in expand_dct'.</p>
 
@@ -477,7 +517,7 @@ torch.Size([16, 4])
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="pad_zeros" class="doc_header"><code>pad_zeros</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pad_zeros</code>(<strong><code>X</code></strong>, <strong><code>lenght</code></strong>)</p>
+<h4 id="pad_zeros" class="doc_header"><code>pad_zeros</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pad_zeros</code>(<strong><code>X</code></strong>, <strong><code>lenght</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -500,7 +540,7 @@ torch.Size([16, 4])
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="Skip" class="doc_header"><code>Skip</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L120" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Skip</code>(<strong><code>percentage_remove</code></strong>)</p>
+<h4 id="Skip" class="doc_header"><code>Skip</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L126" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Skip</code>(<strong><code>percentage_remove</code></strong>)</p>
 </blockquote>
 <p>Helper function for <code>pd.read_csv</code> and will randomly not load <code>percentage_remove</code>% of the whole dataset</p>
 
@@ -593,24 +633,6 @@ torch.Size([16, 4])
   <tbody>
     <tr>
       <th>0</th>
-      <td>D1</td>
-      <td>2039.2000</td>
-      <td>2035.0000</td>
-      <td>2051.8000</td>
-      <td>2061.8000</td>
-      <td>2063.5000</td>
-      <td>2069.5000</td>
-      <td>2054.0000</td>
-      <td>2057.0000</td>
-      <td>2062.8000</td>
-      <td>2066.4000</td>
-      <td>2067.4000</td>
-      <td>2071.4000</td>
-      <td>2083.800</td>
-      <td>2080.6000</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>D2</td>
       <td>2986.0000</td>
       <td>3001.2000</td>
@@ -628,25 +650,7 @@ torch.Size([16, 4])
       <td>3076.9000</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>D4</td>
-      <td>1190.0000</td>
-      <td>1162.0000</td>
-      <td>1134.0000</td>
-      <td>1106.0000</td>
-      <td>1078.0000</td>
-      <td>1050.0000</td>
-      <td>1022.0000</td>
-      <td>994.0000</td>
-      <td>966.0000</td>
-      <td>938.0000</td>
-      <td>910.0000</td>
-      <td>1428.0000</td>
-      <td>1400.000</td>
-      <td>1372.0000</td>
-    </tr>
-    <tr>
-      <th>3</th>
+      <th>1</th>
       <td>D5</td>
       <td>5904.6700</td>
       <td>5917.0500</td>
@@ -664,7 +668,7 @@ torch.Size([16, 4])
       <td>6108.0700</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>2</th>
       <td>D6</td>
       <td>3182.0525</td>
       <td>3147.0985</td>
@@ -680,6 +684,42 @@ torch.Size([16, 4])
       <td>3424.7502</td>
       <td>3280.184</td>
       <td>3338.7257</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>D7</td>
+      <td>5860.0080</td>
+      <td>7773.2460</td>
+      <td>9477.8720</td>
+      <td>8209.0990</td>
+      <td>7421.2360</td>
+      <td>6677.5970</td>
+      <td>8235.9980</td>
+      <td>7850.5550</td>
+      <td>7280.3130</td>
+      <td>6888.8830</td>
+      <td>3432.2460</td>
+      <td>4800.4470</td>
+      <td>4021.873</td>
+      <td>3483.4570</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>D8</td>
+      <td>1732.2000</td>
+      <td>1731.8300</td>
+      <td>1739.1700</td>
+      <td>1741.8000</td>
+      <td>1738.5000</td>
+      <td>1748.9400</td>
+      <td>1746.3100</td>
+      <td>1754.0500</td>
+      <td>1750.3300</td>
+      <td>1735.5400</td>
+      <td>1739.4600</td>
+      <td>1734.6900</td>
+      <td>1732.070</td>
+      <td>1730.4400</td>
     </tr>
     <tr>
       <th>...</th>
@@ -700,25 +740,7 @@ torch.Size([16, 4])
       <td>...</td>
     </tr>
     <tr>
-      <th>3786</th>
-      <td>D4222</td>
-      <td>2203.0000</td>
-      <td>2201.0000</td>
-      <td>2229.0000</td>
-      <td>2239.0000</td>
-      <td>2193.0000</td>
-      <td>2189.0000</td>
-      <td>2204.0000</td>
-      <td>2207.0000</td>
-      <td>2221.0000</td>
-      <td>2244.0000</td>
-      <td>2227.0000</td>
-      <td>2222.0000</td>
-      <td>2247.000</td>
-      <td>2248.0000</td>
-    </tr>
-    <tr>
-      <th>3787</th>
+      <th>3807</th>
       <td>D4223</td>
       <td>3050.0000</td>
       <td>3125.0000</td>
@@ -736,7 +758,7 @@ torch.Size([16, 4])
       <td>3494.0000</td>
     </tr>
     <tr>
-      <th>3788</th>
+      <th>3808</th>
       <td>D4224</td>
       <td>3719.0000</td>
       <td>3754.0000</td>
@@ -754,7 +776,7 @@ torch.Size([16, 4])
       <td>3708.0000</td>
     </tr>
     <tr>
-      <th>3789</th>
+      <th>3809</th>
       <td>D4225</td>
       <td>4014.0000</td>
       <td>4023.0000</td>
@@ -772,7 +794,25 @@ torch.Size([16, 4])
       <td>4066.0000</td>
     </tr>
     <tr>
-      <th>3790</th>
+      <th>3810</th>
+      <td>D4226</td>
+      <td>1486.2200</td>
+      <td>1501.3900</td>
+      <td>1502.1500</td>
+      <td>1497.6400</td>
+      <td>1489.7200</td>
+      <td>1494.7500</td>
+      <td>1497.4100</td>
+      <td>1500.5700</td>
+      <td>1492.2000</td>
+      <td>1489.0800</td>
+      <td>1495.5600</td>
+      <td>1488.2100</td>
+      <td>1493.630</td>
+      <td>1487.3000</td>
+    </tr>
+    <tr>
+      <th>3811</th>
       <td>D4227</td>
       <td>15454.8000</td>
       <td>15455.7000</td>
@@ -791,7 +831,7 @@ torch.Size([16, 4])
     </tr>
   </tbody>
 </table>
-<p>3791 rows × 15 columns</p>
+<p>3812 rows × 15 columns</p>
 </div>
 </div>
 
@@ -813,7 +853,7 @@ torch.Size([16, 4])
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_ts_files" class="doc_header"><code>get_ts_files</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ts_files</code>(<strong><code>path</code></strong>, <strong><code>recurse</code></strong>=<em><code>True</code></em>, <strong><code>folders</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="get_ts_files" class="doc_header"><code>get_ts_files</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ts_files</code>(<strong><code>path</code></strong>, <strong><code>recurse</code></strong>=<em><code>True</code></em>, <strong><code>folders</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Get image files in <code>path</code> recursively, only in <code>folders</code>, if specified.</p>
 
@@ -850,7 +890,7 @@ torch.Size([16, 4])
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="IndexsSplitter" class="doc_header"><code>IndexsSplitter</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L141" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>IndexsSplitter</code>(<strong><code>train_idx</code></strong>, <strong><code>val_idx</code></strong>=<em><code>None</code></em>, <strong><code>test</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="IndexsSplitter" class="doc_header"><code>IndexsSplitter</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L147" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>IndexsSplitter</code>(<strong><code>train_idx</code></strong>, <strong><code>val_idx</code></strong>=<em><code>None</code></em>, <strong><code>test</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Split <code>items</code> from 0 to <code>train_idx</code> in the training set, from <code>train_idx</code> to <code>val_idx</code> (or the end) in the validation set.</p>
 <p>Optionly if <code>test</code> will  in test set will also make test from val_idx to end.</p>
@@ -930,7 +970,7 @@ torch.Size([16, 4])
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ts_lists" class="doc_header"><code>ts_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L164" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ts_lists</code>(<strong><code>ts</code></strong>:<code>ndarray</code>)</p>
+<h4 id="ts_lists" class="doc_header"><code>ts_lists</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/core.py#L170" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ts_lists</code>(<strong><code>ts</code></strong>:<code>ndarray</code>)</p>
 </blockquote>
 <p>Transforms a <code>np.ndarray</code> of shape (timeseries, max_time) to a list of timeseries with shape (1,time).</p>
 <p>where:</p>

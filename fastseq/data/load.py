@@ -116,5 +116,5 @@ def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9,rows=None, c
     for i in range(len(samples[0])):
         ctxs = [b.show(ctx=c, **kwargs) for b,c,_ in zip(samples.itemgot(i),ctxs,range(max_n))]
     for i in range(len(outs[0])):
-        ctxs = [TSTensorSeqy(b ,m='*r', label='pred', x_len=x.shape[-1]).show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
+        ctxs = [TSTensorSeqy(b ,m='*r', label='pred').show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
     return ctxs

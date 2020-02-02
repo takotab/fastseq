@@ -88,14 +88,14 @@ class TSDataLoader(TfmdDL):
             y = ts[:,-self.horizon:]
         else:
             x = ts[:,lookback_id:lookback_id + self.lookback]
-            y = ts[:,lookback_id + self.lookback:lookback_id + self.lookback + self.horizon]
+            y = ts[:,lookback_id:lookback_id + self.lookback + self.horizon]
         return x, y
 
     def create_item(self, idx):
         if idx>=self.n:
             raise IndexError
         x, y = self.get_id(idx)
-        return TSTensorSeq(x),TSTensorSeqy(y, x_len=x.shape[1], m='-*g')
+        return TSTensorSeq(x),TSTensorSeqy(y, m='-*g')
 
 
 # Cell

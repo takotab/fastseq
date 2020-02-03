@@ -65,7 +65,6 @@ class Block(Module):
         theta_f = self.apply_range(theta_f) * att
         backcast = self.fnc_b(theta_b, self.backcast_linspace)
         forecast = self.fnc_f(theta_f, self.forecast_linspace)
-#         assert False
         return {'b':backcast,'f': forecast, 'theta': att*(theta_b + theta_f), 'attention': att}
 
     def apply_range(self, x):
@@ -158,7 +157,7 @@ def select_block(o):
         else:
             return GenericBlock
 
-default_thetas={'seasonality':8,'trend':4,'bais':2}
+default_thetas={'seasonality':10,'trend':4,'bais':2}
 
 # Cell
 class NBeatsNet(Module):
@@ -166,7 +165,7 @@ class NBeatsNet(Module):
         self,
         device,
         stack_types=('trend', 'seasonality'),
-        nb_blocks_per_stack=3,
+        nb_blocks_per_stack=5,
         horizon=5,
         lookback=10,
         thetas_dim=None,
@@ -208,8 +207,11 @@ class NBeatsNet(Module):
 
         return nn.Sequential(*blocks)
 
-    def forward(self, backcast):
-        backcast = backcast.view([-1,backcast.shape[-1]])
+    def forward(self, x):
+        backcast_res = x.view([-1,x.shape[-1]])
+        backcast = torch.zeros(
+            size=(backcast_res.size()[0], self.lookback,)
+        )
         forecast = torch.zeros(
             size=(backcast.size()[0], self.horizon,)
         )  # maybe batch size here.
@@ -218,11 +220,13 @@ class NBeatsNet(Module):
         for stack_id, names in enumerate(self.stacks.named_children()):
             name = names[0]
             for block_id in range(len(self.stacks[stack_id])):
-                dct[name+'_'+str(block_id)] = self.stacks[stack_id][block_id](backcast)
-                backcast = backcast.to(self.device) - dct[name+'_'+str(block_id)]['b']
+                dct[name+'_'+str(block_id)] = self.stacks[stack_id][block_id](backcast_res)
+                backcast_res = backcast_res.to(self.device) - dct[name+'_'+str(block_id)]['b']
+
                 forecast = forecast.to(self.device) + dct[name+'_'+str(block_id)]['f']
-#                 print(name+'_'+str(block_id),dct[name+'_'+str(block_id)]['attention'].mean())
-        return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)#, dct
+                backcast = backcast.to(self.device) + dct[name+'_'+str(block_id)]['b']
+
+        return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
 
 
 

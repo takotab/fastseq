@@ -13,7 +13,7 @@ m4_base = "https://motionnet-m4-dataset.s3.eu-central-1.amazonaws.com/"
 URLs.m4_daily = f'{m4_base}m4_daily.tgz'
 
 # Cell
-def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', nrows:int=5, random = True, batch_size=32):
+def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', nrows:int=5, random = True, batch_size=32, norm=False):
     def get_datapoint():
         lin_space = np.linspace(-lookback, horizon, lookback + horizon)
         if random:
@@ -33,7 +33,7 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
             a = np.cos(2 * np.pi * lin_space)
         else:
             raise Exception('Unknown signal type.')
-        return a[None,:]
+        return (a[None,:]-a.mean())/a.std()
 
     data = L()
     for i in range(nrows):

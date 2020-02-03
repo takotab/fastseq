@@ -95,7 +95,7 @@ class TSDataLoader(TfmdDL):
         if idx>=self.n:
             raise IndexError
         x, y = self.get_id(idx)
-        return TSTensorSeq(x),TSTensorSeqy(y, m='-*g')
+        return TSTensorSeq(x),TSTensorSeqy(y)
 
 
 # Cell
@@ -113,8 +113,8 @@ def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,rows=None, cols=Non
 @typedispatch
 def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):
     if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
-    for i in range(len(samples[0])):
-        ctxs = [b.show(ctx=c, **kwargs) for b,c,_ in zip(samples.itemgot(i),ctxs,range(max_n))]
     for i in range(len(outs[0])):
         ctxs = [TSTensorSeqy(b ,m='*r', label='pred').show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
+    for i in range(len(samples[0])):
+        ctxs = [b.show(ctx=c, **kwargs) for b, c, _ in zip(samples.itemgot(i),ctxs,range(max_n))]
     return ctxs

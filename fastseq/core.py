@@ -66,7 +66,7 @@ class TSTensorSeqy(TensorSeq):
         array = np.array(self.cpu())
         array = no_emp_dim(array)
         x_len = self._meta.get('x_len',0)
-        m = self._meta.get('m','-*g')
+        m = self._meta.get('m','*g')
         label = self._meta.get('label','y')
         t = np.arange(x_len,x_len+array.shape[1])[None,:]
         ctx.plot(t.T, array.T, m, label=label, **kwargs)

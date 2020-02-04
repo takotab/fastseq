@@ -125,7 +125,7 @@ def trend_model(thetas, t):
 class TrendBlock(Block):
     def __init__(
         self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True,
-        bn_final=False, ps:L=None, share_thetas=True, y_range=[-1, 1], att = False, scale_exp = 10,stand_alone=False,
+        bn_final=False, ps:L=None, share_thetas=True, y_range=[-1, 1], att = True, scale_exp = 10,stand_alone=False,
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone" )
         self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
@@ -234,8 +234,8 @@ class NBeatsNet(Module):
                 forecast = forecast.to(self.device) + _dct['f']
                 dct[name+'_'+str(block_id)] = _dct
 
-        dct['f'] = forecast
-        dct['b'] = backcast
+        dct['f'] = forecast[:,None,:]
+        dct['b'] = backcast[:,None,:]
         self.dct = dct
         return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
 

@@ -97,8 +97,12 @@ class SeasonalityBlock(Block):
         bn_final=False, ps:L=None, share_thetas=True, y_range=[-1,1], att=True, scale_exp = 2, stand_alone=False
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone" )
-        s = 1*scale_exp**-(torch.arange(float(self.thetas_dim//2))).to(self.device)
-        self.scale = torch.cat([s,s])
+        half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
+        s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
+        if self.thetas_dim %2 == 0:
+            self.scale = torch.cat([s,s])
+        else:
+            self.scale = torch.cat([s,s[:-1]])
         super().__init__(seasonality_model )
         self.to(device)
 
@@ -158,7 +162,7 @@ def select_block(o):
         else:
             return GenericBlock
 
-default_thetas={'seasonality':8,'trend':4,'bais':2}
+default_thetas={'seasonality':6,'trend':4,'bais':2}
 
 # Cell
 class NBeatsNet(Module):
@@ -170,7 +174,7 @@ class NBeatsNet(Module):
         horizon=5,
         lookback=10,
         thetas_dim=None,
-        share_weights_in_stack=True,
+        share_weights_in_stack=False,
         layers= [1024,512],
     ):
         thetas_dim = ifnone(thetas_dim,[default_thetas[o] for o in L(stack_types)])
@@ -191,14 +195,15 @@ class NBeatsNet(Module):
         self._str += f"| --  Stack {stack_type.title()} (#{stack_id}) (share_weights_in_stack={self.share_weights_in_stack})\n"
 
         blocks = []
-        for block_id in range(self.nb_blocks_per_stack):
+        for thetas_dim in range(3,self.thetas_dim[stack_id]+1):
             block_init = select_block(stack_type)
-            if self.share_weights_in_stack and block_id != 0:
+
+            if self.share_weights_in_stack and thetas_dim != 1:
                 block = blocks[-1]  # pick up the last one when we share weights.
             else:
                 block = block_init(
                     layers = self.layers,
-                    thetas_dim = self.thetas_dim[stack_id],
+                    thetas_dim = thetas_dim,
                     device = self.device,
                     lookback = self.lookback,
                     horizon = self.horizon,
@@ -227,12 +232,11 @@ class NBeatsNet(Module):
 
                 backcast = backcast.to(self.device) + _dct['b']
                 forecast = forecast.to(self.device) + _dct['f']
-
                 dct[name+'_'+str(block_id)] = _dct
 
         dct['f'] = forecast
         dct['b'] = backcast
-
+        self.dct = dct
         return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
 
 # Cell

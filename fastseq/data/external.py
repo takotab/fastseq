@@ -20,9 +20,15 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
             offset = np.random.standard_normal() * .10
         else:
             offset = 1
-
+        if signal_type == 'lin':
+            a =  np.random.standard_normal() * lin_space + offset * 100
         if signal_type == 'trend':
-            a = lin_space + offset
+            p = 4
+            a = [(lin_space**(i))[None,:] for i in range(p)]
+            T = np.concatenate(a)
+            thetas = np.random.randn(4)*1*9**-p
+            a= np.matmul(thetas,T)
+
         elif signal_type == 'seasonality':
             a = np.cos(2 * np.random.randint(low=1, high=3) * np.pi * lin_space)* np.random.standard_normal() * .5
             a += np.cos(2 * np.random.randint(low=2, high=4) * np.pi * lin_space)* np.random.standard_normal() * .5
@@ -33,7 +39,10 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
             a = np.cos(2 * np.pi * lin_space)
         else:
             raise Exception('Unknown signal type.')
-        return (a[None,:]-a.mean())/a.std()
+        if norm:
+            return (a[None,:]-a.mean())/a.std()
+        else:
+            return a[None,:]
 
     data = L()
     for i in range(nrows):

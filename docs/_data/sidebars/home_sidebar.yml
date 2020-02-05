@@ -25,8 +25,8 @@ entries:
       title: N-Beats model
       url: /nbeats.models
     - output: web,pdf
-      title: N-Beats metrics
-      url: /nbeats.metrics
+      title: N-Beats Callbacks
+      url: /nbeats.callbacks
     - output: web,pdf
       title: N-Beats Learner
       url: /nbeats.learner
@@ -36,6 +36,9 @@ entries:
     - output: web,pdf
       title: Metrics
       url: /metrics
+    - output: web,pdf
+      title: Fastseq
+      url: /index-Copy1
     output: web
     title: fastseq
   output: web

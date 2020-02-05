@@ -13,7 +13,7 @@ from torch.autograd import Variable
 from ..all import *
 
 from .model import *
-from .metrics import *
+from .callbacks import *
 
 # Cell
 # from fastai2.basics import *

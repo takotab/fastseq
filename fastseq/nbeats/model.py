@@ -232,6 +232,7 @@ class NBeatsNet(Module):
 
                 backcast = backcast.to(self.device) + _dct['b']
                 forecast = forecast.to(self.device) + _dct['f']
+                _dct['_full'] = torch.cat([_dct['b'] , _dct['f']], dim=-1)
                 dct[name+'_'+str(block_id)] = _dct
 
         dct['f'] = forecast[:,None,:]

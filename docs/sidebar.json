@@ -9,7 +9,6 @@
     "N-Beats Callbacks": "/nbeats.callbacks",
     "N-Beats Learner": "/nbeats.learner",
     "Interpret": "/nbeats.interpret",
-    "Metrics": "/metrics",
-    "Fastseq": "/index-Copy1"
+    "Metrics": "/metrics"
   }
 }

@@ -85,7 +85,14 @@ class TSDataLoader(TfmdDL):
                 mode='constant',
                 constant_values=0
             )
-            y = ts[:,-self.horizon:]
+            y = ts[:,-self.lookback + self.horizon:]
+            y = np.pad(
+                y,
+                pad_width=((0, 0), (self.lookback + self.horizon - y.shape[-1], 0)),
+                mode='constant',
+                constant_values=0
+            )
+            assert y.shape == (1,self.lookback+self.horizon), f"{y.shape}\t,{idx}, , 'tsshape':{ts.shape},'ts_id':{ts_id}"
         else:
             x = ts[:,lookback_id:lookback_id + self.lookback]
             y = ts[:,lookback_id:lookback_id + self.lookback + self.horizon]
@@ -94,9 +101,8 @@ class TSDataLoader(TfmdDL):
     def create_item(self, idx):
         if idx>=self.n:
             raise IndexError
-        x, y = self.get_id(idx)
+        x, y  = self.get_id(idx)
         return TSTensorSeq(x),TSTensorSeqy(y)
-
 
 # Cell
 

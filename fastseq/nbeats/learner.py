@@ -20,7 +20,7 @@ from .callbacks import *
 # from fastseq.all import *
 
 @delegates(NBeatsNet.__init__)
-def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=None, b_loss=0., loss_func=None, **kwargs):
+def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=None, b_loss=0., loss_func=None, opt_func=None, **kwargs):
     "Build a N-Beats style learner"
     model = NBeatsNet(
         device = dbunch.train.device,
@@ -29,13 +29,16 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
         **kwargs
        )
 
-    loss_func = ifnone(loss_func, F.mse_loss)
+    loss_func = ifnone(loss_func, CombinedLoss(F.mse_loss, dbunch.train.lookback))
     cbs = L(cbs)
     if b_loss != 0.:
         raise NotImplementedError()
         cbs.append(NBeatsBLoss(b_loss))
-    learn = Learner(dbunch, model, loss_func=loss_func, opt_func= Adam,
-                    metrics=L(metrics)+L(mae, smape, NBeatsBackwards(), NBeatsTheta()),
+    opt_func = ifnone(opt_func, ranger)
+    learn = Learner(dbunch, model, loss_func=loss_func, opt_func= opt_func,
+                    metrics=L(metrics)+L(mae, smape, NBeatsTheta(),
+                                         NBeatsBackwards(dbunch.train.lookback), NBeatsForward(dbunch.train.lookback)
+                                        ),
                     cbs=L(NBeatsAttention())+cbs
                    )
     learn.lh = (dbunch.train.lookback/dbunch.train.horizon)

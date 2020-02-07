@@ -18,12 +18,13 @@ import pandas as pd
 # Cell
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, dataset, horizon, lookback=72, step=1, **kwargs):
-        self.horizon, self.lookback, self.step = horizon, lookback, step
+    def __init__(self, dataset, horizon, lookback=72, step=1, max_std=200, **kwargs):
+        self.horizon, self.lookback, self.step, self.max_std = horizon, lookback, step, max_std
         self.dataset = [o.float() for o in L(dataset).map(tensor)]
         n = self.make_ids()
         super().__init__(dataset=self.dataset, **kwargs)
         self.n = n
+        self.skipped= []
 
     @delegates(TfmdDL.new)
     def new(self, dataset=None, cls=None, **kwargs):
@@ -102,6 +103,12 @@ class TSDataLoader(TfmdDL):
         if idx>=self.n:
             raise IndexError
         x, y  = self.get_id(idx)
+        if (y/x.std()).std()>self.max_std:
+            if idx not in self.skipped:
+                print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
+                self.skipped.append(idx)
+            raise SkipItemException()
+
         return TSTensorSeq(x),TSTensorSeqy(y)
 
 # Cell

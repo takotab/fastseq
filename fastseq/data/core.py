@@ -86,7 +86,7 @@ class TSDataLoaders(DataLoaders):
     @classmethod
     @delegates(TSDataLoader.__init__)
     def from_folder(cls, data_path:Path, valid_pct=.5, seed=None, horizon=None, lookback=None, step=1,
-                   nrows=None, skiprows=None, incl_test = True, path:Path='.', device=None, **kwargs):
+                   nrows=None, skiprows=None, incl_test = True, path:Path='.', device=None, norm=True, **kwargs):
         """Create from M-compition style in `path` with `train`,`test` csv-files.
 
         The `DataLoader` for the test set will be save as an attribute under `test`
@@ -95,22 +95,26 @@ class TSDataLoaders(DataLoaders):
         items = concat_ts_list(train, test).map(tensor)
         horizon = ifnone(horizon, len(test[0]))
         lookback = ifnone(lookback, horizon * 3)
-        return cls.from_items(items, horizon, lookback = lookback,  step = step, incl_test=incl_test, path=path, device=device, **kwargs)
+        return cls.from_items(items, horizon, lookback = lookback,  step = step, incl_test=incl_test, path=path, device=device, norm= norm,**kwargs)
 
 
     @classmethod
     @delegates(TSDataLoader.__init__)
     def from_items(cls, items:L, horizon:int, valid_pct=1.5, seed=None, lookback=None, step=1,
-                   incl_test = True, path:Path='.', device=None, **kwargs):
+                   incl_test = True, path:Path='.', device=None, norm=True, **kwargs):
         """Create an list of time series.
 
         The `DataLoader` for the test set will be save as an attribute under `test`
         """
+        if len(items[0].shape)==1:
+            items = [i[None,:] for i in items]
+        print(items[0].shape)
         lookback = ifnone(lookback, horizon * 4)
         if incl_test:
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
         train, valid = make_test(items, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
-        kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS())})
+        if norm:
+            kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS())})
         db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, **kwargs) for items in [train,valid]], path=path, device=device)
         if device is None:
             db.cuda()

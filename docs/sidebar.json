@@ -9,6 +9,7 @@
     "N-Beats Callbacks": "/nbeats.callbacks",
     "N-Beats Learner": "/nbeats.learner",
     "Interpret": "/nbeats.interpret",
-    "Metrics": "/metrics"
+    "Metrics": "/metrics",
+    "Compare": "/compare"
   }
 }

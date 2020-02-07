@@ -105,7 +105,7 @@ class TSDataLoader(TfmdDL):
         x, y  = self.get_id(idx)
         if (y/x.std()).std()>self.max_std:
             if idx not in self.skipped:
-                print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
+#                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
                 self.skipped.append(idx)
             raise SkipItemException()
 

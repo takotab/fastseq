@@ -28,6 +28,7 @@ index = {"TSeries": "00_core.ipynb",
          "make_test_pct": "03_data.core.ipynb",
          "TSDataLoaders": "03_data.core.ipynb",
          "linspace": "05_nbeats.models.ipynb",
+         "make_base": "05_nbeats.models.ipynb",
          "Block": "05_nbeats.models.ipynb",
          "seasonality_model": "05_nbeats.models.ipynb",
          "SeasonalityBlock": "05_nbeats.models.ipynb",
@@ -50,7 +51,8 @@ index = {"TSeries": "00_core.ipynb",
          "mape": "11_metrics.ipynb",
          "smape": "11_metrics.ipynb",
          "SMAPELossFlat": "11_metrics.ipynb",
-         "mase": "11_metrics.ipynb"}
+         "mase": "11_metrics.ipynb",
+         "compare": "12_compare.ipynb"}
 
 modules = ["core.py",
            "data/external.py",
@@ -60,7 +62,8 @@ modules = ["core.py",
            "nbeats/callbacks.py",
            "nbeats/learner.py",
            "nbeats/interpret.py",
-           "metrics.py"]
+           "metrics.py",
+           "compare.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"
 

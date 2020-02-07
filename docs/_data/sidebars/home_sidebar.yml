@@ -36,6 +36,9 @@ entries:
     - output: web,pdf
       title: Metrics
       url: /metrics
+    - output: web,pdf
+      title: Compare
+      url: /compare
     output: web
     title: fastseq
   output: web

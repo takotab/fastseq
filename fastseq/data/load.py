@@ -121,7 +121,6 @@ def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,rows=None, cols=Non
     ctxs = show_batch[object](x, y, samples=samples, ctxs=ctxs, max_n=max_n, **kwargs)
     return ctxs
 
-
 # Cell
 @typedispatch
 def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):

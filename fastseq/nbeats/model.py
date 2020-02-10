@@ -48,6 +48,7 @@ class Block(Module):
             self.theta_f_fc = LinBnDrop(self.layers[-1], self.thetas_dim)
             print('not going to share thetas')
         self.theta_scale = LinBnDrop(self.layers[-1], self.thetas_dim)
+        self.theta_range = LinBnDrop(self.layers[-1], 1)
 
         self.fnc_f = fnc_f
         self.fnc_b = ifnone(fnc_b, fnc_f)
@@ -71,19 +72,23 @@ class Block(Module):
             res['attention'] = w
 
         scale = self.theta_scale(x)
-        theta_b = self.apply_range(theta_b, scale)
-        theta_f = self.apply_range(theta_f, scale)
+        rang = self.theta_scale(x)
+        theta_b = self.apply_range(theta_b, scale, rang)
+        theta_f = self.apply_range(theta_f, scale, rang)
         b, f = linspace(self.lookback, self.horizon, device = self.device)
         backcast = self.fnc_b(theta_b, b)
         forecast = self.fnc_f(theta_f, f)
         res.update({'b':backcast,'f': forecast, 'theta': (theta_b + theta_f)})
         return res
 
-    def apply_range(self, x, scale):
+    def apply_range(self, x, scale, rang):
         if self.y_range is None:
             return x
-        r = (self.y_range[1]-self.y_range[0]) * torch.sigmoid(x) + self.y_range[0]
-        scale =  torch.sigmoid(scale) + .5
+        rang = 0.5 + torch.sigmoid(rang)
+        y_range = self.y_range[0] * rang, self.y_range[1] * rang
+
+        r = (y_range[1]-y_range[0]) * torch.sigmoid(x) + y_range[0]
+        scale = .5 + torch.sigmoid(scale)
         return r *(self.scale*scale)
 
 # Cell
@@ -108,12 +113,11 @@ class SeasonalityModel(object):
 class SeasonalityBlock(Block):
     def __init__(
         self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, season = None,
-            bn_final=False, ps:L=None, share_thetas=True, y_range=[-1,1], att=True, scale_exp = 4, stand_alone=False, base = None, **kwargs
+            bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 4, stand_alone=False, base = None, **kwargs
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
         half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
         s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
-        print(s)
         if self.thetas_dim %2 == 0:
             self.scale = torch.cat([s,s])
         else:
@@ -124,7 +128,6 @@ class SeasonalityBlock(Block):
 
     def forward(self, x):
         if self.stand_alone:
-#             print('forward',x.shape)
             dct = super().forward(x[:,0,:])
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
@@ -167,7 +170,6 @@ class TrendBlock(Block):
         self.thetas_dim = self.thetas_dim*2
         self.scale = torch.cat([self.scale,3*torch.ones_like(self.scale)])
         self.scale[0]=3
-        print(self.scale)
         super().__init__(trend_model)
         self.to(device)
 

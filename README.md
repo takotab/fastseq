@@ -44,30 +44,14 @@ Getting the data fastai style:
 
 ```python
 path = untar_data(URLs.m4_daily)
-data = TSDataLoaders.from_folder(path, horizon = horizon, lookback = lookback, nrows = 300, step=3)
+data = TSDataLoaders.from_folder(path, horizon = horizon, lookback = lookback, nrows = 300, step=3, max_std=1.5)
 ```
 
 </div>
 <div class="output_area" markdown="1">
 
-    Train:71691; Valid: 1200; Test 300
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-items = dummy_data_generator(60, 10, nrows=300)
-data = TSDataLoaders.from_items(items,horizon = horizon, lookback = lookback, step=5, valid_pct=.2)
-```
-
-</div>
-<div class="output_area" markdown="1">
-
-    Train:1500; Valid: 300; Test 300
+    torch.Size([1, 1020])
+    Train:70707; Valid: 1200; Test 300
 
 
 </div>
@@ -84,7 +68,7 @@ data.show_batch()
 <div class="output_area" markdown="1">
 
 
-![png](docs/images/output_6_0.png)
+![png](docs/images/output_5_0.png)
 
 
 </div>
@@ -94,8 +78,8 @@ data.show_batch()
 <div class="input_area" markdown="1">
 
 ```python
-learn = nbeats_learner(data)   
-learn.loss_func = F.mse_loss
+from fastseq.nbeats.callbacks import *
+learn = nbeats_learner(data, cbs=ClipLoss(20), season =lookback+horizon)   
 ```
 
 </div>
@@ -117,7 +101,7 @@ learn.lr_find()
 
 
 
-![png](docs/images/output_8_1.png)
+![png](docs/images/output_7_1.png)
 
 
 </div>
@@ -127,7 +111,7 @@ learn.lr_find()
 <div class="input_area" markdown="1">
 
 ```python
-learn.fit_flat_cos(1, 2e-2)
+learn.fit_flat_cos(5, 2e-2)
 learn.recorder.plot_loss()
 learn.recorder.plot_sched()
 ```
@@ -144,32 +128,78 @@ learn.recorder.plot_sched()
       <th>valid_loss</th>
       <th>mae</th>
       <th>smape</th>
-      <th>b_loss</th>
       <th>theta</th>
+      <th>b_loss</th>
+      <th>f_loss</th>
       <th>time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>0</td>
-      <td>106363518976.000000</td>
-      <td>52734368669499392.000000</td>
-      <td>3515625.500000</td>
-      <td>1.475688</td>
-      <td>3.627706</td>
-      <td>2.115030</td>
-      <td>01:05</td>
+      <td>1.540548</td>
+      <td>2.303195</td>
+      <td>2834467.500000</td>
+      <td>0.772452</td>
+      <td>1.759676</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>01:22</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1.536659</td>
+      <td>2.219578</td>
+      <td>2834467.500000</td>
+      <td>0.768887</td>
+      <td>1.594365</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>01:22</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1.409645</td>
+      <td>2.161446</td>
+      <td>2834467.500000</td>
+      <td>0.712815</td>
+      <td>1.681730</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>01:23</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1.415572</td>
+      <td>2.195107</td>
+      <td>2834467.500000</td>
+      <td>0.724577</td>
+      <td>1.614143</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>01:24</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>1.300322</td>
+      <td>2.121976</td>
+      <td>2834467.500000</td>
+      <td>0.677533</td>
+      <td>1.609086</td>
+      <td>nan</td>
+      <td>nan</td>
+      <td>01:22</td>
     </tr>
   </tbody>
 </table>
 
 
 
-![png](docs/images/output_9_1.png)
+![png](docs/images/output_8_1.png)
 
 
 
-![png](docs/images/output_9_2.png)
+![png](docs/images/output_8_2.png)
 
 
 </div>
@@ -190,7 +220,7 @@ learn.show_results(0)
 
 
 
-![png](docs/images/output_10_1.png)
+![png](docs/images/output_9_1.png)
 
 
 </div>
@@ -211,7 +241,7 @@ learn.show_results(1)
 
 
 
-![png](docs/images/output_11_1.png)
+![png](docs/images/output_10_1.png)
 
 
 </div>
@@ -221,49 +251,10 @@ learn.show_results(1)
 <div class="input_area" markdown="1">
 
 ```python
-learn.loss_func = smape
-learn.lr_find()
-```
-
-</div>
-<div class="output_area" markdown="1">
-
-
-
-
-
-
-![png](docs/images/output_12_1.png)
-
-
-</div>
-
-</div>
-<div class="codecell" markdown="1">
-<div class="input_area" markdown="1">
-
-```python
-learn.fit_flat_cos(1e-6)
+learn.fit_flat_cos(5,5e-4)
 learn.recorder.plot_loss()
 learn.recorder.plot_sched()
 ```
-
-</div>
-<div class="output_area" markdown="1">
-
-
-    ---------------------------------------------------------------------------
-
-    AttributeError                            Traceback (most recent call last)
-
-    <ipython-input-16-4b11aca025bb> in <module>
-    ----> 1 learn.fit_fc(1e-6)
-          2 learn.recorder.plot_loss()
-          3 learn.recorder.plot_sched()
-
-
-    AttributeError: 'Learner' object has no attribute 'fit_fc'
-
 
 </div>
 
@@ -312,129 +303,165 @@ learn.n_beats_attention.means()
   <tbody>
     <tr>
       <th>theta_0_mean</th>
-      <td>-0.074099414</td>
-      <td>-0.07426101</td>
-      <td>0.4293354</td>
-      <td>0.15625</td>
-      <td>-1.5939595</td>
-      <td>0.35737035</td>
+      <td>1.0484735</td>
+      <td>0.5712331</td>
+      <td>0.7695762</td>
+      <td>-0.13409285</td>
+      <td>-0.165535</td>
+      <td>0.5304334</td>
     </tr>
     <tr>
       <th>theta_0_std</th>
-      <td>0.18427914</td>
-      <td>0.18240511</td>
-      <td>1.1435487</td>
-      <td>0.54097944</td>
-      <td>0.81059384</td>
-      <td>1.2032012</td>
+      <td>0.53147</td>
+      <td>0.5104649</td>
+      <td>0.89892924</td>
+      <td>0.12476344</td>
+      <td>0.11738308</td>
+      <td>1.0524368</td>
     </tr>
     <tr>
       <th>theta_1_mean</th>
-      <td>-0.006618</td>
-      <td>-0.0060307784</td>
-      <td>-0.733439</td>
-      <td>-0.92187035</td>
-      <td>0.69952923</td>
-      <td>-0.35547772</td>
+      <td>0.0</td>
+      <td>-0.008486307</td>
+      <td>0.33995187</td>
+      <td>-0.123186365</td>
+      <td>-0.072090976</td>
+      <td>0.2616474</td>
     </tr>
     <tr>
       <th>theta_1_std</th>
-      <td>0.018844062</td>
-      <td>0.009154702</td>
-      <td>0.4438819</td>
-      <td>0.27048832</td>
-      <td>0.45268404</td>
-      <td>0.6103023</td>
+      <td>0.0</td>
+      <td>0.008260585</td>
+      <td>0.25519606</td>
+      <td>0.20760116</td>
+      <td>0.3698771</td>
+      <td>0.18846405</td>
     </tr>
     <tr>
       <th>theta_2_mean</th>
-      <td>-0.0016885607</td>
-      <td>0.00012500375</td>
-      <td>-0.53056526</td>
-      <td>0.15625</td>
-      <td>0.25669834</td>
-      <td>-1.6763806e-07</td>
+      <td>-0.0034576228</td>
+      <td>-0.0004631914</td>
+      <td>0.09690633</td>
+      <td>-0.085941315</td>
+      <td>-0.055885807</td>
+      <td>-0.046996526</td>
     </tr>
     <tr>
       <th>theta_2_std</th>
-      <td>0.00072945596</td>
-      <td>0.0004879491</td>
-      <td>1.193347</td>
-      <td>0.54097944</td>
-      <td>0.41068566</td>
-      <td>4.3785803e-07</td>
-    </tr>
-    <tr>
-      <th>att_mean</th>
-      <td>0.947958</td>
-      <td>0.41586</td>
-      <td>0.490716</td>
-      <td>0.289062</td>
-      <td>0.64974</td>
-      <td>0.584103</td>
-    </tr>
-    <tr>
-      <th>att_std</th>
-      <td>0.221936</td>
-      <td>0.490302</td>
-      <td>0.49319</td>
-      <td>0.453327</td>
-      <td>0.474961</td>
-      <td>0.466623</td>
+      <td>0.0018157117</td>
+      <td>0.0012395354</td>
+      <td>0.120248154</td>
+      <td>0.15570128</td>
+      <td>0.07383171</td>
+      <td>0.09366264</td>
     </tr>
     <tr>
       <th>theta_3_mean</th>
+      <td>0.044545975</td>
+      <td>0.0</td>
       <td>NaN</td>
-      <td>-6.5637076e-05</td>
-      <td>NaN</td>
-      <td>-0.078125</td>
-      <td>1.5937493</td>
-      <td>-0.07927033</td>
+      <td>-0.0034272978</td>
+      <td>0.09713822</td>
+      <td>0.18888618</td>
     </tr>
     <tr>
       <th>theta_3_std</th>
+      <td>0.030647082</td>
+      <td>0.0</td>
       <td>NaN</td>
-      <td>9.4638235e-05</td>
-      <td>NaN</td>
-      <td>0.27048972</td>
-      <td>0.81101006</td>
-      <td>0.92355716</td>
+      <td>0.03154439</td>
+      <td>0.15776587</td>
+      <td>0.62231266</td>
     </tr>
     <tr>
       <th>theta_4_mean</th>
+      <td>0.2584329</td>
+      <td>0.049222477</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>3.9115548e-08</td>
-      <td>-0.3905308</td>
+      <td>-0.005607492</td>
+      <td>-0.03192711</td>
     </tr>
     <tr>
       <th>theta_4_std</th>
+      <td>0.44719952</td>
+      <td>0.06712501</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>2.5492858e-07</td>
-      <td>0.8090458</td>
+      <td>0.059638757</td>
+      <td>0.30349037</td>
     </tr>
     <tr>
       <th>theta_5_mean</th>
+      <td>-0.13016799</td>
+      <td>0.07761635</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-0.030955186</td>
+      <td>-0.026232796</td>
     </tr>
     <tr>
       <th>theta_5_std</th>
+      <td>0.22034122</td>
+      <td>1.1497012</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.1286816</td>
+    </tr>
+    <tr>
+      <th>att_mean</th>
+      <td>0.443135</td>
+      <td>0.715307</td>
+      <td>0.775233</td>
+      <td>0.568036</td>
+      <td>0.799381</td>
+      <td>0.971488</td>
+    </tr>
+    <tr>
+      <th>att_std</th>
+      <td>0.436081</td>
+      <td>0.409965</td>
+      <td>0.416275</td>
+      <td>0.494035</td>
+      <td>0.394072</td>
+      <td>0.164985</td>
+    </tr>
+    <tr>
+      <th>theta_6_mean</th>
+      <td>NaN</td>
+      <td>0.22906151</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+    </tr>
+    <tr>
+      <th>theta_6_std</th>
       <td>NaN</td>
-      <td>0.11994398</td>
+      <td>1.1522285</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>theta_7_mean</th>
+      <td>NaN</td>
+      <td>-0.32102555</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>theta_7_std</th>
+      <td>NaN</td>
+      <td>0.52404284</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
   </tbody>
 </table>

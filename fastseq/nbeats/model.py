@@ -47,6 +47,7 @@ class Block(Module):
             self.theta_b_fc = LinBnDrop(self.layers[-1], self.thetas_dim)
             self.theta_f_fc = LinBnDrop(self.layers[-1], self.thetas_dim)
             print('not going to share thetas')
+        self.theta_scale = LinBnDrop(self.layers[-1], self.thetas_dim)
 
         self.fnc_f = fnc_f
         self.fnc_b = ifnone(fnc_b, fnc_f)
@@ -69,19 +70,21 @@ class Block(Module):
             theta_b, theta_f = theta_b * w, theta_b * w
             res['attention'] = w
 
-        theta_b = self.apply_range(theta_b)
-        theta_f = self.apply_range(theta_f)
+        scale = self.theta_scale(x)
+        theta_b = self.apply_range(theta_b, scale)
+        theta_f = self.apply_range(theta_f, scale)
         b, f = linspace(self.lookback, self.horizon, device = self.device)
         backcast = self.fnc_b(theta_b, b)
         forecast = self.fnc_f(theta_f, f)
         res.update({'b':backcast,'f': forecast, 'theta': (theta_b + theta_f)})
         return res
 
-    def apply_range(self, x):
+    def apply_range(self, x, scale):
         if self.y_range is None:
             return x
-        r= (self.y_range[1]-self.y_range[0]) * torch.sigmoid(x) + self.y_range[0]
-        return r * self.scale
+        r = (self.y_range[1]-self.y_range[0]) * torch.sigmoid(x) + self.y_range[0]
+        scale =  torch.sigmoid(scale) + .5
+        return r *(self.scale*scale)
 
 # Cell
 class SeasonalityModel(object):
@@ -89,7 +92,7 @@ class SeasonalityModel(object):
     def __init__(self, period=None):
         self.period = period
 
-    def __call__(self, thetas, t):
+    def __call__(self, thetas, t, *args):
         p = thetas.size()[-1]
         assert p < 12, f"thetas_dim is too big. p = {p}"
         p1, p2 = (p // 2, p // 2) if p % 2 == 0 else (p // 2, p // 2 + 1)
@@ -105,11 +108,12 @@ class SeasonalityModel(object):
 class SeasonalityBlock(Block):
     def __init__(
         self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, season = None,
-            bn_final=False, ps:L=None, share_thetas=True, y_range=[-1,1], att=True, scale_exp = 2, stand_alone=False, base = None,**kwargs
+            bn_final=False, ps:L=None, share_thetas=True, y_range=[-1,1], att=True, scale_exp = 4, stand_alone=False, base = None, **kwargs
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
         half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
         s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
+        print(s)
         if self.thetas_dim %2 == 0:
             self.scale = torch.cat([s,s])
         else:
@@ -120,6 +124,7 @@ class SeasonalityBlock(Block):
 
     def forward(self, x):
         if self.stand_alone:
+#             print('forward',x.shape)
             dct = super().forward(x[:,0,:])
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
@@ -127,11 +132,28 @@ class SeasonalityBlock(Block):
 
 # Cell
 def trend_model(thetas, t):
+    s = tensor(thetas.shape[-1]/2).int()
+
+    bias = thetas[:,s:]
+    thetas = thetas[:,:s]
+    assert bias.shape == thetas.shape, f"{bias.shape} {thetas.shape}"
     p = thetas.size()[-1]
     assert p <= 4, f"thetas_dim is too big. p={p}"
-    a = [torch.pow(t, i)[None,:] for i in range(p)]
-    T = torch.cat(a).float()
-    return thetas.mm(T)
+    a =[]
+    for i in range(p):
+        _t = t[None,:] + bias[:,i][:,None]
+        exp = torch.pow(_t, i)
+        a.append((thetas[:,i][:,None] * exp)[:,:,None])
+#     print([o.shape for o in a])
+    T = torch.cat(a,-1).float()
+    return torch.sum(T,-1)
+# def trend_model(thetas, t):
+#     p = thetas.size()[-1]
+#     assert p <= 4, f"thetas_dim is too big. p={p}"
+#     a = [torch.pow(t, i)[None,:] for i in range(p)]
+#     T = torch.cat(a).float()
+#     return thetas.mm(T)
+
 
 # Cell
 class TrendBlock(Block):
@@ -141,6 +163,11 @@ class TrendBlock(Block):
     ):
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
         self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
+#         self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
+        self.thetas_dim = self.thetas_dim*2
+        self.scale = torch.cat([self.scale,3*torch.ones_like(self.scale)])
+        self.scale[0]=3
+        print(self.scale)
         super().__init__(trend_model)
         self.to(device)
 

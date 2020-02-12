@@ -45,7 +45,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NormalizeTS" class="doc_header"><code>class</code> <code>NormalizeTS</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NormalizeTS</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>zero</code></strong>=<em><code>None</code></em>) :: <code>ItemTransform</code></p>
+<h2 id="NormalizeTS" class="doc_header"><code>class</code> <code>NormalizeTS</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NormalizeTS</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>make_ones</code></strong>=<em><code>True</code></em>, <strong><code>eps</code></strong>=<em><code>1e-07</code></em>, <strong><code>mean</code></strong>=<em><code>None</code></em>) :: <code>ItemTransform</code></p>
 </blockquote>
 <p>Normalize the Time-Series.</p>
 
@@ -94,7 +94,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&lt;matplotlib.lines.Line2D at 0x7f8b72f0d150&gt;]</pre>
+<pre>[&lt;matplotlib.lines.Line2D at 0x7fd73a94f990&gt;]</pre>
 </div>
 
 </div>
@@ -120,7 +120,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">norm</span> <span class="o">=</span> <span class="n">NormalizeTS</span><span class="p">(</span><span class="n">zero</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">norm</span> <span class="o">=</span> <span class="n">NormalizeTS</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
 <span class="n">o</span> <span class="o">=</span> <span class="p">(</span><span class="n">TSTensorSeq</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">10.</span><span class="p">)),</span><span class="n">TSTensorSeqy</span><span class="p">(</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span><span class="n">x_len</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">o_en</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="n">o_en</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
@@ -149,18 +149,10 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>torch.Size([])
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&lt;matplotlib.lines.Line2D at 0x7f8b72944f90&gt;]</pre>
+<pre>[&lt;matplotlib.lines.Line2D at 0x7fd73a82bb90&gt;]</pre>
 </div>
 
 </div>
@@ -205,7 +197,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="concat_ts_list" class="doc_header"><code>concat_ts_list</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>concat_ts_list</code>(<strong><code>train</code></strong>, <strong><code>val</code></strong>)</p>
+<h4 id="concat_ts_list" class="doc_header"><code>concat_ts_list</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L58" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>concat_ts_list</code>(<strong><code>train</code></strong>, <strong><code>val</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -245,7 +237,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="make_test" class="doc_header"><code>make_test</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_test</code>()</p>
+<h4 id="make_test" class="doc_header"><code>make_test</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L66" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_test</code>()</p>
 </blockquote>
 <p>Splits the every ts in <code>items</code> based on <code>horizon + lookback</code>*, where the last part will go into <code>val</code> and the first in <code>train</code>.</p>
 <p>*if <code>keep_lookback</code>:
@@ -268,7 +260,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="make_test_pct" class="doc_header"><code>make_test_pct</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_test_pct</code>()</p>
+<h4 id="make_test_pct" class="doc_header"><code>make_test_pct</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L82" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_test_pct</code>()</p>
 </blockquote>
 <p>Splits the every ts in <code>items</code> based on <code>pct</code>(percentage) of the length of the timeserie, where the last part will go into <code>val</code> and the first in <code>train</code>.</p>
 
@@ -307,6 +299,48 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
@@ -318,7 +352,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TSDataLoaders" class="doc_header"><code>class</code> <code>TSDataLoaders</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L85" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TSDataLoaders</code>(<strong>*<code>loaders</code></strong>, <strong><code>path</code></strong>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>) :: <code>DataLoaders</code></p>
+<h2 id="TSDataLoaders" class="doc_header"><code>class</code> <code>TSDataLoaders</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L95" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TSDataLoaders</code>(<strong>*<code>loaders</code></strong>, <strong><code>path</code></strong>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>) :: <code>DataLoaders</code></p>
 </blockquote>
 <p>Basic wrapper around several <code>DataLoader</code>s.</p>
 
@@ -369,7 +403,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="TSDataLoaders.from_items" class="doc_header"><code>TSDataLoaders.from_items</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TSDataLoaders.from_items</code>(<strong><code>items</code></strong>:<code>L</code>, <strong><code>horizon</code></strong>:<code>int</code>, <strong><code>valid_pct</code></strong>=<em><code>1.5</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>lookback</code></strong>=<em><code>None</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>incl_test</code></strong>=<em><code>True</code></em>, <strong><code>path</code></strong>:<code>Path</code>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>norm</code></strong>=<em><code>True</code></em>, <strong><code>max_std</code></strong>=<em><code>200</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="TSDataLoaders.from_items" class="doc_header"><code>TSDataLoaders.from_items</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TSDataLoaders.from_items</code>(<strong><code>items</code></strong>:<code>L</code>, <strong><code>horizon</code></strong>:<code>int</code>, <strong><code>valid_pct</code></strong>=<em><code>1.5</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>lookback</code></strong>=<em><code>None</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>incl_test</code></strong>=<em><code>True</code></em>, <strong><code>path</code></strong>:<code>Path</code>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>norm</code></strong>=<em><code>True</code></em>, <strong><code>min_seq_len</code></strong>=<em><code>None</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Create an list of time series.</p>
 <p>The <code>DataLoader</code> for the test set will be save as an attribute under <code>test</code></p>
@@ -391,7 +425,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="TSDataLoaders.from_folder" class="doc_header"><code>TSDataLoaders.from_folder</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L86" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TSDataLoaders.from_folder</code>(<strong><code>data_path</code></strong>:<code>Path</code>, <strong><code>valid_pct</code></strong>=<em><code>0.5</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>horizon</code></strong>=<em><code>None</code></em>, <strong><code>lookback</code></strong>=<em><code>None</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>nrows</code></strong>=<em><code>None</code></em>, <strong><code>skiprows</code></strong>=<em><code>None</code></em>, <strong><code>incl_test</code></strong>=<em><code>True</code></em>, <strong><code>path</code></strong>:<code>Path</code>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>norm</code></strong>=<em><code>True</code></em>, <strong><code>max_std</code></strong>=<em><code>200</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="TSDataLoaders.from_folder" class="doc_header"><code>TSDataLoaders.from_folder</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/core.py#L96" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TSDataLoaders.from_folder</code>(<strong><code>data_path</code></strong>:<code>Path</code>, <strong><code>valid_pct</code></strong>=<em><code>0.5</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>horizon</code></strong>=<em><code>None</code></em>, <strong><code>lookback</code></strong>=<em><code>None</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>nrows</code></strong>=<em><code>None</code></em>, <strong><code>skiprows</code></strong>=<em><code>None</code></em>, <strong><code>incl_test</code></strong>=<em><code>True</code></em>, <strong><code>path</code></strong>:<code>Path</code>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>norm</code></strong>=<em><code>True</code></em>, <strong><code>min_seq_len</code></strong>=<em><code>None</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Create from M-compition style in <code>path</code> with <code>train</code>,<code>test</code> csv-files.</p>
 <p>The <code>DataLoader</code> for the test set will be save as an attribute under <code>test</code></p>

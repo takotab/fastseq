@@ -28,8 +28,8 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
         lookback = dbunch.train.lookback,
         **kwargs
        )
-
-    loss_func = ifnone(loss_func, CombinedLoss(F.mse_loss, dbunch.train.lookback))
+    lb = dbunch.train.lookback
+    loss_func = ifnone(loss_func, CombinedLoss(F.mse_loss, lb))
     cbs = L(cbs)
     if b_loss != 0.:
         raise NotImplementedError()
@@ -37,7 +37,7 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
     opt_func = ifnone(opt_func, ranger)
     learn = Learner(dbunch, model, loss_func=loss_func, opt_func= opt_func,
                     metrics=L(metrics)+L(mae, smape, NBeatsTheta(),
-                                         NBeatsBackwards(dbunch.train.lookback), NBeatsForward(dbunch.train.lookback)
+                                         NBeatsBackward(lb), NBeatsForward(lb)
                                         ),
                     cbs=L(NBeatsAttention())+cbs
                    )

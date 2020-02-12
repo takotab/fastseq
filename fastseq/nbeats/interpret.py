@@ -102,7 +102,7 @@ def ts_plot_top_losses(x:TSTensorSeq, y:TSTensorSeqy, *args, blocks={}, total_b=
 
     for i, (_x, _y, pred, t) in enumerate(zip(x, y, args[2], args[3])):
         ax = axs[i*2]
-        ctx = show_graph(_x, ax=ax, title=str(t.data), label='x')
+        ctx = show_graph(_x, ax=ax, title=str(f"loss:{np.round(t.data.item(),2)}"), label='x')
         TSTensorSeqy(_y, m = '*g', label = 'y').show(ctx=ctx)
         TSTensorSeqy(pred, m = '-*r', label = 'pred').show(ctx=ctx)
         ax = axs[i*2 + 1]

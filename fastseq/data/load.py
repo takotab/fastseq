@@ -18,8 +18,8 @@ import pandas as pd
 # Cell
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, dataset, horizon, lookback=72, step=1, min_seq_len=None, **kwargs):
-        self.horizon, self.lookback, self.step = horizon, lookback, step
+    def __init__(self, dataset, horizon, lookback=72, step=1, min_seq_len=None, max_std= 2, **kwargs):
+        self.horizon, self.lookback, self.step, self.max_std = horizon, lookback, step, max_std
         self.min_seq_len = ifnone(min_seq_len, lookback)
         self.dataset = [o.float() for o in L(dataset).map(tensor)]
         n = self.make_ids()
@@ -106,12 +106,12 @@ class TSDataLoader(TfmdDL):
         if idx>=self.n:
             raise IndexError
         x, y  = self.get_id(idx)
-        # TODO remove
-#         if (y/x.std()).std()>self.max_std:
-#             if idx not in self.skipped:
-# #                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
-#                 self.skipped.append(idx)
-#             raise SkipItemException()
+
+        if (y/(x.std()+1e-7)).std() > self.max_std:
+            if idx not in self.skipped:
+#                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
+                self.skipped.append(idx)
+            raise SkipItemException()
 
         return TSTensorSeq(x),TSTensorSeqy(y)
 

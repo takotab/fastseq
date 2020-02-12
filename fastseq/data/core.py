@@ -14,18 +14,28 @@ from fastai2.tabular.core import *
 # Cell
 class NormalizeTS(ItemTransform):
     "Normalize the Time-Series."
-    def __init__(self, verbose=False, zero = None):
-        self.verbose = verbose
-        self.zero = zero
+    def __init__(self, verbose=False, make_ones=True, eps=1e-7, mean = None):
+        """
+        `make_ones` will make the std 1 if the std is smaller than `10*eps`.
+        This is for blok seqences to not magnify the `y` part of the data.
+
+        `mean` will set a mean instead of the mean of the x value.
+        """
+        store_attr(self,'verbose, make_ones, eps, mean')
         self.m, self.s = 0, 0
 
     def encodes(self, o):
-        self.m, self.s = torch.mean(o[0],-1,keepdim=True), o[0].std(-1,keepdim=True)+1e-7
-        if self.zero:
-            self.m = o[0][self.zero]
-            print(self.m.shape)
+        self.m, self.s = torch.mean(o[0],-1,keepdim=True), o[0].std(-1,keepdim=True) +self.eps
         if self.verbose:
-            print('encodes',type(o),[a.shape for a in o])
+            print('encodes',type(o),[a.shape for a in o], self.m,self.s)
+        if self.mean:
+            self.m = o[0][self.mean]
+        if self.make_ones:
+            self.s[self.s < self.eps*10] = 1
+            if self.verbose:
+                print(o[0])
+                print(f"made {self.s < self.eps*10} to ones due to setting `make_ones`")
+                print(f"m:{self.m}\n s:{self.s}")
         return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
@@ -114,8 +124,10 @@ class TSDataLoaders(DataLoaders):
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
         train, valid = make_test(items, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
         if norm:
-            kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS())})
-        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, **kwargs) for items in [train,valid]], path=path, device=device)
+            make_ones = kwargs.pop('make_ones',True)
+            kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS(make_ones=make_ones))})
+        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, **kwargs)
+                           for items in [train,valid]], path=path, device=device)
         if device is None:
             db.cuda()
         if incl_test:

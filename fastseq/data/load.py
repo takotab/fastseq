@@ -18,8 +18,9 @@ import pandas as pd
 # Cell
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, dataset, horizon, lookback=72, step=1, max_std=200, **kwargs):
-        self.horizon, self.lookback, self.step, self.max_std = horizon, lookback, step, max_std
+    def __init__(self, dataset, horizon, lookback=72, step=1, min_seq_len=None, **kwargs):
+        self.horizon, self.lookback, self.step = horizon, lookback, step
+        self.min_seq_len = ifnone(min_seq_len, lookback)
         self.dataset = [o.float() for o in L(dataset).map(tensor)]
         n = self.make_ids()
         super().__init__(dataset=self.dataset, **kwargs)
@@ -33,6 +34,7 @@ class TSDataLoader(TfmdDL):
         return res
 
     def make_ids(self):
+        """Make ids if the sequence is shorter than `min_seq_len`, it will drop that sequence."""
         # Slice each time series into examples, assigning IDs to each
         last_id = 0
         n_dropped = 0
@@ -43,7 +45,7 @@ class TSDataLoader(TfmdDL):
                 ts = ts[0] # no idea why they become tuples
             num_examples = (ts.shape[-1] - self.lookback - self.horizon + self.step) // self.step
             # Time series shorter than the forecast horizon need to be dropped.
-            if ts.shape[-1] < self.horizon:
+            if ts.shape[-1] < self.min_seq_len:
                 n_dropped += 1
                 continue
             # For short time series zero pad the input
@@ -80,18 +82,19 @@ class TSDataLoader(TfmdDL):
         if ts.shape[-1] < self.lookback + self.horizon:
             # If the time series is too short, we zero pad
             x = ts[:, :-self.horizon]
+            mean = x.mean()
             x = np.pad(
                 x,
                 pad_width=((0, 0), (self.lookback - x.shape[-1], 0)),
                 mode='constant',
-                constant_values=0
+                constant_values=mean
             )
             y = ts[:,-self.lookback + self.horizon:]
             y = np.pad(
                 y,
                 pad_width=((0, 0), (self.lookback + self.horizon - y.shape[-1], 0)),
                 mode='constant',
-                constant_values=0
+                constant_values=mean
             )
             assert y.shape == (1,self.lookback+self.horizon), f"{y.shape}\t,{idx}, , 'tsshape':{ts.shape},'ts_id':{ts_id}"
         else:
@@ -103,11 +106,12 @@ class TSDataLoader(TfmdDL):
         if idx>=self.n:
             raise IndexError
         x, y  = self.get_id(idx)
-        if (y/x.std()).std()>self.max_std:
-            if idx not in self.skipped:
-#                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
-                self.skipped.append(idx)
-            raise SkipItemException()
+        # TODO remove
+#         if (y/x.std()).std()>self.max_std:
+#             if idx not in self.skipped:
+# #                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
+#                 self.skipped.append(idx)
+#             raise SkipItemException()
 
         return TSTensorSeq(x),TSTensorSeqy(y)
 

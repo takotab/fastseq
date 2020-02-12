@@ -46,7 +46,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TSDataLoader" class="doc_header"><code>class</code> <code>TSDataLoader</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/load.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TSDataLoader</code>(<strong><code>dataset</code></strong>, <strong><code>horizon</code></strong>, <strong><code>lookback</code></strong>=<em><code>72</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>max_std</code></strong>=<em><code>200</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>) :: <code>TfmdDL</code></p>
+<h2 id="TSDataLoader" class="doc_header"><code>class</code> <code>TSDataLoader</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/data/load.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TSDataLoader</code>(<strong><code>dataset</code></strong>, <strong><code>horizon</code></strong>, <strong><code>lookback</code></strong>=<em><code>72</code></em>, <strong><code>step</code></strong>=<em><code>1</code></em>, <strong><code>min_seq_len</code></strong>=<em><code>None</code></em>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>batch_size</code></strong>=<em><code>None</code></em>, <strong><code>drop_last</code></strong>=<em><code>False</code></em>, <strong><code>indexed</code></strong>=<em><code>None</code></em>, <strong><code>n</code></strong>=<em><code>None</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>, <strong><code>wif</code></strong>=<em><code>None</code></em>, <strong><code>before_iter</code></strong>=<em><code>None</code></em>, <strong><code>after_item</code></strong>=<em><code>None</code></em>, <strong><code>before_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_batch</code></strong>=<em><code>None</code></em>, <strong><code>after_iter</code></strong>=<em><code>None</code></em>, <strong><code>create_batches</code></strong>=<em><code>None</code></em>, <strong><code>create_item</code></strong>=<em><code>None</code></em>, <strong><code>create_batch</code></strong>=<em><code>None</code></em>, <strong><code>retain</code></strong>=<em><code>None</code></em>, <strong><code>get_idxs</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>shuffle_fn</code></strong>=<em><code>None</code></em>, <strong><code>do_batch</code></strong>=<em><code>None</code></em>) :: <code>TfmdDL</code></p>
 </blockquote>
 <p>Transformed <code>DataLoader</code></p>
 
@@ -102,6 +102,7 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 <span class="c1">#                            [[ 7.,  8.]],</span>
 <span class="c1">#                            [[12., 13.]]]))]</span>
 <span class="c1">#        )</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -119,14 +120,34 @@ summary: "Using the fastai2 `Datasets` to make an time series dataset."
 </div>
 </div>
 
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(TSTensorSeq([[[ 0.,  1.,  2.,  3.,  4.]],
+  
+          [[ 2.,  3.,  4.,  5.,  6.]],
+  
+          [[10., 10.,  9., 10., 11.]]]),
+  TSTensorSeqy([[[ 0.,  1.,  2.,  3.,  4.,  5.,  6.]],
+  
+          [[ 2.,  3.,  4.,  5.,  6.,  7.,  8.]],
+  
+          [[10., 10., 10., 10., 11., 12., 13.]]]))]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The first sequence (0 to 7) is transformed in to two items. One with x from 0 to 5 and y from 6 to 7. 
-The next one is shifted just two, because <code>step</code> == 2. Note the second sequence is not long enough and is therefore padded with <code>0</code>'s.</p>
+<p>The first sequence (0 to 7) is transformed in to two items. One with x from 0 to 4 and y from 0 to 6. 
+The next one is shifted just two, because <code>step</code> == 2. 
+The second sequence (and third resulting item) is not long enough and is therefore padded with the mean of x (<code>10</code>). Note both x and y are padded with the mean of x</p>
 
 </div>
 </div>

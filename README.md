@@ -7,7 +7,10 @@
 Please install [fastai2](https://dev.fast.ai/#Installing) according to the instructions.
 
 Then install Fastseq by:
+
 ```
+git clone https://github.com/takotab/fastseq.git
+cd fastseq
 pip install -e .
 ```
 

@@ -36,19 +36,21 @@ def CombinedLoss(loss_func, lookback, ratio = [1,1]):
 # Cell
 class NBeatsLossPart(Metric):
     "The loss according to the `loss_func` on a particular part of the time-serie."
-    def __init__(self, start, end, name, *args, **kwargs):
-        store_attr(self,"start,end")
+    def __init__(self, start, end, name, *args, loss_func=None, **kwargs):
+        store_attr(self,"start,end,loss_func")
         self._name = name
 
     def reset(self):           self.total,self.count = 0.,0
     def accumulate(self, learn):
         bs = find_bs(learn.yb)
+        if self.loss_func is None:
+            self.loss_func = learn.loss_func
         pred, truth = learn.pred, learn.yb[0]
         if len(pred.shape) == 2:
             pred = pred[:,None,:]
             truth = truth[:,None,:]
         assert pred[:,0,self.start:self.end].shape == truth[:,0,self.start:self.end].shape
-        loss = to_detach(learn.loss_func(pred[:,0,self.start:self.end], truth[:,0,self.start:self.end])) / truth[:,0,self.start:self.end].shape[-1]
+        loss = to_detach(self.loss_func(pred[:,0,self.start:self.end], truth[:,0,self.start:self.end])) / truth[:,0,self.start:self.end].shape[-1]
         self.total += loss.mean()*bs
         self.count += bs
     @property

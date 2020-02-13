@@ -37,7 +37,7 @@ def nbeats_learner(dbunch:TSDataLoaders, output_channels=None, metrics=None,cbs=
     opt_func = ifnone(opt_func, ranger)
     learn = Learner(dbunch, model, loss_func=loss_func, opt_func= opt_func,
                     metrics=L(metrics)+L(mae, smape, NBeatsTheta(),
-                                         NBeatsBackward(lb), NBeatsForward(lb)
+                                         NBeatsBackward(lb), NBeatsForward(lb), ForwardSMAPE(lb)
                                         ),
                     cbs=L(NBeatsAttention())+cbs
                    )

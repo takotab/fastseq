@@ -120,20 +120,20 @@ class TSDataLoaders(DataLoaders):
             items = [i[None,:] for i in items]
         print(items[0].shape)
         lookback = ifnone(lookback, horizon * 4)
+        device = ifnone(device, default_device())
         if incl_test:
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
         train, valid = make_test(items, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
         if norm:
             make_ones = kwargs.pop('make_ones',True)
             kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS(make_ones=make_ones))})
-        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, **kwargs)
+        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
                            for items in [train,valid]], path=path, device=device)
-        if device is None:
-            db.cuda()
         if incl_test:
-            db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, name='test')
+            db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, name='test', device=device, **kwargs)
+
             print(f"Train:{db.train.n}; Valid: {db.valid.n}; Test {db.test.n}")
         else:
             print(f"Train:{db.train.n}; Valid: {db.valid.n}")
-#         TODO add with test_dl, currently give buges
+
         return db

@@ -255,6 +255,12 @@ class NBeatsNet(Module):
 
         return nn.Sequential(*blocks)
 
+    def iter_blocks(self):
+        for stack_id, names in enumerate(self.stacks.named_children()):
+            name = names[0]
+            for block_id in range(len(self.stacks[stack_id])):
+                yield name, stack_id, block_id, self.stacks[stack_id][block_id]
+
     def forward(self, x):
         self.dct = None
         backcast_res = x.view([-1,x.shape[-1]])
@@ -281,3 +287,10 @@ class NBeatsNet(Module):
         dct['b'] = backcast[:,None,:]
         self.dct = dct
         return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
+
+    def __setattr__(self, key, value):
+        if key in ['lookback','horizon']:
+            if hasattr(self,'stacks'):
+                for name, stack_id, block_id, stack in self.iter_blocks():
+                    setattr(stack,key,value)
+        super().__setattr__(key, value)

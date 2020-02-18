@@ -8,7 +8,6 @@ from fastcore.imports import *
 from fastai2.basics import *
 from .data.all import *
 
-
 # Cell
 
 def mape(truth, pred, reduction='mean') -> tensor:
@@ -67,4 +66,3 @@ def mase(y_test, y_hat_test, insample, freq, reduction=None):
     if reduction is not None:
         ret = torch.mean(ret,-1) if reduction == 'mean' else torch.sum(ret,-1)
     return ret
-

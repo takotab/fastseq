@@ -9,7 +9,6 @@ from fastai2.basics import *
 from .data.all import *
 from .nbeats.learner import *
 
-
 # Cell
 import seaborn as sns
 def _compare(learn, lr, epochs):

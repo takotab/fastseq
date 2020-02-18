@@ -217,11 +217,13 @@ class NBeatsNet(Module):
         thetas_dim=None,
         share_weights_in_layers=True,
         layers= [1024,512],
+        norm=False,
         **kwargs,
     ):
         thetas_dim = ifnone(thetas_dim,[default_thetas[o] for o in L(stack_types)])
         stack_types= L(stack_types)
-        store_attr(self,'device,horizon,lookback,layers,nb_blocks_per_stack,share_weights_in_layers,stack_types,thetas_dim,device,kwargs')
+        self.eps, self.m, self.s = Variable(tensor(1e-7), requires_grad=False).to(device),Variable(tensor(1e-7), requires_grad=True).to(device),Variable(tensor(1e-7), requires_grad=True).to(device)
+        store_attr(self,'device,horizon,lookback,layers,nb_blocks_per_stack,share_weights_in_layers,stack_types,thetas_dim,device,norm,kwargs')
         self.stacks = []
         self._str = "| N-Beats\n"
 
@@ -263,6 +265,10 @@ class NBeatsNet(Module):
 
     def forward(self, x):
         self.dct = None
+        if self.norm:
+            self.m, self.s = torch.mean(x,-1,keepdim=True), x.std(-1,keepdim=True) + self.eps
+            x = (x-self.m)/self.s
+            print('requires_grad',x.requires_grad)
         backcast_res = x.view([-1,x.shape[-1]])
         backcast = torch.zeros(
             size=(backcast_res.size()[0], self.lookback,)
@@ -286,11 +292,14 @@ class NBeatsNet(Module):
         dct['f'] = forecast[:,None,:]
         dct['b'] = backcast[:,None,:]
         self.dct = dct
-        return torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
+        res = torch.cat([backcast[:,None,:], forecast[:,None,:]], dim=-1)
+        if self.norm:
+            return (res*self.s)+self.m
+        return res
 
     def __setattr__(self, key, value):
         if key in ['lookback','horizon']:
             if hasattr(self,'stacks'):
                 for name, stack_id, block_id, stack in self.iter_blocks():
-                    setattr(stack,key,value)
+                    setattr(stack, key, value)
         super().__setattr__(key, value)

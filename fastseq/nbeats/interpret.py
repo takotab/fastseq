@@ -64,7 +64,7 @@ def plot_top_losses(self, k, largest=True, **kwargs):
         losses,idx = self.top_losses(k, largest)
 #         total_b = self.dct['b'][idx.long(), :]
 #         keys_wo_total_b = [o for o in list(self.dct.keys()) if 'total_b' not in o]
-        full_every_block = _get_key_from_nested_dct(self.dct,'full')
+        full_every_block = _get_key_from_nested_dct(self.dct, 'full')
         if not isinstance(self.inputs, tuple):
             self.inputs = (self.inputs,)
 
@@ -72,13 +72,12 @@ def plot_top_losses(self, k, largest=True, **kwargs):
             inps = tuple(o[idx] for o in self.inputs)
             self.dl.after_batch(inps)
         else:
-            xb = [tuple(o[i] for o in self.inputs) for i in idx]
-            inps = self.dl.create_batch(self.dl.before_batch(xb))
-        assert self.dl.after_batch[0].m.shape[0] == k
+            inps = [tuple(o[i] for o in self.inputs) for i in idx]
+            inps = self.dl.create_batch(self.dl.before_batch(inps))
 
         b = inps + tuple(o[idx] for o in (self.targs if is_listy(self.targs) else (self.targs,)))
         x,y,its = self.dl._pre_show_batch(b, max_n=k)
-        full_every_block = {k:self.dl.after_batch.decode((o[:,None,:]))[0] for k,o in full_every_block.items()}
+        full_every_block = {k:self.dl.after_batch.decode((o[:,None,:])) for k,o in full_every_block.items()}
         b_out = inps + tuple(o[idx] for o in (self.decoded if is_listy(self.decoded) else (self.decoded,)))
         x1,y1,outs = self.dl._pre_show_batch(b_out, max_n=k)
         if its is not None:

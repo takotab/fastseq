@@ -18,14 +18,15 @@ import pandas as pd
 # Cell
 @delegates()
 class TSDataLoader(TfmdDL):
-    def __init__(self, dataset, horizon, lookback=72, step=1, min_seq_len=None, max_std= 2, **kwargs):
-        self.horizon, self.lookback, self.step, self.max_std = horizon, lookback, step, max_std
+    def __init__(self, dataset, horizon, lookback=72, step=1, min_seq_len=None, max_std= 2, norm=True, **kwargs):
+        store_attr(self,'horizon,lookback,step,max_std,norm')
         self.min_seq_len = ifnone(min_seq_len, lookback)
         self.dataset = [o.float() for o in L(dataset).map(tensor)]
         n = self.make_ids()
         super().__init__(dataset=self.dataset, **kwargs)
         self.n = n
         self.skipped= []
+        self.ms = {}
 
     @delegates(TfmdDL.new)
     def new(self, dataset=None, cls=None, **kwargs):
@@ -83,19 +84,19 @@ class TSDataLoader(TfmdDL):
             # If the time series is too short, we zero pad
             x = ts[:, :-self.horizon]
             mean = x.mean()
-            x = np.pad(
+            x = tensor(np.pad(
                 x,
                 pad_width=((0, 0), (self.lookback - x.shape[-1], 0)),
                 mode='constant',
                 constant_values=mean
-            )
+            ))
             y = ts[:,-self.lookback + self.horizon:]
-            y = np.pad(
+            y = tensor(np.pad(
                 y,
                 pad_width=((0, 0), (self.lookback + self.horizon - y.shape[-1], 0)),
                 mode='constant',
                 constant_values=mean
-            )
+            ))
             assert y.shape == (1,self.lookback+self.horizon), f"{y.shape}\t,{idx}, , 'tsshape':{ts.shape},'ts_id':{ts_id}"
         else:
             x = ts[:,lookback_id:lookback_id + self.lookback]
@@ -106,7 +107,8 @@ class TSDataLoader(TfmdDL):
         if idx>=self.n:
             raise IndexError
         x, y  = self.get_id(idx)
-
+        if self.norm:
+            x, y = self.normalize(x,y,idx)
         if (y/(x.std()+1e-7)).std() > self.max_std:
             if idx not in self.skipped:
 #                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
@@ -114,6 +116,12 @@ class TSDataLoader(TfmdDL):
             raise SkipItemException()
 
         return TSTensorSeq(x),TSTensorSeqy(y)
+
+    def normalize(self, x, y, idx, eps = 1e-7):
+        m, s = torch.mean(x,-1,keepdim=True), torch.std(x, -1,keepdim=True) + eps
+        self.ms[idx] = (m,s)
+        return (x-m)/s, (y-m)/s
+
 
 # Cell
 

@@ -8,7 +8,6 @@ from ..data.external import *
 from fastai2.basics import *
 from .learner import *
 
-
 # Cell
 from .callbacks import _get_key_from_nested_dct
 
@@ -29,7 +28,6 @@ class NBeatsInterpretation():
     def top_losses(self, k=None, largest=True):
         "`k` largest(/smallest) losses and indexes, defaulting to all losses (sorted by `largest`)."
         return self.losses.topk(ifnone(k, len(self.losses)), largest=largest)
-
 
 # Cell
 def add_stack(b):
@@ -57,7 +55,6 @@ def add_stack_full(b):
                 else:
                     res[stack+'_'+direction] = b[key]
     return res
-
 
 # Cell
 def plot_top_losses(self, k, largest=True, **kwargs):

@@ -53,9 +53,6 @@ class NormalizeTS(ItemTransform):
             print('decodes',type(o),[a.shape for a in o], 'shape m/s',self.m.shape)
         return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
 
-
-
-
 # Cell
 def concat_ts_list(train, val):
     items=L()

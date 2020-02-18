@@ -53,23 +53,32 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
 
 # Cell
 
-def dummy_data_generator_multi(length, citys=2, signal_type='none',nrows:int=5, random = True, noise = .2, incl_city_trend = False, norm= True):
+def dummy_data_generator_multi(length, citys=2, cont = False, signal_type='none',nrows:int=5, random = True, noise = .2, incl_city_trend = False, norm= True, increase_noise = False):
 
     data = L()
     for city_i in range(citys):
         city_trend = 2* dummy_data_generator(length, 0, signal_type = 'trend', nrows=1, random=random, noise = 0 )[0]
         for i in range(nrows):
             weather = dummy_data_generator(length-10, 10, signal_type = 'seasonality', nrows=1, random=random, noise = 0 )[0]
-            city_weather = city_trend + weather
+            cont = np.random.randn()
+            if cont:
+                city_weather = cont * city_trend + weather
+            else:
+                city_weather = city_trend + weather
             normal_signal = 3 * dummy_data_generator(length//2, length//2, signal_type = signal_type, nrows=1, random=random, noise = noise )[0]
+            if increase_noise:
+                city_weather += dummy_data_generator(2, length-2, signal_type = 'seasonality', nrows=1, random=random, noise = noise,norm=True )[0] * (np.random.randn(length) *(np.arange(length) * (1/length) ) * noise)
             final = normal_signal + city_weather * (1+np.random.randn(length) * .1 * noise)
-            tot = [final, weather,]
+            tot = [final, weather]
             if incl_city_trend:
                 tot.append(city_trend)
             r = np.concatenate(tot)
             if norm:
                 r = (r-r.mean())/r.std()
-            data.append(r)
+            if cont:
+                data.append((r, city_i, cont))
+            else:
+                data.append((r, city_i))
 
 
     return data

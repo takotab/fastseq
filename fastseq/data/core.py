@@ -16,6 +16,8 @@ class NormalizeTS(ItemTransform):
     "Normalize the Time-Series."
     def __init__(self, verbose=False, make_ones=True, eps=1e-7, mean = None):
         """
+        NOTE: is not used anymore due to problems when changing sizes.
+
         `make_ones` will make the std 1 if the std is smaller than `10*eps`.
         This is for blok seqences to not magnify the `y` part of the data.
 
@@ -124,10 +126,10 @@ class TSDataLoaders(DataLoaders):
         if incl_test:
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
         train, valid = make_test(items, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
-        if norm:
-            make_ones = kwargs.pop('make_ones',True)
-            kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS(make_ones=make_ones))})
-        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, device=device, **kwargs)
+#         if norm:
+#             make_ones = kwargs.pop('make_ones',True)
+#             kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS(make_ones=make_ones))})
+        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, device=device, norm = norm, **kwargs)
                            for items in [train,valid]], path=path, device=device)
         if incl_test:
             db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, name='test', device=device, **kwargs)

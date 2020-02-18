@@ -153,7 +153,6 @@ class NBeatsAttention(Callback):
 
 # Cell
 class ClipLoss(Callback):
-    "`Callback` that adds weights regularization the thetas in N-Beats training."
     def __init__(self, clip=5):
         self.clip = tensor([clip])
 

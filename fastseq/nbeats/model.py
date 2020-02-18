@@ -108,7 +108,6 @@ class SeasonalityModel(object):
         S = torch.cat([*s1, *s2])
         return thetas.mm(S)
 
-
 # Cell
 class SeasonalityBlock(Block):
     def __init__(
@@ -156,7 +155,6 @@ def trend_model(thetas, t):
 #     a = [torch.pow(t, i)[None,:] for i in range(p)]
 #     T = torch.cat(a).float()
 #     return thetas.mm(T)
-
 
 # Cell
 class TrendBlock(Block):

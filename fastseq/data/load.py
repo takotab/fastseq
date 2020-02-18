@@ -122,7 +122,6 @@ class TSDataLoader(TfmdDL):
         self.ms[idx] = (m,s)
         return (x-m)/s, (y-m)/s
 
-
 # Cell
 
 from fastai2.vision.data import get_grid

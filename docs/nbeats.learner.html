@@ -18,8 +18,24 @@ summary: "A basic architecture for time series forecasting."
 -->
 
 <div class="container" id="notebook-container">
-    
+    {% raw %}
+        
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/tako/dev/env37/lib/python3.7/site-packages/pandas/compat/__init__.py:117: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+  warnings.warn(msg)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
@@ -43,7 +59,7 @@ summary: "A basic architecture for time series forecasting."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="nbeats_learner" class="doc_header"><code>nbeats_learner</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/learner.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>nbeats_learner</code>(<strong><code>dbunch</code></strong>:<a href="/fastseq/data.core#TSDataLoaders"><code>TSDataLoaders</code></a>, <strong><code>output_channels</code></strong>=<em><code>None</code></em>, <strong><code>metrics</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>b_loss</code></strong>=<em><code>0.0</code></em>, <strong><code>loss_func</code></strong>=<em><code>None</code></em>, <strong><code>opt_func</code></strong>=<em><code>None</code></em>, <strong><code>stack_types</code></strong>=<em><code>('trend', 'seasonality')</code></em>, <strong><code>nb_blocks_per_stack</code></strong>=<em><code>3</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>thetas_dim</code></strong>=<em><code>None</code></em>, <strong><code>share_weights_in_layers</code></strong>=<em><code>True</code></em>, <strong><code>layers</code></strong>=<em><code>[1024, 512]</code></em>)</p>
+<h4 id="nbeats_learner" class="doc_header"><code>nbeats_learner</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/learner.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>nbeats_learner</code>(<strong><code>dbunch</code></strong>:<a href="/fastseq/data.core#TSDataLoaders"><code>TSDataLoaders</code></a>, <strong><code>output_channels</code></strong>=<em><code>None</code></em>, <strong><code>metrics</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>b_loss</code></strong>=<em><code>0.0</code></em>, <strong><code>loss_func</code></strong>=<em><code>None</code></em>, <strong><code>opt_func</code></strong>=<em><code>None</code></em>, <strong><code>stack_types</code></strong>=<em><code>('trend', 'seasonality')</code></em>, <strong><code>nb_blocks_per_stack</code></strong>=<em><code>3</code></em>, <strong><code>horizon</code></strong>=<em><code>5</code></em>, <strong><code>lookback</code></strong>=<em><code>10</code></em>, <strong><code>thetas_dim</code></strong>=<em><code>None</code></em>, <strong><code>share_weights_in_layers</code></strong>=<em><code>True</code></em>, <strong><code>layers</code></strong>=<em><code>[1024, 512]</code></em>, <strong><code>norm</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Build a N-Beats style learner</p>
 
@@ -554,6 +570,7 @@ Train:110; Valid: 20; Test 10
 </div>
 
 </div>
+    {% endraw %}
 </div>
  
 

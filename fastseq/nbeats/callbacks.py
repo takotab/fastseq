@@ -32,7 +32,6 @@ def CombinedLoss(loss_func, lookback, ratio = [1,1]):
 
     return _inner
 
-
 # Cell
 class NBeatsChangeSizes(Callback):
     """Changes the lookback and horizon to match with the size of batch."""
@@ -45,7 +44,6 @@ class NBeatsChangeSizes(Callback):
         if h != self.learn.model.horizon:
             self.learn.model.horizon = h
             print(f"set horizon to {h}")
-
 
 # Cell
 class NBeatsLossPart(Metric):
@@ -99,7 +97,6 @@ class ForwardSMAPE(NBeatsLossPart):
 
     def __init__(self, lookback, *args, **kwargs):
         super().__init__(lookback, None, "f_smape", *args, loss_func=smape, **kwargs)
-
 
 # Cell
 def _get_key_from_nested_dct(dct, s_key, exclude = [], namespace=''):

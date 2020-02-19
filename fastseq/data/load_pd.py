@@ -35,27 +35,6 @@ class TensorSeqs(TSeries):
 
 
 # Cell
-
-from fastai2.vision.data import get_grid
-
-@typedispatch
-def show_batch(x: DfDataLoader, y, samples, ctxs=None, max_n=10,rows=None, cols=None, figsize=None, **kwargs):
-    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
-    print('hello')
-    ctxs = show_batch[object](x, y, samples=samples, ctxs=ctxs, max_n=max_n, **kwargs)
-    return ctxs
-
-# Cell
-@typedispatch
-def show_results(x: TensorSeqs, y, samples, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):
-    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
-    for i in range(len(outs[0])):
-        ctxs = [TSTensorSeqy(b ,m='*r', label='pred').show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
-    for i in range(len(samples[0])):
-        ctxs = [b.show(ctx=c, **kwargs) for b, c, _ in zip(samples.itemgot(i),ctxs,range(max_n))]
-    return ctxs
-
-# Cell
 from typing import List
 def same_size_ts(ts:pd.Series, ts_names:List[str]):
     all_same = [[(ts[c].shape == ts[a].shape) for c in ts_names] for a in ts_names]
@@ -180,6 +159,6 @@ class DfDataLoader(TfmdDL):
             TensorSeqs(tsx,label=self.ts_names),
             TensorCon(cat,label=self.cat_names).long(),
             TensorCon(con,label=self.con_names),
-            TensorSeqs(y, label=[self.y_name], m=['r'])
+            TensorSeqs(y, label=[self.y_name+ '_y'], m=['r'])
         )
 

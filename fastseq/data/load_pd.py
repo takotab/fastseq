@@ -16,6 +16,13 @@ import numpy as np
 import pandas as pd
 
 # Cell
+from typing import List
+def same_size_ts(ts:pd.Series, ts_names:List[str]):
+    all_same = [[(ts[c].shape == ts[a].shape) for c in ts_names] for a in ts_names]
+    mask = np.array(all_same)
+    return np.sum(mask) == len(ts_names)**2
+
+# Cell
 @delegates()
 class DfDataLoader(TfmdDL):
     def __init__(self, dataset:pd.DataFrame, y_name, horizon, lookback=72, step=1, min_seq_len=None, max_std= 2, norm=True, **kwargs):

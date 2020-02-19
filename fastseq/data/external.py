@@ -70,16 +70,13 @@ def dummy_data_generator_multi(length, citys=2, cont = False, signal_type='none'
             if increase_noise:
                 city_weather += dummy_data_generator(2, length-2, signal_type = 'seasonality', nrows=1, random=random, noise = noise,norm=True )[0] * (np.random.randn(length) *(np.arange(length) * (1/length) ) * noise)
             final = normal_signal + city_weather * (1+np.random.randn(length) * .1 * noise)
-            tot = [final, weather]
-            if incl_city_trend:
-                tot.append(city_trend)
-            r = np.concatenate(tot)
             if norm:
-                r = (r-r.mean())/r.std()
+                final = (final-final.mean())/final.std()
+            tot = {'x':final,'weather': weather,'city': city_i}
+            if incl_city_trend:
+                tot['city_trend']=city_trend
             if cont:
-                data.append((r, city_i, cont))
-            else:
-                data.append((r, city_i))
+                tot['cont'] = cont
+            data.append(tot)
 
-
-    return data
+    return pd.DataFrame(data)

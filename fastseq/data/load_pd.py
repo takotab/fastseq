@@ -27,12 +27,13 @@ def same_size_ts(ts:pd.Series, ts_names:List[str]):
 def get_part_of_ts(x, lookback_id, length, pad=np.mean):
     if len(x.shape) == 1:
         x = x[None,:]
-    print(x.shape, lookback_id, length)
+    if isinstance(x[0,0],int):
+        x = x.astype(float)
     if x.shape[-1] < length:
         # If the time series is too short, we pad
-        padding = pad(x,-1)
+        padding = pad(x, -1)
         x = tensor(np.pad(
-            x.astype(np.float), # report issue https://github.com/numpy/numpy/issues/15606
+            x, # report issue https://github.com/numpy/numpy/issues/15606
             pad_width=((0, 0), (length - x.shape[-1], 0)),
             mode='constant',
             constant_values=padding
@@ -53,16 +54,16 @@ class DfDataLoader(TfmdDL):
         self.con_names, self.cat_names, self.ts_names = L(), L(), L()
         for col in dataset.columns:
             t = type(dataset[col].iloc[0])
-            print(t)
             if t is pd.core.series.Series:
                 self.ts_names.append(col)
             elif isinstance(dataset[col].iloc[0], int) or t is np.int64:
                 self.con_names.append(col)
-            elif isinstance(dataset[col].iloc[0], np.float32) or isinstance(dataset[col].iloc[0], np.float64):
+            elif isinstance(dataset[col].iloc[0], float):
                 self.cat_names.append(col)
             else:
                 raise Exception(t)
         assert y_name in self.ts_names
+        self.ts_names.remove(y_name)
         n = self.make_ids()
         super().__init__(dataset=self.dataset, **kwargs)
         self.n = n
@@ -117,9 +118,10 @@ class DfDataLoader(TfmdDL):
         ts_id, lookback_id = self._ids[idx]
         row = self.dataset.iloc[ts_id, :]
         x = get_part_of_ts(row[self.y_name].values, lookback_id, self.lookback)
-        y = get_part_of_ts(row[self.y_name].values, lookback_id, self.lookback + self.horizon )
-        tsx = get_part_of_ts(row[self.ts_names].values, lookback_id, self.lookback + self.horizon)
-        cat, con = row[self.cat_names], row[self.con_names]
+        y = get_part_of_ts(row[self.y_name].values, lookback_id, self.lookback + self.horizon)
+        tsx = np.concatenate([o[None,:] for o in row[self.ts_names].to_numpy()])
+        tsx = get_part_of_ts(tsx, lookback_id, self.lookback + self.horizon)
+        cat, con = row[self.cat_names].to_numpy().astype(int), row[self.con_names].to_numpy().astype(float)
         return x, tsx, cat, con, y
 
     def create_item(self, idx):
@@ -132,5 +134,6 @@ class DfDataLoader(TfmdDL):
                 self.skipped.append(idx)
             raise SkipItemException()
 
+#         print({k:(o,o.dtype,o.shape) for k,o in zip(['x','tsx','cat','con','y'],[x,tsx,cat,con,y])})
         return TSTensorSeq(x),TSTensorSeq(tsx), tensor(cat).long(), tensor(con),TSTensorSeqy(y)
 

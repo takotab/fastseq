@@ -58,9 +58,14 @@ def dummy_data_generator_multi(length, citys=2, cont = False, signal_type='none'
 
     data = L()
     for city_i in range(citys):
-        city_trend = 2* dummy_data_generator(length, 0, signal_type = 'trend', nrows=1, random=random, noise = 0 )[0]
+        city_trend = dummy_data_generator(length//2, length//2, signal_type = 'trend', nrows=1, random=random, noise = 0 )[0]
         for i in range(nrows):
-            weather = dummy_data_generator(length-10, 10, signal_type = 'seasonality', nrows=1, random=random, noise = 0 )[0]
+            if noise > .15:
+                weather = dummy_data_generator(length//2, 0, signal_type = 'seasonality', nrows=1, random=random, noise = 0 )[0]
+                weather = np.concatenate([weather,weather],-1)
+            else:
+                weather = dummy_data_generator(length-10, 10, signal_type = 'seasonality', nrows=1, random=random, noise = 0 )[0]
+
             cont = np.random.randn()
             if cont:
                 city_weather = cont * city_trend + weather

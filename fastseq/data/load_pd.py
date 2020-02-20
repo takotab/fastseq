@@ -75,6 +75,9 @@ class DfDataLoader(TfmdDL):
             t = type(dataset[col].iloc[0])
             if t is pd.core.series.Series:
                 self.ts_names.append(col)
+            elif t is np.ndarray:
+                self.dataset[col] = pd.Series([pd.Series(o.flatten()) for o in self.dataset[col]])
+                self.ts_names.append(col)
             elif isinstance(dataset[col].iloc[0], int) or t is np.int64:
                 self.con_names.append(col)
             elif isinstance(dataset[col].iloc[0], float):

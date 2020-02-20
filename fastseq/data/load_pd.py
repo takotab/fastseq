@@ -40,7 +40,7 @@ class TensorCon(TSeries):
         ax = ifnone(ax,ctx)
         if ax is None:
             _, ax = plt.subplots(figsize=(5,5))
-        ax.set_title(ax.title._text +f" {self._meta.get('label','con')}: {str(self.data.item())}")
+        ax.set_title(ax.title._text +f" {self._meta.get('label','con')}: {str(self)}")
         return ax
 
 # Cell

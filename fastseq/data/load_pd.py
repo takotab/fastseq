@@ -75,7 +75,7 @@ def get_part_of_ts(x, lookback_id, length, pad=np.mean):
 # Cell
 @delegates()
 class DfDataLoader(TfmdDL):
-    def __init__(self, dataset:pd.DataFrame, y_name, horizon, lookback=72, step=1, min_seq_len=None, max_std= 2, norm=True, **kwargs):
+    def __init__(self, dataset:pd.DataFrame, y_name:str, horizon:int, lookback=72, step=1, min_seq_len=None, max_std= 2, norm=True, **kwargs):
         store_attr(self,'horizon,lookback,step,max_std,norm,y_name')
         self.min_seq_len = ifnone(min_seq_len, lookback)
         self.dataset = dataset
@@ -157,7 +157,8 @@ class DfDataLoader(TfmdDL):
         if len(self.cat_names):
             r.append(TensorCon(row[self.cat_names].to_numpy().astype(float),label=self.cat_names))
         if len(self.con_names):
-            r.append(TensorCon(row[self.con_names].to_numpy().astype(int),label=self.con_names))
+            # TODO make cat its own type
+            r.append(TensorCon(row[self.con_names].to_numpy().astype(float),label=self.con_names))
         # TODO make y its own type
         r.append(TensorSeqs(y, label=[self.y_name+ '_y'], m=['r']))
         return Tuple(r)

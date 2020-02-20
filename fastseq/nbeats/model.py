@@ -56,7 +56,7 @@ class Block(Module):
         self.y_range = getattr(self,'y_range', None)
 
 
-    def forward(self, x):
+    def forward(self, x, b, f):
         res = {}
         x = self.base(x)
         if self.share_thetas:
@@ -75,7 +75,7 @@ class Block(Module):
         rang = self.theta_scale(x)
         theta_b = self.apply_range(theta_b, scale, rang)
         theta_f = self.apply_range(theta_f, scale, rang)
-        b, f = linspace(self.lookback, self.horizon, device = self.device)
+#         b, f = linspace(self.lookback, self.horizon, device = self.device)
         backcast = self.fnc_b(theta_b, b)
         forecast = self.fnc_f(theta_f, f)
         res.update({'b':backcast,'f': forecast, 'theta': (theta_b + theta_f)})
@@ -126,11 +126,12 @@ class SeasonalityBlock(Block):
         self.to(device)
 
     def forward(self, x):
+        b, f = linspace(self.lookback, self.horizon, device = self.device)
         if self.stand_alone:
-            dct = super().forward(x[:,0,:])
+            dct = super().forward(x[:,0,:], b, f)
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
-            return super().forward(x)
+            return super().forward(x, b, f)
 
 # Cell
 def trend_model(thetas, t):
@@ -172,11 +173,12 @@ class TrendBlock(Block):
         self.to(device)
 
     def forward(self, x):
+        b, f = linspace(self.lookback, self.horizon, device = self.device)
         if self.stand_alone:
-            dct = super().forward(x[:,0,:])
+            dct = super().forward(x[:,0,:], b, f)
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
-            return super().forward(x)
+            return super().forward(x, b, f)
 
 # Cell
 

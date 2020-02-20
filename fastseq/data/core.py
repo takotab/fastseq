@@ -29,15 +29,14 @@ class NormalizeTS(ItemTransform):
     def encodes(self, o):
         self.m, self.s = torch.mean(o[0],-1,keepdim=True), o[0].std(-1,keepdim=True) +self.eps
         if self.verbose:
-            print('encodes',type(o),[a.shape for a in o], self.m,self.s)
+            print('encodes',[a.shape for a in o],'m shape', self.m.shape,'s shape', self.s.shape)
         if self.mean:
             self.m = o[0][self.mean]
         if self.make_ones:
             self.s[self.s < self.eps*10] = 1
-            if self.verbose:
-                print(o[0])
-                print(f"made {self.s < self.eps*10} to ones due to setting `make_ones`")
-                print(f"m:{self.m}\n s:{self.s}")
+#             if self.verbose:
+#                 print(f"made {self.s < self.eps*10} to ones due to setting `make_ones`")
+#                 print(f"m:{self.m}\n s:{self.s}")
         return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
@@ -50,7 +49,7 @@ class NormalizeTS(ItemTransform):
                 o = Tuple([to_cpu(a) for a in o])
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
         if self.verbose:
-            print('decodes',type(o),[a.shape for a in o], 'shape m/s',self.m.shape)
+            print('decodes',[a.shape for a in o], 'shape m/s',self.m.shape)
         return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
 
 # Cell
@@ -123,10 +122,10 @@ class TSDataLoaders(DataLoaders):
         if incl_test:
             items, test = make_test(items, horizon, lookback, keep_lookback = True)
         train, valid = make_test(items, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
-#         if norm:
-#             make_ones = kwargs.pop('make_ones',True)
-#             kwargs.update({'after_batch':L(kwargs.get('after_batch',None))+L(NormalizeTS(make_ones=make_ones))})
-        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, device=device, norm = norm, **kwargs)
+        if norm and 'after_batch' not in kwargs:
+            make_ones = kwargs.pop('make_ones', True)
+            kwargs.update({'after_batch':L(NormalizeTS(make_ones=make_ones))})
+        db = DataLoaders(*[TSDataLoader(items, horizon=horizon, lookback=lookback, step=step, device=device, norm = False, **kwargs)
                            for items in [train,valid]], path=path, device=device)
         if incl_test:
             db.test = TSDataLoader(test, horizon=horizon, lookback=lookback, step=step, name='test', device=device, **kwargs)

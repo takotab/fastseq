@@ -155,9 +155,10 @@ class DfDataLoader(TfmdDL):
         r = [TensorSeqs(x, label=[self.y_name + '_x'], m=['g']),
              TensorSeqs(tsx,label=self.ts_names)]
         if len(self.cat_names):
-            r.append(TensorCon(row[self.cat_names].to_numpy(),label=self.cat_names))
+            r.append(TensorCon(row[self.cat_names].to_numpy().astype(float),label=self.cat_names))
         if len(self.con_names):
             r.append(TensorCon(row[self.con_names].to_numpy().astype(int),label=self.con_names))
+        # TODO make y its own type
         r.append(TensorSeqs(y, label=[self.y_name+ '_y'], m=['r']))
         return Tuple(r)
 

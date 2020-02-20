@@ -152,25 +152,23 @@ class DfDataLoader(TfmdDL):
         y = get_part_of_ts(row[self.y_name].values, lookback_id, self.lookback + self.horizon)
         tsx = np.concatenate([o[None,:] for o in row[self.ts_names].to_numpy()])
         tsx = get_part_of_ts(tsx, lookback_id, self.lookback + self.horizon)
-        cat, con = row[self.cat_names].to_numpy().astype(int), row[self.con_names].to_numpy().astype(float)
-        return x, tsx, cat, con, y
+        r = [TensorSeqs(x, label=[self.y_name + '_x'], m=['g']),
+             TensorSeqs(tsx,label=self.ts_names)]
+        if len(self.cat_names):
+            r.append(TensorCon(row[self.cat_names].to_numpy(),label=self.cat_names))
+        if len(self.con_names):
+            r.append(TensorCon(row[self.con_names].to_numpy().astype(int),label=self.con_names))
+        r.append(TensorSeqs(y, label=[self.y_name+ '_y'], m=['r']))
+        return Tuple(r)
 
     def create_item(self, idx):
         if idx>=self.n:
             raise IndexError
-        x, tsx, cat, con, y  = self.get_id(idx)
-        if (y/(x.std()+1e-7)).std() > self.max_std:
+        r  = self.get_id(idx)
+        if (r[-1]/(r[0].std()+1e-7)).std() > self.max_std:
             if idx not in self.skipped:
 #                 print(f"idx: {idx};y.std to high: {(y/x.std()).std()} > {self.max_std}")
                 self.skipped.append(idx)
             raise SkipItemException()
 
-#         print({k:(o,o.dtype,o.shape) for k,o in zip(['x','tsx','cat','con','y'],[x,tsx,cat,con,y])})
-        return (
-            TensorSeqs(x, label=[self.y_name + '_x'], m=['g']),
-            TensorSeqs(tsx,label=self.ts_names),
-            TensorCon(cat,label=self.cat_names).long(),
-            TensorCon(con,label=self.con_names),
-            TensorSeqs(y, label=[self.y_name+ '_y'], m=['r'])
-        )
-
+        return r

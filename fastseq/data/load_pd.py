@@ -110,7 +110,10 @@ class DfDataLoader(TfmdDL):
 
     @delegates(TfmdDL.new)
     def new(self, dataset=None, cls=None, **kwargs):
-        res = super().new(dataset, cls, horizon=self.horizon, lookback=self.lookback, step=self.step , **kwargs)
+        for k,v in {k:getattr(self,k) for k in ['horizon', 'lookback', 'step']}.items():
+            if k not in kwargs:
+                kwargs[k] = v
+        res = super().new(dataset = dataset,cls= cls, y_name= self.y_name, **kwargs)
         res.make_ids()
         return res
 

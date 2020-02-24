@@ -191,7 +191,7 @@ class DfDataLoader(TfmdDL):
         y = get_part_of_ts(row[self.y_name].values, lookback_id, self.lookback + self.horizon)
         tsx = np.concatenate([o[None,:] for o in row[self.ts_names].to_numpy()])
         tsx = get_part_of_ts(tsx, lookback_id, self.lookback + self.horizon)
-        r = [TensorSeqsX(x, label=[self.y_name + '_x'], m=['g']),
+        r = [TensorSeqs(x, label=[self.y_name + '_x'], m=['g']),
              TensorSeqs(tsx, label=self.ts_names)]
         if len(self.cat_names):
             r.append(TensorCon(row[self.cat_names].to_numpy().astype(float),label=self.cat_names))

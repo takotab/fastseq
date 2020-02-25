@@ -16,8 +16,8 @@ from .model import *
 
 # Cell
 # TODO
-def make_base_rnn(u_in, layers, use_bn, ps):
-    pass
+def make_base_rnn(u_in, u_o, layers):
+    return nn.LSTM(u_in, u_o, layers, batch_first=True)
 
 # Cell
 class DependentModel(object):
@@ -27,12 +27,16 @@ class DependentModel(object):
 
     def __call__(self, thetas, t, *args):
         p = thetas.size()[-1]
-        t = (t - t.mean())/t.std()
-        thetas = thetas.flatten()
-        assert p < 6, f"thetas_dim is too big. p = {p}"
-        S = [(t*thetas[i]**i)[None,:] for i in range(p)]
-        o = torch.cat(S).sum(0)
-        return o
+        assert p < 10, f"thetas_dim is too big. p = {p}"
+        p1, p2 = (p // 2, p // 2) if p % 2 == 0 else (p // 2, p // 2 + 1)
+        s = []
+        for i in range(p1):
+            o = (t*thetas[:,i][:,None])**i
+            s.append(o[:,:,None])
+        for i in range(p2):
+            o = (t*thetas[:,i][:,None])**i
+            s.append(o[:,:,None])
+        return torch.cat(s,-1).sum(-1)
 
 # Cell
 class DependentBlock(Block):
@@ -40,14 +44,27 @@ class DependentBlock(Block):
         self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, norm = True,
             bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 2, stand_alone=False, base = None, **kwargs
     ):
+
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
-        self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
+        half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
+        s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
+        if self.thetas_dim %2 == 0:
+            self.scale = torch.cat([s,s])
+        else:
+            self.scale = torch.cat([s,s[:-1]])
+        print(self.scale)
+#         self.seq_base = make_base_'rnn(2, 4, 1)
         super().__init__(DependentModel(norm))
+        self.base =  make_base(self.lookback*2, self.layers, self.use_bn, self.ps)
         self.to(device)
+
 
     def forward(self,x, xts, *args):
         if self.stand_alone:
-            dct = super().forward(x[:,0,:], xts[:,0,self.lookback:], xts[:,0,:self.lookback])
+            x = torch.cat([x, xts[:,:,:self.lookback]],-1)
+#             out,(h,c) = self.seq_base(x)
+#             out = out.reshape([out.shape[0],self.lookback*4])
+            dct = super().forward(x[:,0], xts[:,0,:self.lookback], xts[:,0,self.lookback:])
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
             return super().forward(x, t[self.lookback:], t[:self.lookback])

@@ -61,7 +61,7 @@ class NormalizeTSMulti(ItemTransform):
         if self.verbose:
             print('encodes',[a.shape for a in o],'m shape', {k:o.shape for k,o in self.m.items()},'s shape',{k:o.shape for k,o in self.s.items()})
 
-        return MetaTuple([(o[i]-self.m[i]) / self.s[i] for i in range(len(o))])
+        return TSMulti([(o[i]-self.m[i]) / self.s[i] for i in range(len(o))])
 
     def decodes(self, o):
         if o[0].is_cuda:
@@ -74,7 +74,7 @@ class NormalizeTSMulti(ItemTransform):
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
         if self.verbose:
             print('decodes',[a.shape for a in o],  {k:o.shape for k,o in self.m.items()},'s shape',{k:o.shape for k,o in self.s.items()})
-        return MetaTuple([(o[i]*self.s[i])+self.m[i] for i in range(len(o))])
+        return TSMulti([(o[i]*self.s[i])+self.m[i] for i in range(len(o))])
 
 # Cell
 def make_test_df(df:L(), horizon:int, lookback:int, keep_lookback:bool = False):

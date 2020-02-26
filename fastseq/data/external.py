@@ -54,7 +54,7 @@ def dummy_data_generator(lookback:int, horizon:int, signal_type='seasonality', n
 
 # Cell
 def dummy_generator_multi_easy(length, signal_type='none',nrows:int=5, random = True, noise = .3,
-                               norm= True, increase_noise = False, rang = [5,5]):
+                               norm = True, norm_t = True, increase_noise = False, rang = [5,5]):
 
     data = L()
     for i in range(nrows):
@@ -63,6 +63,8 @@ def dummy_generator_multi_easy(length, signal_type='none',nrows:int=5, random = 
         final = (rang[0] + np.random.sample()*(rang[1]-rang[0])) * weather * n
         if norm:
             final = (final-final.mean())/final.std()
+        if norm_t:
+            weather = (weather-weather.mean())/weather.std()
         tot = {'x':final,'weather': weather}
         data.append(tot)
 

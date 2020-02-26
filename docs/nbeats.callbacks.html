@@ -164,7 +164,7 @@ Train:644; Valid: 18; Test 3
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsChangeSizes" class="doc_header"><code>class</code> <code>NBeatsChangeSizes</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L37" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsChangeSizes</code>() :: <code>Callback</code></p>
+<h2 id="NBeatsChangeSizes" class="doc_header"><code>class</code> <code>NBeatsChangeSizes</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L36" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsChangeSizes</code>() :: <code>Callback</code></p>
 </blockquote>
 <p>Changes the lookback and horizon to match with the size of batch.</p>
 
@@ -464,7 +464,7 @@ Train:534; Valid: 51; Test 3
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsLossPart" class="doc_header"><code>class</code> <code>NBeatsLossPart</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L51" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsLossPart</code>(<strong><code>start</code></strong>, <strong><code>end</code></strong>, <strong><code>name</code></strong>, <strong>*<code>args</code></strong>, <strong><code>loss_func</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>Metric</code></p>
+<h2 id="NBeatsLossPart" class="doc_header"><code>class</code> <code>NBeatsLossPart</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L49" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsLossPart</code>(<strong><code>start</code></strong>, <strong><code>end</code></strong>, <strong><code>name</code></strong>, <strong>*<code>args</code></strong>, <strong><code>loss_func</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>Metric</code></p>
 </blockquote>
 <p>The loss according to the <code>loss_func</code> on a particular part of the time-serie.</p>
 
@@ -488,7 +488,7 @@ Train:534; Valid: 51; Test 3
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsBackward" class="doc_header"><code>class</code> <code>NBeatsBackward</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L76" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsBackward</code>(<strong><code>lookback</code></strong>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/fastseq/nbeats.callbacks#NBeatsLossPart"><code>NBeatsLossPart</code></a></p>
+<h2 id="NBeatsBackward" class="doc_header"><code>class</code> <code>NBeatsBackward</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L74" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsBackward</code>(<strong><code>lookback</code></strong>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/fastseq/nbeats.callbacks#NBeatsLossPart"><code>NBeatsLossPart</code></a></p>
 </blockquote>
 <p>The loss according to the <code>loss_func</code> on the backwards part of the time-serie.</p>
 
@@ -512,7 +512,7 @@ Train:534; Valid: 51; Test 3
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsForward" class="doc_header"><code>class</code> <code>NBeatsForward</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L82" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsForward</code>(<strong><code>lookback</code></strong>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/fastseq/nbeats.callbacks#NBeatsLossPart"><code>NBeatsLossPart</code></a></p>
+<h2 id="NBeatsForward" class="doc_header"><code>class</code> <code>NBeatsForward</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L80" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsForward</code>(<strong><code>lookback</code></strong>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/fastseq/nbeats.callbacks#NBeatsLossPart"><code>NBeatsLossPart</code></a></p>
 </blockquote>
 <p>The loss according to the <code>loss_func</code> on the forward part of the time-serie.</p>
 
@@ -823,7 +823,7 @@ Train:327; Valid: 3; Test 1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsTheta" class="doc_header"><code>class</code> <code>NBeatsTheta</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L116" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsTheta</code>() :: <code>Metric</code></p>
+<h2 id="NBeatsTheta" class="doc_header"><code>class</code> <code>NBeatsTheta</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L113" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsTheta</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>The sqaure of the <code>theta</code> for every block.</p>
 
@@ -933,7 +933,7 @@ Train:327; Valid: 4; Test 1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NBeatsAttention" class="doc_header"><code>class</code> <code>NBeatsAttention</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L131" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsAttention</code>() :: <code>Callback</code></p>
+<h2 id="NBeatsAttention" class="doc_header"><code>class</code> <code>NBeatsAttention</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L128" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NBeatsAttention</code>() :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 
@@ -1296,7 +1296,7 @@ Train:89; Valid: 33; Test 3
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ClipLoss" class="doc_header"><code>class</code> <code>ClipLoss</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L155" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClipLoss</code>(<strong><code>clip</code></strong>=<em><code>5</code></em>) :: <code>Callback</code></p>
+<h2 id="ClipLoss" class="doc_header"><code>class</code> <code>ClipLoss</code><a href="https://github.com/takotab/fastseq/tree/master/fastseq/nbeats/callbacks.py#L152" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClipLoss</code>(<strong><code>clip</code></strong>=<em><code>5</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 

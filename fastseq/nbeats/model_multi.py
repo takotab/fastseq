@@ -72,6 +72,7 @@ class DependentBlock(Block):
 
 # Cell
 
+
 # not pritty but still works better
 def _select_block(o):
     if isinstance(o,int):

@@ -41,11 +41,11 @@ class DependentModel(object):
 # Cell
 class DependentBlock(Block):
     def __init__(
-        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, norm = True,
+        self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, norm = True, rnn_base = False,
             bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 2, stand_alone=False, base = None, **kwargs
     ):
 
-        store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
+        store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base,rnn_base" )
         half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
         s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
         if self.thetas_dim %2 == 0:
@@ -53,18 +53,22 @@ class DependentBlock(Block):
         else:
             self.scale = torch.cat([s,s[:-1]])
         print(self.scale)
-#         self.seq_base = make_base_'rnn(2, 4, 1)
+        if rnn_base:
+            self.seq_base = make_base_rnn(2, 2, 3)
         super().__init__(DependentModel(norm))
-        self.base =  make_base(self.lookback*2, self.layers, self.use_bn, self.ps)
+        self.base =  make_base(self.lookback*2+ (2 if rnn_base else 0), self.layers, self.use_bn, self.ps)
         self.to(device)
 
 
     def forward(self,x, xts, *args):
         if self.stand_alone:
-            x = torch.cat([x, xts[:,:,:self.lookback]],-1)
-#             out,(h,c) = self.seq_base(x)
-#             out = out.reshape([out.shape[0],self.lookback*4])
-            dct = super().forward(x[:,0], xts[:,0,:self.lookback], xts[:,0,self.lookback:])
+            x = torch.cat([x, xts[:,:,:self.lookback]],1)
+            if self.rnn_base:
+                out,(h,c) = self.seq_base(x.transpose(1,2))
+            x = x.reshape([x.shape[0],self.lookback*2])
+            if self.rnn_base:
+                x = torch.cat([x, h[-1]],-1)
+            dct = super().forward(x, xts[:,0,:self.lookback], xts[:,0,self.lookback:])
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
             return super().forward(x, t[self.lookback:], t[:self.lookback])

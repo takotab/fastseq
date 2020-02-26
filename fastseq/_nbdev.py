@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"same_size_ts": "00_core.ipynb",
+index = {"git_add": "00_core.ipynb",
+         "same_size_ts": "00_core.ipynb",
          "get_part_of_ts": "00_core.ipynb",
          "first_item": "00_core.ipynb",
          "concat_dct": "00_core.ipynb",

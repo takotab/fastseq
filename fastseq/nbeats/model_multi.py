@@ -21,20 +21,19 @@ def make_base_rnn(u_in, u_o, layers):
 
 # Cell
 class DependentModel(object):
-    """Returns the result of polynominal function on the dependent variable."""
+    """Returns the result of polynominal function on the dependent variable.
+
+    r = theta[0] + sum((theta[i]*t)^i)
+    """
     def __init__(self, norm=True):
         self.norm = norm
 
     def __call__(self, thetas, t, *args):
         p = thetas.size()[-1]
-        assert p < 10, f"thetas_dim is too big. p = {p}"
-        p1, p2 = (p // 2, p // 2) if p % 2 == 0 else (p // 2, p // 2 + 1)
-        s = []
-        for i in range(p1):
-            o = (t*thetas[:,i][:,None])**i
-            s.append(o[:,:,None])
-        for i in range(p2):
-            o = (t**(i))*thetas[:,i][:,None]
+        assert p < 5, f"thetas_dim is too big. p = {p}"
+        s = [(thetas[:,0][:,None] * torch.ones_like(t))[:,:,None]]
+        for i in range(1, p):
+            o = (t*thetas[:,i][:,None])**(i)
             s.append(o[:,:,None])
         return torch.cat(s,-1).sum(-1)
 
@@ -42,16 +41,12 @@ class DependentModel(object):
 class DependentBlock(Block):
     def __init__(
         self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, norm = True, rnn_base = False,
-            bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 2, stand_alone=False, base = None, **kwargs
+            bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 1.2, stand_alone=False, base = None, **kwargs
     ):
 
         store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base,rnn_base" )
-        half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
-        s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
-        if self.thetas_dim %2 == 0:
-            self.scale = torch.cat([s,s])
-        else:
-            self.scale = torch.cat([s,s[:-1]])
+        self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
+#         self.scale[2] = .1
         print(self.scale)
         if rnn_base:
             self.seq_base = make_base_rnn(2, 2, 3)
@@ -61,17 +56,19 @@ class DependentBlock(Block):
 
 
     def forward(self,x, xts, *args):
+        if not self.stand_alone:
+            x, xts = x[:,None,:], xts[:,None,:]
+        x = torch.cat([x, xts[:,:,:self.lookback]],1)
+        if self.rnn_base:
+            out,(h,c) = self.seq_base(x.transpose(1,2))
+        x = x.reshape([x.shape[0],self.lookback*2])
+        if self.rnn_base:
+            x = torch.cat([x, h[-1]],-1)
+        dct = super().forward(x, xts[:,0,:self.lookback], xts[:,0,self.lookback:])
         if self.stand_alone:
-            x = torch.cat([x, xts[:,:,:self.lookback]],1)
-            if self.rnn_base:
-                out,(h,c) = self.seq_base(x.transpose(1,2))
-            x = x.reshape([x.shape[0],self.lookback*2])
-            if self.rnn_base:
-                x = torch.cat([x, h[-1]],-1)
-            dct = super().forward(x, xts[:,0,:self.lookback], xts[:,0,self.lookback:])
             return torch.cat([dct['b'][:,None,:], dct['f'][:,None,:]],dim=-1)
         else:
-            return super().forward(x, t[self.lookback:], t[:self.lookback])
+            return dct
 
 # Cell
 

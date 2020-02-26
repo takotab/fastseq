@@ -34,7 +34,7 @@ class DependentModel(object):
             o = (t*thetas[:,i][:,None])**i
             s.append(o[:,:,None])
         for i in range(p2):
-            o = (t*thetas[:,i][:,None])**i
+            o = (t**(i))*thetas[:,i][:,None]
             s.append(o[:,:,None])
         return torch.cat(s,-1).sum(-1)
 

@@ -249,6 +249,8 @@ class TensorCon(TSeries):
             _, ax = plt.subplots(figsize=(5,5))
         l, its = _get_its_shape(self)
         dct = {k:np.round(its[i].item(),2) for k,i in zip(L(self._meta.get('label',self._name)),range(l))}
+        if dct == {}:
+            dct = ''
         ax.set_title(ax.title._text +f"{dct}")
         return ax
 

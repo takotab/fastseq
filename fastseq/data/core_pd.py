@@ -43,7 +43,7 @@ class NormalizeTSMulti(ItemTransform):
 
     def encodes(self, o):
         for i in range(len(o)-1):
-            if type(o[i]) == TensorCon and o[i].shape[-1]>0:
+            if type(o[i]) == TensorCon and o[i].shape[-1]>0: # if tensor has shape (bs,0) than ignore
                 self.m[i] = torch.mean(o[i])
                 self.s[i] = torch.std(o[i]) +self.eps
             elif type(o[i]) == TensorSeqs :
@@ -51,7 +51,8 @@ class NormalizeTSMulti(ItemTransform):
                 self.s[i] = torch.std(o[i],  -1, keepdim=True) +self.eps
                 self.s[i] = _zeros_2_ones(self.s[i], self.eps*10)
             else:
-                print(f'NormalizeTSMulti:type {type(o[i])} on location:{i}/{len(o)} of tuple not found')
+                if o[i].shape[-1]>0:
+                    print(f'NormalizeTSMulti:type {type(o[i])} on location:{i}/{len(o)} of tuple not found')
                 self.m[i], self.s[i] = 0, 1
 
         # y must be scaled with m

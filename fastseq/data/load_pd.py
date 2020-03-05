@@ -176,10 +176,18 @@ DfDataLoader.show_batch = _show_batch_class
 # Cell
 from fastai2.vision.data import get_grid
 @typedispatch
-def show_batch(x:TSMulti, y, its, *args, ctxs=None, max_n=10, rows=None, cols=None, figsize=None, **kwargs):
+def show_batch(x:TSMulti, y:TensorSeqs, its, *args, ctxs=None, max_n=10, rows=None, cols=None, figsize=None, **kwargs):
     if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
     for i, ctx in enumerate(ctxs):
         o = TSMulti([type(o)(o,**o._meta) for o in its[i]])
+        ctx = o.show(ctx=ctx)
+    return ctxs
+
+@typedispatch
+def show_batch(x:TSMulti, y:None, its, *args, ctxs=None, max_n=10, rows=None, cols=None, figsize=None, **kwargs):
+    if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
+    for i, ctx in enumerate(ctxs):
+        o = TSMulti([type(o)(o[i],**o[i]._meta) for o in x])
         ctx = o.show(ctx=ctx)
     return ctxs
 

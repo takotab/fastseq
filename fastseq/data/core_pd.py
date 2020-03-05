@@ -50,6 +50,8 @@ class NormalizeTSMulti(ItemTransform):
                 self.m[i] = torch.mean(o[i], -1, keepdim=True)
                 self.s[i] = torch.std(o[i],  -1, keepdim=True) +self.eps
                 self.s[i] = _zeros_2_ones(self.s[i], self.eps*10)
+            elif type(o[i]) == TensorCatI:
+                self.m[i], self.s[i] = 0, 1
             else:
                 if o[i].shape[-1]>0:
                     print(f'NormalizeTSMulti:type {type(o[i])} on location:{i}/{len(o)} of tuple not found')
@@ -57,12 +59,11 @@ class NormalizeTSMulti(ItemTransform):
 
         # y must be scaled with m
         self.m[len(o)-1], self.s[len(o)-1] = self.m[0],self.s[0]
-
         # TODO make y its own type
         if self.verbose:
             print('encodes',[a.shape for a in o],'m shape', {k:o.shape for k,o in self.m.items()},'s shape',{k:o.shape for k,o in self.s.items()})
 
-        return TSMulti([(o[i]-self.m[i]) / self.s[i] for i in range(len(o))])
+        return TSMulti_([(o[i]-self.m[i]) / self.s[i] for i in range(len(o))])
 
     def decodes(self, o):
         if o[0].is_cuda:
@@ -75,7 +76,7 @@ class NormalizeTSMulti(ItemTransform):
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
         if self.verbose:
             print('decodes',[a.shape for a in o],  {k:o.shape for k,o in self.m.items()},'s shape',{k:o.shape for k,o in self.s.items()})
-        return TSMulti([(o[i]*self.s[i])+self.m[i] for i in range(len(o))])
+        return TSMulti_([(o[i]*self.s[i])+self.m[i] for i in range(len(o))])
 
 # Cell
 def make_test_df(df:L(), horizon:int, lookback:int, keep_lookback:bool = False):

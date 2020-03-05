@@ -263,6 +263,8 @@ class TensorCon(TSeries):
 class TensorCat():
     _name = 'Catagory'
     def __init__(self, o, label= None):
+        if isinstance(o, TensorCat):
+            o, label = o.o, o._meta['label']
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
 
@@ -270,7 +272,7 @@ class TensorCat():
         return {k:v for k,v in zip(self._meta['label'],self.o)}
 
     def __repr__(self):
-        return f"TensorCat({list(self.o)}, label = {self._meta['label']})"
+        return f"TensorCat({list(self.o)}, label = {list(self._meta['label'])})"
 
     def __eq__(self, o):
         if isinstance(o, TensorCat):

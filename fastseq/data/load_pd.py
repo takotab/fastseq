@@ -31,13 +31,16 @@ class ConTfm(ItemTransform):
         r = []
         for i in self.o2i:
             r.append(self.o2i[i][o[2].o[i]])
-        return TSMulti_no_show(o[0], o[1], TensorBase(r), o[3], o[4])
+        return TSMulti_no_show(o[0], o[1], TensorBase(r, label = o[2]._meta['label']), o[3], o[4])
 
     def decodes(self, x:TSMulti_no_show):
         r = []
         for i in self.vocab:
             r.append(self.vocab[i][x[2][i]])
-        return TSMulti(o[0], o[1], TensorCat(r), o[3], o[4])
+        cat = TensorCat(r)
+        cat._meta = x[2]._meta
+        r= TSMulti(o[0], o[1], cat, o[3], o[4])
+        return r
 
 
 # Cell
@@ -55,16 +58,16 @@ class DfDataLoader(TfmdDL):
             elif t is np.ndarray:
                 self.dataset[col] = pd.Series([pd.Series(o.flatten()) for o in self.dataset[col]])
                 self.ts_names.append(col)
-            elif isinstance(dataset[col].iloc[0], int) or t is np.int64 or isinstance(dataset[col].iloc[0], str):
+            elif isinstance(dataset[col].iloc[0], str):
                 self.cat_names.append(col)
-            elif isinstance(dataset[col].iloc[0], float):
+            elif isinstance(dataset[col].iloc[0], float) or isinstance(dataset[col].iloc[0], int) or t is np.int64:
                 self.con_names.append(col)
             else:
                 raise Exception(t)
         assert y_name in self.ts_names
         self.ts_names.remove(y_name)
         n = self.make_ids()
-        kwargs.update({'after_item':kwargs.get('after_item',L()).append(ConTfm)})
+        kwargs.update({'after_item':ConTfm(dataset, self.cat_names)})
         super().__init__(dataset=self.dataset, **kwargs)
         self.n = n
         self.skipped= []
@@ -132,7 +135,7 @@ class DfDataLoader(TfmdDL):
         tsx = get_part_of_ts(tsx, lookback_id, self.lookback + self.horizon)
         r = [TensorSeqs(x, label=[self.y_name + '_x'], m=['g']),
              TensorSeqs(tsx, label=self.ts_names)]
-        r.append(TensorCat(row[self.cat_names].to_numpy(),label=self.cat_names))
+        r.append(TensorCat(list(row[self.cat_names]), label=self.cat_names))
         # TODO make cat its own type
         r.append(TensorCon(row[self.con_names].to_numpy().astype(float),label=self.con_names))
         # TODO make y its own type

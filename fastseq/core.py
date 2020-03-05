@@ -219,7 +219,8 @@ def show_graphs(arrays, rows=None, cols=None, figsize=None, titles=None, **kwarg
 
 # Cell
 import matplotlib.colors as mcolors
-_colors = ['b', 'c', 'm', 'y', 'k', 'b', 'c', 'm', 'y', 'k',]
+_colors = [v for k,v in mcolors.TABLEAU_COLORS.items()]
+_colors += [v for k,v in mcolors.TABLEAU_COLORS.items()]# could be done better but ...
 class TensorSeqs(TSeries):
 
     def show(self, ax = None, ctx=None, **kwargs):
@@ -232,8 +233,9 @@ class TensorSeqs(TSeries):
         assert len(m)==len(labels)==len(arrays),f"{len(m)}=={len(labels)}=={len(arrays)}"
         t = np.arange(array.shape[-1])
         for a, c, label in zip(arrays, m, labels):
-            mark = '-' if 'y' not in label else ''
-            ctx.plot(t, a, mark + '*' +c, **kwargs, label=label)
+            ls = ('-',None) if 'y' not in label else ('None','*' )
+            ctx.plot(t, a, ls = ls[0], marker = ls[1], c=c,
+                     **kwargs, label=label)
         ctx.legend()
         return ctx
 class TensorSeqsX(TensorSeqs):pass
@@ -242,6 +244,7 @@ class TensorSeqsX(TensorSeqs):pass
 def _get_its_shape(o):
     if len(o.shape) == 0: return 1, o[None]
     return len(o), o
+
 
 class TensorCon(TSeries):
     _name = 'Constant'
@@ -258,6 +261,7 @@ class TensorCon(TSeries):
 
 # Cell
 class TensorCat():
+    _name = 'Catagory'
     def __init__(self, o, label= None):
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}

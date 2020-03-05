@@ -218,6 +218,8 @@ def show_graphs(arrays, rows=None, cols=None, figsize=None, titles=None, **kwarg
     return axs
 
 # Cell
+import matplotlib.colors as mcolors
+_colors = ['b', 'c', 'm', 'y', 'k', 'b', 'c', 'm', 'y', 'k',]
 class TensorSeqs(TSeries):
 
     def show(self, ax = None, ctx=None, **kwargs):
@@ -225,10 +227,10 @@ class TensorSeqs(TSeries):
         if ctx is None: _, ctx = plt.subplots(figsize=(5,5))
         array = np.array(self.cpu())
         arrays = no_emp_dim(array)
-        m = L(self._meta.get('m',['b', 'c', 'm', 'y', 'k',][:len(arrays)]))
+        m = L(self._meta.get('m',_colors[:len(arrays)]))
         labels = L(self._meta.get('label',['x']*len(arrays)))
         assert len(m)==len(labels)==len(arrays),f"{len(m)}=={len(labels)}=={len(arrays)}"
-        t = np.arange(array.shape[1])
+        t = np.arange(array.shape[-1])
         for a, c, label in zip(arrays, m, labels):
             mark = '-' if 'y' not in label else ''
             ctx.plot(t, a, mark + '*' +c, **kwargs, label=label)

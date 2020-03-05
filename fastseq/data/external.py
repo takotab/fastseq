@@ -73,7 +73,7 @@ def dummy_generator_multi_easy(length, signal_type='none',nrows:int=5, random = 
 # Cell
 
 def dummy_data_generator_multi(length, citys=2, cont = False, signal_type='none',nrows:int=5, random = True, noise = .2, incl_city_trend = False, norm= True, increase_noise = False):
-
+    city_names=['adam','rdam','zdam','istanbul','berlin','barcalona','NYC','LA']
     data = L()
     for city_i in range(citys):
         city_trend = dummy_data_generator(length//2, length//2, signal_type = 'trend', nrows=1, random=random, noise = 0 )[0]
@@ -95,7 +95,7 @@ def dummy_data_generator_multi(length, citys=2, cont = False, signal_type='none'
             final = normal_signal + city_weather * (1+np.random.randn(length) * .1 * noise)
             if norm:
                 final = (final-final.mean())/final.std()
-            tot = {'x':final,'weather': weather,'city': city_i}
+            tot = {'x': final,'weather': weather,'city': city_names[city_i]}
             if incl_city_trend:
                 tot['city_trend']=city_trend
             if cont:

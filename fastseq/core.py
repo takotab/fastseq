@@ -2,8 +2,8 @@
 
 __all__ = ['git_add', 'same_size_ts', 'get_part_of_ts', 'first_item', 'concat_dct', 'pad_zeros', 'Skip', 'get_ts_files',
            'IndexsSplitter', 'TSeries', 'no_emp_dim', 'show_graph', 'test_graph_exists', 'TensorSeq', 'TSTensorSeq',
-           'TSTensorSeqy', 'show_graphs', 'TensorSeqs', 'TensorSeqsX', 'TensorCon', 'TensorCat', 'MultiTuple', 'get_ax',
-           'show_mt', 'ts_lists']
+           'TSTensorSeqy', 'show_graphs', 'TensorSeqs', 'TensorSeqsX', 'TensorCon', 'TensorCat', 'ConTfm', 'MultiTuple',
+           'get_ax', 'show_mt', 'ts_lists']
 
 # Cell
 from fastcore.all import *
@@ -255,8 +255,36 @@ class TensorCon(TSeries):
         return ax
 
 # Cell
-class TensorCat(TensorCon):
-    _name = 'Catagory'
+class TensorCat():
+    def __init__(self, o, label= None):
+        self.o = L(o)
+        self.label = ifnone(label, ['Constant_'+str(i) for i in range(len(self.o))])
+
+    def show(self, ax = None, ctx=None):
+        ax = ifnone(ax,ctx)
+        if ax is None:
+            _, ax = plt.subplots(figsize=(5,5))
+
+        dct = {k:v for k,v in zip(self.label,self.o)}
+        if dct == {}:
+            dct = ''
+        ax.set_title(ax.title._text +f"{dct}")
+        return ax
+
+class ConTfm(ItemTransform):
+    def __init__(self, items, cat_cols:[]):
+        self.cols = cat_cols
+        self.vocab,self.o2i = {},{}
+        for col in cat_cols:
+            self.vocab[col], self.o2i[col] = uniqueify(items[col], sort=True, bidir=True)
+
+    def encodes(self, o):
+        for col in self.cols:
+            o[col] = self.o2i[self.labeller(o)]
+
+
+    def decodes(self, x): return TitledImage(x[0],self.vocab[x[1]])
+
 
 # Cell
 class MultiTuple(Tuple):

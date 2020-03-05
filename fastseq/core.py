@@ -258,14 +258,24 @@ class TensorCon(TSeries):
 class TensorCat():
     def __init__(self, o, label= None):
         self.o = L(o)
-        self.label = ifnone(label, ['Constant_'+str(i) for i in range(len(self.o))])
+        self.label = ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])
+
+    def _dct(self):
+        return {k:v for k,v in zip(self.label,self.o)}
+
+    def __repr__(self):
+        return str(self._dct())
+
+    def __eq__(self, o):
+        if isinstance(o, TensorCat):
+            return self.o == self.o
+        return False
 
     def show(self, ax = None, ctx=None):
         ax = ifnone(ax,ctx)
         if ax is None:
             _, ax = plt.subplots(figsize=(5,5))
-
-        dct = {k:v for k,v in zip(self.label,self.o)}
+        dct = self._dct()
         if dct == {}:
             dct = ''
         ax.set_title(ax.title._text +f"{dct}")

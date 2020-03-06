@@ -174,8 +174,7 @@ class DfDataLoaders(DataLoaders):
             dataset, test = make_test_df(dataset, horizon, lookback, keep_lookback = True)
         train, valid = make_test_df(dataset, horizon + int(valid_pct*horizon), lookback , keep_lookback = True)
         if norm and 'after_batch' not in kwargs:
-            make_ones = kwargs.pop('make_ones', True)
-            kwargs.update({'after_batch':L(NormalizeTSMulti(make_ones=make_ones))})
+            kwargs.update({'after_batch':L(NormalizeSeqsMulti(n_its=4))})
         db = DataLoaders(*[DfDataLoader(ds, y_name, horizon=horizon, lookback=lookback, step=step, device=device, norm = False, **kwargs)
                            for ds in [train,valid]], path=path, device=device)
         if incl_test:

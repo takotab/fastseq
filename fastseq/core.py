@@ -267,7 +267,7 @@ class TensorCat():
             o, label = o.o, o._meta['label']
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
-
+        self.shape = (len(o))
     def _dct(self):
         return {k:v for k,v in zip(self._meta['label'],self.o)}
 

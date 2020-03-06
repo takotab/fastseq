@@ -16,11 +16,17 @@ entries:
       title: Data Collection
       url: /data.external
     - output: web,pdf
+      title: Data Load Dataframe
+      url: /data.load_pd
+    - output: web,pdf
       title: Data Load
       url: /data.load
     - output: web,pdf
       title: Data Core
       url: /data.core
+    - output: web,pdf
+      title: N-Beats model multi
+      url: /nbeats.models_multi
     - output: web,pdf
       title: N-Beats model
       url: /nbeats.models

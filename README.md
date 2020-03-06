@@ -20,7 +20,7 @@ Thank you
 
 ## How to use
 
-```python
+```
 from fastai2.basics import *
 from fastseq.all import *
 from fastseq.nbeats.model import *
@@ -28,13 +28,13 @@ from fastseq.nbeats.learner import *
 from fastseq.nbeats.callbacks import *
 ```
 
-```python
+```
 horizon, lookback = 7, 35    
 ```
 
 Getting the data fastai style:
 
-```python
+```
 path = untar_data(URLs.m4_daily)
 data = TSDataLoaders.from_folder(path, horizon = horizon, lookback = lookback, nrows = 300, step=3)
 ```
@@ -43,7 +43,7 @@ data = TSDataLoaders.from_folder(path, horizon = horizon, lookback = lookback, n
     Train:70707; Valid: 1200; Test 300
 
 
-```python
+```
 data.show_batch()
 ```
 
@@ -51,11 +51,11 @@ data.show_batch()
 ![png](docs/images/output_7_0.png)
 
 
-```python
+```
 learn = nbeats_learner(data, season = lookback+horizon)   
 ```
 
-```python
+```
 from fastai2.callback.all import *
 learn.lr_find()
 ```
@@ -68,7 +68,7 @@ learn.lr_find()
 ![png](docs/images/output_9_1.png)
 
 
-```python
+```
 learn.fit_flat_cos(5, 2e-2)
 learn.recorder.plot_loss()
 learn.recorder.plot_sched()
@@ -163,7 +163,7 @@ learn.recorder.plot_sched()
 ![png](docs/images/output_10_2.png)
 
 
-```python
+```
 learn.show_results(0)
 ```
 
@@ -175,7 +175,7 @@ learn.show_results(0)
 ![png](docs/images/output_11_1.png)
 
 
-```python
+```
 learn.show_results(1)
 ```
 
@@ -187,7 +187,7 @@ learn.show_results(1)
 ![png](docs/images/output_12_1.png)
 
 
-```python
+```
 learn.fit_flat_cos(1,5e-4)
 learn.recorder.plot_loss()
 learn.recorder.plot_sched()
@@ -236,7 +236,7 @@ learn.recorder.plot_sched()
 
 ## Interperation
 
-```python
+```
 learn.n_beats_attention.means()
 ```
 
@@ -438,7 +438,7 @@ learn.n_beats_attention.means()
 
 
 
-```python
+```
 interp = NBeatsInterpretation.from_learner(learn)
 ```
 
@@ -446,7 +446,7 @@ interp = NBeatsInterpretation.from_learner(learn)
 
 
 
-```python
+```
 interp.plot_top_losses(3, combine_stack=True)
 ```
 

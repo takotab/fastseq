@@ -230,6 +230,10 @@ class TensorSeqs(TSeries):
         arrays = no_emp_dim(array)
         m = L(self._meta.get('m',_colors[:len(arrays)]))
         labels = L(self._meta.get('label',['x']*len(arrays)))
+        if arrays.shape[-1] == 0:
+            if len(labels):
+                ctx.set_title(ctx.title._text +f"{labels} is empty")
+            return ctx
         assert len(m)==len(labels)==len(arrays),f"{len(m)}=={len(labels)}=={len(arrays)}"
         t = np.arange(array.shape[-1])
         for a, c, label in zip(arrays, m, labels):
@@ -267,7 +271,7 @@ class TensorCat():
             o, label = o.o, o._meta['label']
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
-        self.shape = (len(o))
+        self.shape = (len(o),)
     def _dct(self):
         return {k:v for k,v in zip(self._meta['label'],self.o)}
 

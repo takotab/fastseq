@@ -218,6 +218,9 @@ def show_graphs(arrays, rows=None, cols=None, figsize=None, titles=None, **kwarg
     return axs
 
 # Cell
+import matplotlib.colors as mcolors
+_colors = [v for k,v in mcolors.TABLEAU_COLORS.items()]
+_colors += [v for k,v in mcolors.TABLEAU_COLORS.items()]# could be done better but ...
 class TensorSeqs(TSeries):
 
     def show(self, ax = None, ctx=None, **kwargs):
@@ -225,13 +228,18 @@ class TensorSeqs(TSeries):
         if ctx is None: _, ctx = plt.subplots(figsize=(5,5))
         array = np.array(self.cpu())
         arrays = no_emp_dim(array)
-        m = L(self._meta.get('m',['b', 'c', 'm', 'y', 'k',][:len(arrays)]))
+        m = L(self._meta.get('m',_colors[:len(arrays)]))
         labels = L(self._meta.get('label',['x']*len(arrays)))
+        if arrays.shape[-1] == 0:
+            if len(labels):
+                ctx.set_title(ctx.title._text +f"{labels} is empty")
+            return ctx
         assert len(m)==len(labels)==len(arrays),f"{len(m)}=={len(labels)}=={len(arrays)}"
-        t = np.arange(array.shape[1])
+        t = np.arange(array.shape[-1])
         for a, c, label in zip(arrays, m, labels):
-            mark = '-' if 'y' not in label else ''
-            ctx.plot(t, a, mark + '*' +c, **kwargs, label=label)
+            ls = ('-',None) if 'y' not in label else ('None','*' )
+            ctx.plot(t, a, ls = ls[0], marker = ls[1], c=c,
+                     **kwargs, label=label)
         ctx.legend()
         return ctx
 class TensorSeqsX(TensorSeqs):pass
@@ -241,6 +249,7 @@ def _get_its_shape(o):
     if len(o.shape) == 0: return 1, o[None]
     return len(o), o
 
+
 class TensorCon(TSeries):
     _name = 'Constant'
     def show(self, ax = None, ctx=None):
@@ -249,12 +258,42 @@ class TensorCon(TSeries):
             _, ax = plt.subplots(figsize=(5,5))
         l, its = _get_its_shape(self)
         dct = {k:np.round(its[i].item(),2) for k,i in zip(L(self._meta.get('label',self._name)),range(l))}
+        if dct == {}:
+            dct = ''
         ax.set_title(ax.title._text +f"{dct}")
         return ax
 
 # Cell
-class TensorCat(TensorCon):
+class TensorCat():
     _name = 'Catagory'
+    def __init__(self, o, label= None):
+        if isinstance(o, TensorCat):
+            o, label = o.o, o._meta['label']
+        self.o = L(o)
+        self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
+        self.shape = (len(o),)
+    def _dct(self):
+        return {k:v for k,v in zip(self._meta['label'],self.o)}
+
+    def __repr__(self):
+        return f"TensorCat({list(self.o)}, label = {list(self._meta['label'])})"
+
+    def __eq__(self, o):
+        if isinstance(o, TensorCat):
+            return self.o == self.o
+        return False
+
+    def show(self, ax = None, ctx=None):
+        ax = ifnone(ax,ctx)
+        if ax is None:
+            _, ax = plt.subplots(figsize=(5,5))
+        dct = self._dct()
+        if dct == {}:
+            dct = ''
+        ax.set_title(ax.title._text +f"{dct}")
+        return ax
+
+
 
 # Cell
 class MultiTuple(Tuple):

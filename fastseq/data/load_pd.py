@@ -190,7 +190,7 @@ from fastai2.vision.data import get_grid
 def show_batch(x:TSMulti, y:TensorSeqs, its, *args, ctxs=None, max_n=10, rows=None, cols=None, figsize=None, **kwargs):
     if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
     for i, ctx in enumerate(ctxs):
-        o = TSMulti([type(o)(o,**o._meta) for o in its[i]])
+        o = TSMulti([type(o)(o,**o._meta) for o in its[i] if o.shape[-1] > 0])
         ctx = o.show(ctx=ctx)
     return ctxs
 
@@ -198,7 +198,7 @@ def show_batch(x:TSMulti, y:TensorSeqs, its, *args, ctxs=None, max_n=10, rows=No
 def show_batch(x:TSMulti, y:None, its, *args, ctxs=None, max_n=10, rows=None, cols=None, figsize=None, **kwargs):
     if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
     for i, ctx in enumerate(ctxs):
-        o = TSMulti([type(o)(o[i],**o[i]._meta) for o in x])
+        o = TSMulti([type(o)(o[i],**o[i]._meta) for o in x if o.shape[-1] > 0])
         ctx = o.show(ctx=ctx)
     return ctxs
 
@@ -222,7 +222,7 @@ def show_batch(x:TSMulti, y:None, its, *args, ctxs=None, max_n=10, rows=None, co
 def show_results(x:TSMulti, y, its, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):
     if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
     for i, ctx in enumerate(ctxs):
-        r = [type(o)(o,**o._meta) for o in its[i]]
+        r = [type(o)(o,**o._meta) for o in its[i] if o.shape[-1] > 0]
         r.append(type(its[i][-1])(outs[i][0], label=['pred_y'], m=['r']))
         o = TSMulti(r)
         ctx = o.show(ctx=ctx)

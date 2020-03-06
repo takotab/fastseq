@@ -76,7 +76,7 @@ class DfDataLoader(TfmdDL):
             if t is pd.core.series.Series:
                 self.ts_names.append(col)
             elif t is np.ndarray:
-                o = arrays2series(df[col])
+                o = arrays2series(dataset[col])
                 self.dataset[col] = o
                 self.ts_names.append(col)
             elif isinstance(dataset[col].iloc[0], str):

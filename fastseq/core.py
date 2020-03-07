@@ -40,23 +40,23 @@ def same_size_ts(ts:pd.Series, ts_names:List[str]):
 
 
 # Cell
-def get_part_of_ts(x, lookback_id, length, pad=np.mean):
-    if len(x.shape) == 1:
-        x = x[None,:]
-    if isinstance(x[0,0],int):
-        x = x.astype(float)
+def get_part_of_ts(x, lookback_id, length, pad=np.mean, t = tensor, **kwargs):
+#     if len(x.shape) == 1:
+#         x = x[None,:]
+#     if isinstance(x[0,0],int):
+#         x = x.astype(float)
     if x.shape[-1] < length:
         # If the time series is too short, we pad
         padding = pad(x, -1)
-        x = tensor(np.pad(
+        x = t(np.pad(
             x, # report issue https://github.com/numpy/numpy/issues/15606
             pad_width=((0, 0), (length - x.shape[-1], 0)),
             mode='constant',
             constant_values=padding
-        )).float()
+        ), **kwargs).float()
         assert x.shape == (x.shape[0],length), f"{x.shape}\t,{lookback_id}, 'tsshape':{x.shape}"
     else:
-        x = tensor(x[:,lookback_id:lookback_id + length]).float()
+        x = t(x[:,lookback_id:lookback_id + length], **kwargs).float()
     return x
 
 

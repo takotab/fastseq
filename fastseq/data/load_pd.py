@@ -167,7 +167,7 @@ class DfDataLoader(TfmdDL):
         y = get_part_of_ts(self.dataset.loc[ts_id, self.y_name].values[None,:], lookback_id, self.lookback + self.horizon,
                            t = TensorSeqs, label=[self.y_name + '_y'], m=['g'])
         x = TensorSeqs(y[:,:self.lookback], label=[self.y_name + '_x'], m=['g'])
-        if len(dl.ts_names):
+        if len(self.ts_names):
             tsx = get_part_of_ts(self.tsx[ts_id], lookback_id, self.lookback + self.horizon,
                                  t = TensorSeqs, label=self.ts_names)
         else: tsx = TensorSeqs(np.empty([0]), label=self.ts_names)

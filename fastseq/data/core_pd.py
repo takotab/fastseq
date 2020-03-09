@@ -95,7 +95,7 @@ class NormalizeSeqs(Transform):
     def encodes(self, o: TensorSeqs):
         self.m = torch.mean(o, -1, keepdim=True)
         self.s = torch.std(o,  -1, keepdim=True) +self.eps
-        if self.s < self.eps*10:
+        if (self.s < self.eps*10).sum():
             self.s = _zeros_2_ones(self.s, self.eps*10)
         if self.verbose:
             print('encodes',[a.shape for a in o],

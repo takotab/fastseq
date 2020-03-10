@@ -15,9 +15,8 @@ from ..all import *
 from .model import *
 
 # Cell
-# TODO
 def make_base_rnn(u_in, u_o, layers):
-    return nn.LSTM(u_in, u_o, layers, batch_first=True)
+    return nn.LSTM(u_in, u_o, layers, batch_first=True, )
 
 # Cell
 class DependentModel(object):

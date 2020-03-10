@@ -276,7 +276,7 @@ class CatSeq(TensorCat):
         self.o = o
         self._meta ={'label': label}
         self.shape = np.array(o).shape
-        assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
+#         assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
 
     def _dct(self):
         return {k:v for k,v in zip(self._meta['label'],self.o)}

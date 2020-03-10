@@ -57,6 +57,7 @@ class Block(Module):
 
 
     def forward(self, x, b, f):
+        """x: data input; b: time or depend variable backwards; f: time or depend variable forwards; """
         res = {}
         x = self.base(x)
         if self.share_thetas:

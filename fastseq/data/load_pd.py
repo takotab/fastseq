@@ -36,35 +36,37 @@ class CatTfm(Transform):
         self.vocab,self.o2i = {},{}
         for i, col in enumerate(L(cat_cols)):
             r = unpack_list(list(df[col]))
-            self.vocab[i], self.o2i[i] = uniqueify(r, sort=True, bidir=True)
+            self.vocab[col], self.o2i[col] = uniqueify(r, sort=True, bidir=True)
 
     def encodes(self, o:TensorCat):
         r = []
-        for i in self.o2i:
-            r.append(self.o2i[i][o.o[i]])
+        for key in self.o2i:
+            if key in o.k2i:
+                for a in o.o[o.k2i[key]]:
+                    r.append(self.o2i[key][a])#TensorCat
         return TensorCatI(r, label = o._meta['label'])
 
-    def decodes(self, o:TensorCatI):
+    def decodes(self, x:TensorCatI):
         r = []
-        for i_cat in self.vocab:
-            r.append(self.vocab[i_cat][o[i_cat]])
-        return TensorCat(r, label = o._meta.get('label',None))
+        for i,(o, key) in enumerate(zip(x,x._meta['label'])):
+            r.append(self.vocab[key][o]) #TensorCat
+        return TensorCat(r, label = x._meta['label'])
 
-    def encodes(self, o:CatSeq):
+    def encodes(self, x:CatSeq):
         r = []
-        for i in self.o2i:
+        for i,(o, key) in enumerate(zip(x.o,x._meta['label'])):
             r.append([])
-            for a in o.o[i]:
-                r[i].append(self.o2i[i][a])
-        return CatSeqI(r, label = o._meta['label'])
+            for a in o:
+                r[i].append(self.o2i[key][a]) #CatSeq
+        return CatSeqI(r, label = x._meta['label'])
 
-    def decodes(self, o:CatSeqI):
+    def decodes(self, x:CatSeqI):
         r = []
-        for i in self.o2i:
+        for i, (o, key) in enumerate(zip(x,x._meta['label'])):
             r.append([])
-            for a in o[i]:
-                r[i].append(self.vocab[i][a])
-        return CatSeq(r, label = o._meta.get('label',None))
+            for a in o:
+                r[i].append(self.vocab[key][a])
+        return CatSeq(r, label = x._meta.get('label',None))
 
 
 
@@ -220,7 +222,7 @@ def get_id(dl, ts_id, lookback_id):
     if len(dl.con_ts_names):
         tsx_con = get_part_of_ts(dl.tsx_con[ts_id], lookback_id, dl.lookback + dl.horizon,
                              t = TensorSeqs, label=dl.con_ts_names)
-    else: tsx_con = TensorSeqs(np.empty([0]), label=dl.con_ts_names)
+    else: tsx_con = TensorSeqs(np.empty([0]), label=[dl.con_ts_names])
     if len(dl.cat_ts_names):
         tsx_cat = get_part_of_ts(dl.tsx_cat[ts_id], lookback_id, dl.lookback + dl.horizon,
                              t = CatSeq, label=dl.cat_ts_names)

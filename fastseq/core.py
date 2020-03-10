@@ -2,8 +2,8 @@
 
 __all__ = ['git_add', 'same_size_ts', 'get_part_of_ts', 'first_item', 'concat_dct', 'pad_zeros', 'Skip', 'get_ts_files',
            'IndexsSplitter', 'TSeries', 'no_emp_dim', 'show_graph', 'test_graph_exists', 'TensorSeq', 'TSTensorSeq',
-           'TSTensorSeqy', 'show_graphs', 'TensorSeqs', 'TensorSeqsX', 'TensorCon', 'TensorCat', 'MultiTuple', 'get_ax',
-           'show_mt', 'ts_lists']
+           'TSTensorSeqy', 'show_graphs', 'TensorSeqs', 'TensorSeqsX', 'TensorCon', 'TensorCat', 'CatSeq', 'MultiTuple',
+           'get_ax', 'show_mt', 'ts_lists']
 
 # Cell
 from fastcore.all import *
@@ -222,7 +222,6 @@ import matplotlib.colors as mcolors
 _colors = [v for k,v in mcolors.TABLEAU_COLORS.items()]
 _colors += [v for k,v in mcolors.TABLEAU_COLORS.items()]# could be done better but ...
 class TensorSeqs(TSeries):
-
     def show(self, ax = None, ctx=None, **kwargs):
         ctx = ifnone(ctx, ax)
         if ctx is None: _, ctx = plt.subplots(figsize=(5,5))
@@ -243,6 +242,7 @@ class TensorSeqs(TSeries):
         ctx.legend()
         return ctx
 class TensorSeqsX(TensorSeqs):pass
+
 
 # Cell
 def _get_its_shape(o):
@@ -272,6 +272,7 @@ class TensorCat():
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
         self.shape = (len(o),)
+
     def _dct(self):
         return {k:v for k,v in zip(self._meta['label'],self.o)}
 
@@ -294,6 +295,27 @@ class TensorCat():
         return ax
 
 
+
+# Cell
+class CatSeq(TensorCat):
+    def __init__(self, o:List[List[str]], label= None):
+        if isinstance(o, CatSeq):
+            o, label = o.o, o._meta['label']
+        self.o = o
+        self._meta ={'label': ifnone(label, ['Cat_'+str(i) for i in range(len(self.o))])}
+        self.shape = np.array(o).shape
+        assert len(self.shape) == 2
+
+    def _dct(self):
+        return {k:v for k,v in zip(self._meta['label'],self.o)}
+
+    def __repr__(self):
+        return f"CatSeq({list(self.o)}, label = {list(self._meta['label'])})"
+
+    def __eq__(self, o):
+        if isinstance(o, TensorCat):
+            return self.o == self.o
+        return False
 
 # Cell
 class MultiTuple(Tuple):

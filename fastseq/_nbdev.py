@@ -112,7 +112,8 @@ modules = ["core.py",
            "nbeats/learner.py",
            "nbeats/interpret.py",
            "metrics.py",
-           "compare.py"]
+           "compare.py",
+           "tab/model.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"
 

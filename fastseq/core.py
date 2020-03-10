@@ -241,6 +241,7 @@ class TensorCat():
             o, label = o.o, o._meta['label']
         self.o = L(o)
         self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
+        self.k2i = {k:i for i,k in enumerate(self._meta['label'])}
         self.shape = (len(o),)
 
     def _dct(self):
@@ -273,8 +274,9 @@ class CatSeq(TensorCat):
             o, label = o.o, o._meta['label']
         self.o = o
         self._meta ={'label': ifnone(label, ['Cat_'+str(i) for i in range(len(self.o))])}
+        self.k2i = {k:i for i,k in enumerate(self._meta['label'])}
         self.shape = np.array(o).shape
-        assert len(self.shape) == 2
+        assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
 
     def _dct(self):
         return {k:v for k,v in zip(self._meta['label'],self.o)}

@@ -39,13 +39,11 @@ class CatTfm(Transform):
             r = unpack_list(list(df[col]))
             self.vocab[col], self.o2i[col] = uniqueify(r, sort=True, bidir=True)
 
-    def encodes(self, o:TensorCat):
+    def encodes(self, x:TensorCat):
         r = []
-        for key in self.o2i:
-            if key in o.k2i:
-                for a in o.o[o.k2i[key]]:
-                    r.append(self.o2i[key][a])#TensorCat
-        return TensorCatI(r, label = o._meta['label'])
+        for i, (o, key) in enumerate(zip(x.o, x._meta['label'])):
+            r.append(self.o2i[key][o])#TensorCat
+        return TensorCatI(r, label = x._meta['label'])
 
     def decodes(self, x:TensorCatI):
         r = []

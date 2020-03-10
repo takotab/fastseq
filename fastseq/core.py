@@ -270,11 +270,11 @@ class TensorCat():
 
 # Cell
 class CatSeq(TensorCat):
-    def __init__(self, o:List[List[str]], label):
+    def __init__(self, o:List[List[str]], label, **kwargs):
         if isinstance(o, CatSeq):
             o, label = o.o, o._meta['label']
         self.o = o
-        self._meta ={'label': label}
+        self._meta ={'label': label,**kwargs}
         self.shape = np.array(o).shape
 #         assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
 
@@ -304,7 +304,7 @@ class CatSeq(TensorCat):
         ax.text(0.01, 0.99, lst,
         verticalalignment='top', horizontalalignment='left',
         transform=ax.transAxes,
-        color='green', fontsize=15)
+        color=self._meta.get('color','green'), fontsize=self._meta.get('fontsize',10))
         return ax
 
 # Cell

@@ -246,7 +246,7 @@ class TensorCat():
         self.shape = (len(o),)
 
     def _dct(self):
-        return {k:v for k,v in zip(self._meta['label'],self.o)}
+        return {k:v for k,v in zip(self._meta['label'], self.o)}
 
     def __repr__(self):
         return f"TensorCat({list(self.o)}, label = {list(self._meta['label'])})"
@@ -288,6 +288,24 @@ class CatSeq(TensorCat):
         if isinstance(o, TensorCat):
             return self.o == self.o
         return False
+
+    def show(self, ax = None, ctx=None):
+        ax = ifnone(ax,ctx)
+        if ax is None:
+            _, ax = plt.subplots(figsize=(5,5))
+        lst =  '\n'.join(self._dct().keys())
+
+        if lst == '':
+            lst = ''
+        elif len(self._dct()) == 1:
+            lst = 'CatSeq:\n' +lst
+        else:
+            lst = 'CatSeqs:\n' +lst
+        ax.text(0.01, 0.99, lst,
+        verticalalignment='top', horizontalalignment='left',
+        transform=ax.transAxes,
+        color='green', fontsize=15)
+        return ax
 
 # Cell
 class MultiTuple(Tuple):

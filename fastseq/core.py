@@ -31,41 +31,6 @@ def git_add(fname, commit_msg='.'):
 
 
 # Cell
-@typedispatch
-def get_part_of_ts(x, lookback_id, length, pad=np.mean, t = tensor, **kwargs):
-#     if len(x.shape) == 1:
-#         x = x[None,:]
-#     if isinstance(x[0,0],int):
-#         x = x.astype(float)
-    if x.shape[-1] < length:
-        # If the time series is too short, we pad
-        padding = pad(x, -1)
-        x = t(np.pad(
-            x, # report issue https://github.com/numpy/numpy/issues/15606
-            pad_width=((0, 0), (length - x.shape[-1], 0)),
-            mode='constant',
-            constant_values=padding
-        ), **kwargs).float()
-        assert x.shape == (x.shape[0],length), f"{x.shape}\t,{lookback_id}, 'tsshape':{x.shape}"
-    else:
-        x = t(x[:,lookback_id:lookback_id + length], **kwargs).float()
-    return x
-
-
-# Cell
-@typedispatch
-def get_part_of_ts(x:L, lookback_id, length, t = L, **kwargs):
-    if len(x[0]) < length:
-        # If the time series is too short, we pad
-        padding = [o[-1] for o in x]
-        pad_len = length - len(x[0])
-        x = t(L(o[lookback_id:lookback_id + length] + [padding[i]]*pad_len) for i,o in enumerate(x))
-#         assert x.shape == len(x), f"{x.shape}\t,{lookback_id}, 'tsshape':{x.shape}"
-    else:
-        x = t([o[lookback_id:lookback_id + length] for o in x], **kwargs)
-    return x
-
-# Cell
 def first_item(lst):
     if type(lst)==list or type(lst) == L:
         return lst[0]

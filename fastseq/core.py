@@ -236,11 +236,12 @@ class TensorCon(TSeries):
 # Cell
 class TensorCat():
     _name = 'Catagory'
-    def __init__(self, o, label= None):
+    def __init__(self, o, label = None):
         if isinstance(o, TensorCat):
             o, label = o.o, o._meta['label']
+        assert label is not None, f"label is not optional"
         self.o = L(o)
-        self._meta ={'label': ifnone(label, ['Catagory_'+str(i) for i in range(len(self.o))])}
+        self._meta ={'label': label}
         self.k2i = {k:i for i,k in enumerate(self._meta['label'])}
         self.shape = (len(o),)
 
@@ -269,12 +270,11 @@ class TensorCat():
 
 # Cell
 class CatSeq(TensorCat):
-    def __init__(self, o:List[List[str]], label= None):
+    def __init__(self, o:List[List[str]], label):
         if isinstance(o, CatSeq):
             o, label = o.o, o._meta['label']
         self.o = o
-        self._meta ={'label': ifnone(label, ['Cat_'+str(i) for i in range(len(self.o))])}
-        self.k2i = {k:i for i,k in enumerate(self._meta['label'])}
+        self._meta ={'label': label}
         self.shape = np.array(o).shape
         assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
 

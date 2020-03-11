@@ -91,7 +91,7 @@ def arrays2series(s:pd.Series):
     return pd.Series([array2series(o) for o in s])
 
 # Cell
-def reconize_cols(dataset):
+def reconize_cols(dataset, col_types = {}):
     con_names, cat_names, con_ts_names, cat_ts_names, classes = L(), L(), L(), L(), {}
     for col in dataset.columns:
         t = type(dataset[col].iloc[0])
@@ -106,7 +106,7 @@ def reconize_cols(dataset):
             classes[col] = uniqueify(list(dataset[col].values))
         elif isinstance(dataset[col].iloc[0], float) or isinstance(dataset[col].iloc[0], int) or t is np.int64:
             con_names.append(col)
-        elif isinstance(dataset[col].iloc[0], L) or isinstance(dataset[col].iloc[0],list):
+        elif (isinstance(dataset[col].iloc[0], L) or isinstance(dataset[col].iloc[0],list)) and isinstance(dataset[col].iloc[0][0],str):
             cat_ts_names.append(col)
             classes[col] = uniqueify(unpack_list(list(dataset[col])))
         else:
@@ -331,9 +331,8 @@ def _to_series(df, s_slice=None, add_zeros = 28*2):
     return r
 
 @delegates(_to_series)
-def to_contained_series(df, **kwargs):
+def to_contained_series(df, series_column_name = 'sales', **kwargs):
     data={k:v for k,v in dict(df).items() if ('d_' not in k and 'F' not in k)}
-    data['sales'] = pd.Series(_to_series(df, **kwargs))
-
+    data[series_column_name] = pd.Series(_to_series(df, **kwargs))
     df = pd.DataFrame(data=data)
     return df

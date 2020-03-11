@@ -246,6 +246,7 @@ def from_m5_folder(cls, path:pd.DataFrame, cols = ['sales'], p_stay=.2, s_slice 
     df_sales = to_contained_series(pd.read_csv(path / 'sales_train_validation.csv'), s_slice = s_slice)
     dl = cls.from_df(df_sales.loc[:,cols], y_name = 'sales', procs = SkipZeros(p_stay), **kwargs)
     df_validation = to_contained_series(pd.read_csv(path / 'sales_train_validation.csv'),slice(1,None))
+    dl.validation =
     return dl
 
 DfDataLoaders.from_m5_folder = classmethod(from_m5_folder)

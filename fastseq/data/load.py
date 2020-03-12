@@ -27,7 +27,7 @@ def get_df(length = [100,120]):
     for i, l in enumerate(length):
         assert int(l/2) == l/2
         dct['x'].append(np.arange(l))
-        dct['con_ts_0'].append(np.ones(l)[None,:])
+        dct['con_ts_0'].append(np.arange(l)[None,:])
         dct['con_ts_1'].append(pd.Series(np.arange(l)+np.random.randn(l)))
         dct['con_0'].append(np.random.randn())
         dct['con_1'].append(10+np.random.randn()*2)

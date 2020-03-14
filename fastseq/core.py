@@ -108,7 +108,7 @@ def IndexsSplitter(train_idx, val_idx=None, test=None):
 class TSeries(TensorBase):
     def __list__(self):
         print(self)
-        return []
+        return [0]
 
 def no_emp_dim(x):
     if len(x.shape)==1 :

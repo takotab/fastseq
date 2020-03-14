@@ -143,3 +143,5 @@ m4_daily/*.csv
 m4_daily.*z
 data/*.csv
 data/m5/*.csv
+data/m5/rows/*.json
+data/m5*/rows/*.json

@@ -145,3 +145,4 @@ data/*.csv
 data/m5/*.csv
 data/m5/rows/*.json
 data/m5*/rows/*.json
+data/m5_tiny/sell_prices.csv

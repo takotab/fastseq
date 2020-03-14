@@ -105,10 +105,7 @@ def IndexsSplitter(train_idx, val_idx=None, test=None):
     return _inner
 
 # Cell
-class TSeries(TensorBase):
-    def __list__(self):
-        print(self)
-        return [0]
+class TSeries(TensorBase):pass
 
 def no_emp_dim(x):
     if len(x.shape)==1 :
@@ -215,6 +212,13 @@ class CatSeq(TensorCat):
         if isinstance(o, TensorCat):
             return self.o == self.o
         return False
+
+    def __iter__(self):
+        for i in range(self.shape[0]):
+            yield list(self.o[i])
+
+    def dict(self):
+        return {k:[a,b,c] for k,(a,b,c) in zip(self._meta['label'], self.o)}
 
     def show(self, ax = None, ctx=None):
         ax = ifnone(ax,ctx)

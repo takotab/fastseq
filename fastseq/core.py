@@ -105,7 +105,10 @@ def IndexsSplitter(train_idx, val_idx=None, test=None):
     return _inner
 
 # Cell
-class TSeries(TensorBase):pass
+class TSeries(TensorBase):
+    def __list__(self):
+        print(self)
+        return []
 
 def no_emp_dim(x):
     if len(x.shape)==1 :
@@ -198,7 +201,7 @@ class CatSeq(TensorCat):
         if isinstance(o, CatSeq):
             o, label = o.o, o._meta['label']
         self.o = o
-        self._meta ={'label': label,**kwargs}
+        self._meta ={'label': label, **kwargs}
         self.shape = np.array(o).shape
 #         assert len(self.shape) == 2, f"shape of input in CatSeq not the correct size {self.o}"
 

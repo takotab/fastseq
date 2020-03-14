@@ -218,7 +218,7 @@ class CatSeq(TensorCat):
             yield list(self.o[i])
 
     def dict(self):
-        return {k:[a,b,c] for k,(a,b,c) in zip(self._meta['label'], self.o)}
+        return {k:v for k,v in zip(self._meta['label'], self.o)}
 
     def show(self, ax = None, ctx=None):
         ax = ifnone(ax,ctx)

@@ -1,26 +1,26 @@
 {
   "classes": {
     "cat_0": [
-      "b",
-      "a"
+      "a",
+      "b"
     ],
     "cat_1": [
-      "adam",
-      "rdam"
+      "rdam",
+      "adam"
     ],
     "cat_ts_0": [
-      "b",
-      "a"
+      "a",
+      "b"
     ],
     "cat_ts_1": [
-      "john",
-      "david"
+      "david",
+      "john"
     ]
   },
   "col_names": {
     "cat_names": [
-      "cat_1",
-      "cat_0"
+      "cat_0",
+      "cat_1"
     ],
     "con_names": [
       "con_1",
@@ -31,9 +31,9 @@
       "cat_ts_1"
     ],
     "ts_con_names": [
+      "con_ts_1",
       "x",
-      "con_ts_0",
-      "con_ts_1"
+      "con_ts_0"
     ]
   }
 }

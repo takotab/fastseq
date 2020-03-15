@@ -4,8 +4,8 @@ __all__ = ['NormalizeSeq', 'NormalizeSeqMulti', 'make_test', 'split_file', 'mult
            'MTSDataLoaders']
 
 # Cell
-from .load import *
 from ..core import *
+from .load import *
 from fastcore.all import *
 from fastcore.imports import *
 from fastai2.basics import *
@@ -69,7 +69,7 @@ class NormalizeSeqMulti(ItemTransform):
         self.f = {i:NormalizeSeq(**kwargs) for i in range(n_its)}
         self.n = n_its
 
-    def encodes(self, o:TSMulti_):
+    def encodes(self, o):
         r = L()
         for i,a in enumerate(o):
             if type(a) is not TensorSeq:
@@ -80,7 +80,7 @@ class NormalizeSeqMulti(ItemTransform):
                 r.append(self.f[0].norm(o[i]))
         return TSMulti_(r)
 
-    def decodes(self, o:TSMulti_):
+    def decodes(self, o):
         r = L(self.f[i].decode(a) for i,a in enumerate(o[:-1]))
         r.append(self.f[0].denorm(o[-1]))
         return TSMulti_(r)
@@ -88,18 +88,20 @@ class NormalizeSeqMulti(ItemTransform):
 
 # Cell
 def make_test(ts:dict, horizon:int, lookback:int, keep_lookback:bool = False):
-    """Splits the every ts in `items` based on `horizon + lookback`*, where the last part will go into `val` and the first in `train`.
+    """Splits the every ts in `items` based on `horizon + lookback`*,
+    where the last part will go into `val` and the first in `train`.
     *if `keep_lookback`:
         it will only remove `horizon` from `train` otherwise will also remove lookback from `train`.
     """
-    train,val = {},{}
+    train, val = {}, {}
     for k,v in ts.items():
         if k in ['ts_con','ts_cat']:
             if keep_lookback:
-                train[k] = [o[:-(horizon)] for o in v]
+                train[k] = {col:o[:-(horizon)] for col, o in v.items()}
             else:
-                train[k] = [o[:-(horizon+lookback)] for o in v]
-            val[k] = [o[-(horizon+lookback):] for o in v]
+                train[k] = {col:o[:-(horizon+lookback)] for col, o in v.items()}
+            val[k] = {col: o[-(horizon+lookback):] for col, o in v.items()}
+
         elif k == '_length':
             train[k] = v - (horizon if keep_lookback else horizon+lookback)
             val[k] = horizon+lookback
@@ -149,11 +151,13 @@ class MTSDataLoaders(DataLoaders):
         """
         lookback = ifnone(lookback, horizon * 3)
         device = ifnone(device, default_device())
-        train, valid = get_train_valid_ts(path, horizon, lookback, valid_pct)
+        train, valid = get_train_valid_ts(path,horizon= horizon, lookback= lookback,
+                                          valid_pct=valid_pct, splitter = splitter)
+        vocab, o2i = make_vocab(path)
         if norm and 'after_batch' not in kwargs:
             kwargs.update({'after_batch':L(NormalizeSeqMulti(n_its=5))})
-        db = DataLoaders(*[MTSDataLoader(ds, y_name, horizon=horizon, lookback=lookback, step=step,
-                                        device=device, **kwargs)
+        db = DataLoaders(*[MTSDataLoader(ds, get_meta(path), y_name, horizon=horizon, lookback=lookback, step=step,
+                                        device=device, vocab=vocab, o2i=o2i, **kwargs)
                            for ds in [train,valid]], path=path, device=device)
         print(f"Train:{db.train.n}; Valid: {db.valid.n}")
         return db

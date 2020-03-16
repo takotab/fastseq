@@ -149,14 +149,14 @@ def make_compact(dp, con_names, cat_names, ts_con_names, ts_cat_names, **kwargs)
     r['ts_cat'] = {k:dp[k] for k in ts_cat_names}
     return r
 
-
 def meta_file(path, **kwargs):
     dct = {}
+    f = path / '.ts_meta'
     if (path / '.ts_meta').exists():
-        dct = json.load(open(path / '.ts_meta'))
+        dct = json.load(open(f))
     for k,v in kwargs.items():
         dct = add_dct(dct,k,v)
-    json.dump(dct, open(path / '.ts_meta', 'w'), indent = 2, sort_keys = True)
+    json.dump(dct, open(f,'w'), indent = 2, sort_keys = True)
 
 @delegates(reconize_cols)
 def save_row(row, path:Path, fname='1', **kwargs):

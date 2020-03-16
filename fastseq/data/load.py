@@ -191,6 +191,11 @@ def _make_vocab_df(df,cat_cols, classes = None):
     return vocab, o2i
 
 # Cell
+def _reverse_lst(lst):
+    return [[a for a in o] for o in list(np.array(lst).T)]
+
+
+# Cell
 from IPython.core.debugger import set_trace
 class TensorCatI(TensorBase):pass
 class CatSeqI(TensorSeq):pass
@@ -219,8 +224,9 @@ class CatTfm(Transform):
 
     def decodes(self, x:TensorCatI):
         if len(x.shape) == 1:
-            x = CatSeqI(x[None,:],**x._meta)
-        return TensorCat(self._decode(x), label = x._meta.get('label', None))
+            x = TensorCatI(x[None,:],**x._meta)
+        return TensorCat(_reverse_lst(self._decode(TensorCatI(x.T,**x._meta))),
+                         label = x._meta.get('label', None))
 
     def encodes(self, x:CatSeq):
         r = []
@@ -240,7 +246,7 @@ class CatTfm(Transform):
 
     def _decode(self, x):
         r = []
-        for i, (o, key) in enumerate(zip(x,x._meta['label'])):
+        for i, (o, key) in enumerate(zip(x, x._meta['label'])):
             r.append([])
             for a in o:
                 r[i].append(self.vocab[key][a])

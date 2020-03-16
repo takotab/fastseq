@@ -349,7 +349,9 @@ def json2TSMulti(ts, lookback_id, y_name, lookback, horizon, meta:Meta):
     return TSMulti(r)
 
 # Cell
-class TSMulti_(Tuple):pass
+class TSMulti_(Tuple):
+    def print_dict(self):
+        return {str(str(i)+'_'+type(a)):a.shape for i,a in enumerate(self)}
 
 class CatMultiTfm(ItemTransform):
     @delegates(CatTfm.__init__)

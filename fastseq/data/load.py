@@ -191,6 +191,7 @@ def _make_vocab_df(df,cat_cols, classes = None):
     return vocab, o2i
 
 # Cell
+from IPython.core.debugger import set_trace
 class TensorCatI(TensorBase):pass
 class CatSeqI(TensorSeq):pass
 def unpack_list(o, r=None):
@@ -210,7 +211,6 @@ class CatTfm(Transform):
         else:
             self.vocab,self.o2i = _make_vocab_df(df,cat_cols)
 
-
     def encodes(self, x: TensorCat):
         r = []
         for i, (o, key) in enumerate(zip(x.o, x._meta['label'])):
@@ -218,10 +218,9 @@ class CatTfm(Transform):
         return TensorCatI(r, label = x._meta['label'])
 
     def decodes(self, x:TensorCatI):
-        r = []
-        for i,(o, key) in enumerate(zip(x,x._meta['label'])):
-            r.append(self.vocab[key][o]) #TensorCat
-        return TensorCat(r, label = x._meta['label'])
+        if len(x.shape) == 1:
+            x = CatSeqI(x[None,:],**x._meta)
+        return TensorCat(self._decode(x), label = x._meta.get('label', None))
 
     def encodes(self, x:CatSeq):
         r = []
@@ -232,14 +231,20 @@ class CatTfm(Transform):
         return CatSeqI(r, label = x._meta['label'])
 
     def decodes(self, x:CatSeqI):
+        if len(x.shape) == 2:
+            x = CatSeqI(x[None,:],**x._meta)
+        r = []
+        for o in x:
+            r.append(self._decode(CatSeqI(o,**x._meta)))
+        return CatSeq(r, label = x._meta.get('label', None))
+
+    def _decode(self, x):
         r = []
         for i, (o, key) in enumerate(zip(x,x._meta['label'])):
             r.append([])
             for a in o:
                 r[i].append(self.vocab[key][a])
-        return CatSeq(r, label = x._meta.get('label',None))
-
-
+        return r
 
 # Cell
 def get_classes(path:Path):

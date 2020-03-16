@@ -93,11 +93,12 @@ def add_dct(dct, k, o):
         else:
             dct[k] = o
     elif type(o) == dict or type(o) == collections.defaultdict:
-        if k in dct:
-            for _k,v in o.items():
-                dct[k] = add_dct(dct[k], _k, v)
-        else:
-            dct[k] = o
+        if k not in dct:
+            dct[k] = {}
+        for _k,v in o.items():
+            dct[k] = add_dct(dct[k], _k, v)
+    elif type(o) == int or type(o) == float:
+        dct[k] = o
     else:
         raise Exception(type(o))
     return dct

@@ -11,12 +11,18 @@ import pandas as pd
 import numpy as np
 
 # Cell
+import shutil
 def _copy(self, target):
-    import shutil
     assert self.is_file()
     shutil.copy(str(self), str(target))  # str() only there for Python < (3, 6)
 
 Path.copy = _copy
+
+import shutil
+def _del(path):
+    shutil.rmtree(path, ignore_errors=True)
+
+Path.delete = _del
 
 # Cell
 from git import Repo

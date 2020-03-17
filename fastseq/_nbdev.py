@@ -2,7 +2,9 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"git_add": "00_core.ipynb",
+index = {"Path.copy": "00_core.ipynb",
+         "Path.delete": "00_core.ipynb",
+         "git_add": "00_core.ipynb",
          "first_item": "00_core.ipynb",
          "concat_dct": "00_core.ipynb",
          "pad_zeros": "00_core.ipynb",

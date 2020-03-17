@@ -2,7 +2,7 @@
 
 __all__ = ['m4_base', 'dummy_data_generator', 'dummy_generator_multi_easy', 'dummy_data_generator_multi', 'TSMulti',
            'get_df', 'Meta', 'TS', 'get_ts_datapoint', 'get_meta', 'python_type', 'add_dct', 'reconize_cols',
-           'make_compact', 'meta_file', 'save_row', 'save_df']
+           'make_compact', 'meta_file', 'save_row', 'save_df', 'del_create']
 
 # Cell
 from ..core import *
@@ -213,12 +213,13 @@ def reconize_cols(datapoint:dict, con_names= [], cat_names=[], ts_con_names=[], 
     length = None
     classes = defaultdict(set)
     for k,v in datapoint.items():
-        if k in [con_names+cat_names+ ts_con_names+ts_cat_names]:
+        if k in con_names+cat_names+ ts_con_names+ts_cat_names:
             if k in [cat_names+ts_cat_names]:
                 for _v in set(v):
                     classes[k].add(_v)
-            continue
-        if type(v) == int or isinstance(v,float):
+            if k in ts_cat_names:
+                length = _check_length(v, length)
+        elif type(v) == int or isinstance(v,float):
             con_names.append(k)
         elif type(v) == str:
             cat_names.append(k)
@@ -270,3 +271,12 @@ def save_row(row, path:Path, fname='1', **kwargs):
 def save_df(df:pd.DataFrame, path:Path, **kwargs):
     for i, row in df.iterrows():
         save_row(row, path, fname=str(i), **kwargs)
+
+# Cell
+def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True):
+    df = get_df(length, use_str)
+    if path.exists(): path.delete()
+    path.mkdir()
+    save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0','cat_ts_1','x'] ],
+           cat_names = ['cat_0','cat_1'])
+    return [get_ts_datapoint(str(path / (str(i) + '.json'))).keys() for i in range(0,3)]

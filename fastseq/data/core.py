@@ -234,9 +234,11 @@ class MTSDataLoaders(DataLoaders):
     @classmethod
     @delegates(MTSDataLoader.__init__)
     def _from_folders_list(cls, folders:List[List[Path]], y_name:str, horizon:int, lookback=None, step=1,
-                   device=None, norm=True, valid_pct=1.5, splitter = None, procs = None, vocab=None, o2i=None, **kwargs):
+                           device=None, norm=True, valid_pct=1.5, splitter = None,
+                           procs = None, vocab=None, o2i=None, path = None, **kwargs):
         lookback = ifnone(lookback, horizon * 3)
         device = ifnone(device, default_device())
+        path = ifnone(path, folders[0][0].parent.parent)
         if procs:
             p = Pipeline(*procs)
             for files in folders:
@@ -260,8 +262,9 @@ def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbo
     lookback = ifnone(lookback, horizon * 3)
     vocab, o2i = make_vocab(path)
     train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose)
-    return cls._from_folders_list(folders = [train, val, validation, evalu],y_name= y_name, horizon= horizon, lookback = lookback,
-                                  vocab=vocab, o2i=o2i, **kwargs)
+    return cls._from_folders_list(folders = [train, val, validation, evalu],
+                                  y_name= y_name, horizon= horizon, lookback = lookback,
+                                  vocab=vocab, o2i=o2i, path = path, **kwargs)
 
 MTSDataLoaders.from_m5_path = classmethod(from_m5_path)
 
@@ -275,8 +278,8 @@ def from_path(cls, path:Path, y_name:str, horizon:int, lookback = None, valid_pc
     lookback = ifnone(lookback, horizon * 3)
     vocab, o2i = make_vocab(path)
     train, valid = get_train_valid_ts(path, horizon = horizon, lookback = lookback, valid_pct= valid_pct)
-    return cls._from_folders_list(folders = [train, valid],y_name= y_name, horizon= horizon, lookback = lookback,
-                                  vocab=vocab, o2i=o2i, **kwargs)
+    return cls._from_folders_list(folders = [train, valid], y_name= y_name, horizon= horizon, lookback = lookback,
+                                  vocab=vocab, o2i=o2i, path = path, **kwargs)
 
 MTSDataLoaders.from_path = classmethod(from_path)
 

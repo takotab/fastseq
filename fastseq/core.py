@@ -11,6 +11,14 @@ import pandas as pd
 import numpy as np
 
 # Cell
+def _copy(self, target):
+    import shutil
+    assert self.is_file()
+    shutil.copy(str(self), str(target))  # str() only there for Python < (3, 6)
+
+Path.copy = _copy
+
+# Cell
 from git import Repo
 from nbdev.export import Config as nb_Config
 from nbdev.export import *

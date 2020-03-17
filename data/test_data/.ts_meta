@@ -1,16 +1,16 @@
 {
   "classes": {
     "cat_0": [
-      "a",
-      "b"
+      "b",
+      "a"
     ],
     "cat_1": [
       "rdam",
       "adam"
     ],
     "cat_ts_0": [
-      "a",
-      "b"
+      "b",
+      "a"
     ],
     "cat_ts_1": [
       "david",
@@ -31,9 +31,9 @@
       "cat_ts_1"
     ],
     "ts_con_names": [
+      "con_ts_0",
       "con_ts_1",
-      "x",
-      "con_ts_0"
+      "x"
     ]
   }
 }

@@ -277,6 +277,6 @@ def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str 
     df = get_df(length, use_str)
     if path.exists(): path.delete()
     path.mkdir()
-    save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0','cat_ts_1','x'] ],
+    save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0', 'cat_ts_1'] ],
            cat_names = ['cat_0','cat_1'])
-    return [get_ts_datapoint(str(path / (str(i) + '.json'))).keys() for i in range(0,3)]
+    return [path / (str(i) + '.json') for i in range(0,3)]

@@ -27,4 +27,4 @@ class CatProc():
         for i, cat in enumerate(ts['cat']):
             ts['cat'][cat] = tsm[3][i].item()
         open(f,'wb').write(orjson.dumps(dict(ts)))
-        return r
+        return f

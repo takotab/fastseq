@@ -5,13 +5,13 @@ __all__ = ['NormalizeSeq', 'NormalizeSeqMulti', 'make_test', 'split_file', 'mult
 
 # Cell
 from ..core import *
+from .external import *
 from .load import *
 from fastcore.all import *
 from fastcore.imports import *
 from fastai2.basics import *
 from fastai2.data.transforms import *
 from fastai2.tabular.core import *
-from .load import *
 import orjson
 
 # Cell

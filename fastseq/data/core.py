@@ -7,6 +7,7 @@ __all__ = ['NormalizeSeq', 'NormalizeSeqMulti', 'make_test', 'split_file', 'TSSp
 from ..core import *
 from .external import *
 from .load import *
+from .procs import *
 from fastcore.all import *
 from fastcore.imports import *
 from fastai2.basics import *
@@ -247,17 +248,18 @@ class MTSDataLoaders(DataLoaders):
         return db
 
 @delegates(MTSDataLoaders._from_folders_list)
-def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, **kwargs):
+def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, procs = [], **kwargs):
     """Create `MTSDataLoaders` from a path.
     Defaults to splitting the data according to the M5 compitetion.
     """
     lookback = ifnone(lookback, horizon * 3)
     vocab, o2i = make_vocab(path)
     train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose)
+    procs = L(procs) + CatProc(path, vocab = vocab, o2i = o2i)
     return cls._from_folders_list(folders = [train, val, validation, evalu],
                                   y_name= y_name, horizon= horizon, lookback = lookback,
-                                  vocab=vocab, o2i=o2i, path = path, **kwargs)
-
+                                  vocab=vocab, o2i=o2i, path = path,
+                                  procs = procs,**kwargs)
 MTSDataLoaders.from_m5_path = classmethod(from_m5_path)
 
 

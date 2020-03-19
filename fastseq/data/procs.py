@@ -3,18 +3,34 @@
 __all__ = ['CatProc']
 
 # Cell
+from .external import *
+from .load import *
+from .core import *
+from ..core import *
+from fastcore.all import *
+from fastcore.imports import *
+from fastai2.basics import *
+from fastai2.data.transforms import *
+from fastai2.tabular.core import *
+from .all import *
+from typing import List
+import orjson
+
+# Cell
 class CatProc():
-    def __init__(self, path, vocab = None, o2i = None):
+    def __init__(self, path, num_of_workers = None, vocab = None, o2i = None):
         if vocab is None and o2i is None:
             vocab, o2i = make_vocab(path)
         self.meta = get_meta(path)
         self.f = CatMultiTfm(vocab = vocab, o2i = o2i)
+        self.num_of_workers = num_of_workers
 
     def __call__(self, files:List[Path]):
-        r = []
-        for f in files:
-            r.append(self._setup(f))
-        return r
+        return multithread_f(self._setup, files, self.num_of_workers)
+#         r = []
+#         for f in files:
+#             r.append(self._setup(f))
+#         return r
 
     def _setup(self, f:Path):
         ts = get_ts_datapoint(f)

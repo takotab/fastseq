@@ -85,8 +85,7 @@ def concat_dct(new_dct, expand_dct):
 from multiprocessing.dummy import Pool as ThreadPool
 def multithread_f(f, o:list, num_workers = None):
     pool = ThreadPool(num_workers)
-    r = pool.map(f, o)
-    return r
+    return pool.map(f, o)
 
 # Cell
 def pad_zeros(X, lenght):

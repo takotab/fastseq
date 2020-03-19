@@ -14,6 +14,22 @@ from fastai2.tabular.core import *
 import orjson
 
 # Cell
+class TensorCatI(TensorBase):
+    def __new__(cls, x, **kwargs):
+        res = tensor(x)
+        res.__class__ = TensorCatI
+        res._meta = kwargs
+        return res
+
+class CatSeqI(TensorSeq):
+    def __new__(cls, x, **kwargs):
+        res = tensor(x)
+        res.__class__ = CatSeqI
+        res._meta = kwargs
+        return res
+
+
+# Cell
 def _get_classes(df, cat_cols, classes=None):
     classes = ifnone(classes, {})
     if classes == {}:
@@ -30,8 +46,6 @@ def _make_vocab_df(df,cat_cols, classes = None):
 
 # Cell
 from IPython.core.debugger import set_trace
-class TensorCatI(TensorBase):pass
-class CatSeqI(TensorSeq):pass
 
 class CatTfm(Transform):
     def __init__(self, df:pd.DataFrame = None, cat_cols:[] = None,

@@ -7,7 +7,7 @@ __all__ = ['NormalizeSeq', 'NormalizeSeqMulti', 'make_test', 'split_file', 'TSSp
 from ..core import *
 from .external import *
 from .load import *
-from .procs import *
+# from fastseq.data.procs import *
 from fastcore.all import *
 from fastcore.imports import *
 from fastai2.basics import *
@@ -255,11 +255,10 @@ def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbo
     lookback = ifnone(lookback, horizon * 3)
     vocab, o2i = make_vocab(path)
     train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose)
-    procs = L(procs) + CatProc(path, vocab = vocab, o2i = o2i)
     return cls._from_folders_list(folders = [train, val, validation, evalu],
                                   y_name= y_name, horizon= horizon, lookback = lookback,
                                   vocab=vocab, o2i=o2i, path = path,
-                                  procs = procs,**kwargs)
+                                  procs =L(procs),**kwargs)
 MTSDataLoaders.from_m5_path = classmethod(from_m5_path)
 
 
@@ -273,16 +272,17 @@ def from_path(cls, path:Path, y_name:str, horizon:int, lookback = None, valid_pc
     vocab, o2i = make_vocab(path)
     train, valid = get_train_valid_ts(path, horizon = horizon, lookback = lookback, valid_pct= valid_pct)
     return cls._from_folders_list(folders = [train, valid], y_name= y_name, horizon= horizon, lookback = lookback,
-                                  vocab=vocab, o2i=o2i, path = path, **kwargs)
+                                  vocab=vocab, o2i=o2i, **kwargs)
 
 MTSDataLoaders.from_path = classmethod(from_path)
 
 # Cell
 @delegates(MTSDataLoaders._from_folders_list)
-def from_folders(cls, folders:List[Path], y_name:str, horizon:int, **kwargs):
+def from_folders(cls, folders:List[Path], y_name:str, horizon:int,vocab=None, o2i = None, **kwargs):
     """Create `MTSDataLoaders` from the folders."""
+    if vocab is None:
+        vocab, o2i = make_vocab(folders[0].parent)
     folders = [get_files(path, extensions='.json', folders = False) for path in folders]
-    vocab, o2i = make_vocab(folders[0][0].parent.parent)
-    return cls._from_folders_list(folders, y_name, horizon,vocab=vocab, o2i=o2i, **kwargs)
+    return cls._from_folders_list(folders, y_name, horizon, vocab=vocab, o2i=o2i, **kwargs)
 
 MTSDataLoaders.from_folders = classmethod(from_folders)

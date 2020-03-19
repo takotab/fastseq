@@ -300,10 +300,10 @@ def show_batch(x:TSMulti, y:None, its, *args, ctxs=None, max_n=10, rows=None, co
 # from fastseq.data.load_pd import *
 
 @typedispatch
-def show_results(x:TSMulti, y, its, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):
+def show_results(x:TSMulti, y, its, outs, ctxs=None, max_n=9, rows=None, cols=None, figsize=None, show_kwargs={}, **kwargs):
     if ctxs is None: ctxs = get_grid(min(x[0].shape[0], max_n), add_vert=1, figsize=figsize, **kwargs)
     for i, ctx in enumerate(ctxs):
         r = [type(o)(o,**o._meta) for o in its[i] if o.shape[-1] > 0]
         r.append(type(its[i][-1])(outs[i][0], label=['pred_y'], m=['r']))
         o = TSMulti(r)
-        ctx = o.show(ctx=ctx)
+        ctx = o.show(ctx=ctx,**show_kwargs )

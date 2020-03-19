@@ -311,9 +311,10 @@ class MultiTuple(Tuple):
 
 # Cell
 from fastai2.vision.data import get_grid
-def _show_multituple(t, ax):
-    for o in t:
-        ax = o.show(ctx = ax)
+def _show_multituple(t, ax, extra = True):
+    for i, o in enumerate(t):
+        if extra or i in [0, len(t)-2, len(t)-1]:
+            ax = o.show(ctx = ax)
     return ax
 
 def get_ax(ax, ctx, figsize, **kwargs):
@@ -323,9 +324,9 @@ def get_ax(ax, ctx, figsize, **kwargs):
     return ax
 
 @delegates(plt.subplots)
-def show_mt(self, ax = None, ctx=None, figsize = (10,10), **kwargs):
+def show_mt(self, ax = None, ctx=None, figsize = (10,10),extra = True, **kwargs):
     ax = get_ax(ax, ctx, figsize, **kwargs)
-    return _show_multituple(self, ax)
+    return _show_multituple(self, ax, extra=extra)
 MultiTuple.show = show_mt
 
 # Cell

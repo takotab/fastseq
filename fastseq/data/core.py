@@ -88,23 +88,24 @@ class NormalizeSeqMulti(ItemTransform):
 
 
 # Cell
-def make_test(ts:dict, horizon:int, lookback:int, keep_lookback:bool = False):
+def make_test(ts:dict, horizon:int, lookback:int, keep_lookback:bool = False, train_start = None):
     """Splits the every ts in `items` based on `horizon + lookback`*,
     where the last part will go into `val` and the first in `train`.
     *if `keep_lookback`:
         it will only remove `horizon` from `train` otherwise will also remove lookback from `train`.
     """
+    train_start = abs(ifnone(train_start, 0))
     train, val = {}, {}
     for k,v in ts.items():
         if k in ['ts_con','ts_cat']:
             if keep_lookback:
-                train[k] = {col:o[:-(horizon)] for col, o in v.items()}
+                train[k] = {col:o[train_start:-(horizon)] for col, o in v.items()}
             else:
-                train[k] = {col:o[:-(horizon+lookback)] for col, o in v.items()}
+                train[k] = {col:o[train_start:-(horizon+lookback)] for col, o in v.items()}
             val[k] = {col: o[-(horizon+lookback):] for col, o in v.items()}
 
         elif k == '_length':
-            train[k] = v - (horizon if keep_lookback else horizon+lookback)
+            train[k] = v - (horizon if keep_lookback else horizon+lookback) - train_start
             val[k] = horizon+lookback
         else:
             train[k] = v
@@ -177,7 +178,7 @@ def get_train_valid_ts(path, **kwargs):
 
 
 # Cell
-def split_for_m5(path, lookback, horizon = 28, verbose = False):
+def split_for_m5(path, lookback, horizon = 28, verbose = False, train_start = None):
     """Splits al the files in:
         - Evaluation (`horizon` + `lookback`),
         - Validation (`horizon` + `lookback`),
@@ -212,7 +213,7 @@ def split_for_m5(path, lookback, horizon = 28, verbose = False):
         train, val = _exe_splitter(train, horizon = horizon, lookback= lookback,valid_pct=2,
                                    splitter = None, keep_lookback=True,
                                    valid_folder='val', train_folder = 'train',
-                                   post_fix = False, path = path)
+                                   post_fix = False, path = path, train_start = train_start)
         if verbose: print('made val')
 
         for f in Path(files[0].parent / 'all').glob('*.json'):
@@ -248,13 +249,15 @@ class MTSDataLoaders(DataLoaders):
         return db
 
 @delegates(MTSDataLoaders._from_folders_list)
-def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, procs = [], **kwargs):
+def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, procs = [], train_start =None,
+                 **kwargs):
     """Create `MTSDataLoaders` from a path.
     Defaults to splitting the data according to the M5 compitetion.
     """
     lookback = ifnone(lookback, horizon * 3)
     vocab, o2i = make_vocab(path)
-    train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose)
+    train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose,
+                                                 train_start = train_start)
     return cls._from_folders_list(folders = [train, val, validation, evalu],
                                   y_name= y_name, horizon= horizon, lookback = lookback,
                                   vocab=vocab, o2i=o2i, path = path,

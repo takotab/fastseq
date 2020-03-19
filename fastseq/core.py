@@ -155,6 +155,12 @@ import matplotlib.colors as mcolors
 _colors = [v for k,v in mcolors.TABLEAU_COLORS.items()]
 _colors += [v for k,v in mcolors.TABLEAU_COLORS.items()]# could be done better but ...
 class TensorSeq(TSeries):
+    def __new__(cls, x, **kwargs):
+        res = tensor(x)
+        res.__class__ = TensorSeq
+        res._meta = kwargs
+        return res
+
     def show(self, ax = None, ctx=None, **kwargs):
         ctx = ifnone(ctx, ax)
         if ctx is None: _, ctx = plt.subplots(figsize=(5,5))

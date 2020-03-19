@@ -5,8 +5,8 @@
       "a"
     ],
     "cat_1": [
-      "rdam",
-      "adam"
+      "adam",
+      "rdam"
     ],
     "cat_ts_0": [
       "b",
@@ -19,12 +19,12 @@
   },
   "col_names": {
     "cat_names": [
-      "cat_0",
-      "cat_1"
+      "cat_1",
+      "cat_0"
     ],
     "con_names": [
-      "con_1",
-      "con_0"
+      "con_0",
+      "con_1"
     ],
     "ts_cat_names": [
       "cat_ts_0",

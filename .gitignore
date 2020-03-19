@@ -144,3 +144,4 @@ m4_daily.*z
 data/*.csv
 data/m5/
 data/m5_tiny/
+data/test_data/

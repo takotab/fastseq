@@ -10,7 +10,7 @@ class CatProc():
         self.meta = get_meta(path)
         self.f = CatMultiTfm(vocab = vocab, o2i = o2i)
 
-    def setup(self, files:List[Path]):
+    def __call__(self, files:List[Path]):
         r = []
         for f in files:
             r.append(self._setup(f))
@@ -23,7 +23,6 @@ class CatProc():
         for i, cat in enumerate(ts['ts_cat']):
             test_eq(len(tsm[2][i]), len(ts['ts_cat'][cat]))
             ts['ts_cat'][cat] = [o.item() for o in tsm[2][i]]
-#         print(tsm)
         for i, cat in enumerate(ts['cat']):
             ts['cat'][cat] = tsm[3][i].item()
         open(f,'wb').write(orjson.dumps(dict(ts)))

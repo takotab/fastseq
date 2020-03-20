@@ -143,7 +143,7 @@ def get_df(length = [100,120], use_str = True, classes = {}):
             lst = classes['cat_1']
         else:
             lst = ['adam','rdam'] if use_str else [0,1]
-        dct['cat_1'].append(random.choice(lst) )
+        dct['cat_1'].append(random.choice(lst))
     return pd.DataFrame(data=dct)
 
 # Cell
@@ -184,6 +184,7 @@ def make_meta_file(path, **kwargs):
 
 # Cell
 class Meta(dict):pass
+
 class TS(dict):
     @classmethod
     def load(cls, f):
@@ -198,6 +199,7 @@ class TS(dict):
 
     def get_np(self,meta:Meta, key):return np.array(self.get_ts(meta,key))
     def __len__(self):return self['_length']
+
 
 def get_ts_datapoint(f):
     return TS(orjson.loads(open(f,'rb').read()))
@@ -304,14 +306,14 @@ def save_df(df:pd.DataFrame, path:Path, **kwargs):
 # Cell
 def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True, classes =None):
     if classes is None:
-        classes = dict(cat_ts_0={'a','b'}, cat_ts_1={'david','john'},
-                        cat_0 = {'a','b'}, cat_1= {'adam','rdam'})
+        classes = dict(cat_ts_0=['a','b'], cat_ts_1=['david','john'],
+                        cat_0 = ['a','b'], cat_1= ['adam','rdam'])
 
-    df = get_df(length, use_str, classes = classes)
+    df = get_df(length, use_str, classes = (classes if use_str else {}))
     if path.exists(): path.delete()
     path.mkdir()
     save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0', 'cat_ts_1'] ],
-           cat_names = ['cat_0','cat_1'], **classes)
+           cat_names = ['cat_0','cat_1'], classes=classes)
     return [path / (str(i) + '.json') for i in range(0,3)]
 
 # Cell
@@ -325,3 +327,12 @@ def meta_from_path(path:Path):
         o = make_compact(o, *names, length = length)
         r = make_meta_file(path, classes=classes, col_names = col_names)
     return r
+
+# Cell
+def _get_classes(self):
+    print(self)
+    r = {}
+    for col in [meta['col_names']]:
+        r[col] = self['classes'][col]
+    return r
+Meta.get_classes = _get_classes

@@ -6,7 +6,10 @@ __all__ = ['mape', 'smape', 'SMAPELossFlat', 'mase']
 from fastcore.utils import *
 from fastcore.imports import *
 from fastai2.basics import *
-from .data.all import *
+from .data.external import *
+from .data.load import *
+from .data.core import *
+from .core import *
 
 # Cell
 

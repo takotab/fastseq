@@ -12,7 +12,6 @@ from fastcore.imports import *
 from fastai2.basics import *
 from fastai2.data.transforms import *
 from fastai2.tabular.core import *
-from .all import *
 from typing import List
 import orjson
 

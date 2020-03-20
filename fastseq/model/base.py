@@ -68,15 +68,15 @@ def make_submision_file(learn):
     return dct
 
 # Cell
-def make_file(learn, dct):
+def make_file(learn, dct = None):
+    if dct is None:
+        dct = make_submision_file(learn)
     with open(learn.path / 'submision_file.csv','w') as f_w:
         with open(Path('../data/m5/sample_submission.csv'), 'r') as f:
             f_w.write('id,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22,F23,F24,F25,F26,F27,F28\n')
             _ = f.readline()
             for line in f:
                 f_w.write(line.split(',')[0]+','+dct[line.split(',')[0]] + '\n')
+    return dct
 
 M5Learner.make_submision_file = make_submision_file
-
-# Cell
-make_file(learn, dct)

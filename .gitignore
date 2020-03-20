@@ -142,6 +142,7 @@ checklink/cookies.txt
 m4_daily/*.csv
 m4_daily.*z
 data/*.csv
-data/m5/
+data/m5/*/*.json
+data/m5/*/*.ts_meta
 data/m5_tiny/
 data/test_data/

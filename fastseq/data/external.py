@@ -302,13 +302,16 @@ def save_df(df:pd.DataFrame, path:Path, **kwargs):
         save_row(row, path, fname=str(i), **kwargs)
 
 # Cell
-def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True):
-    df = get_df(length, use_str)
+def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True, classes =None):
+    if classes is None:
+        classes = dict(cat_ts_0={'a','b'}, cat_ts_1={'david','john'},
+                        cat_0 = {'a','b'}, cat_1= {'adam','rdam'})
+
+    df = get_df(length, use_str, classes = classes)
     if path.exists(): path.delete()
     path.mkdir()
     save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0', 'cat_ts_1'] ],
-           cat_names = ['cat_0','cat_1'], classes = dict(cat_ts_0={'a','b'}, cat_ts_1={'david','john'},
-                                                        cat_0 = {'a','b'}, cat_1= {'adam','rdam'}))
+           cat_names = ['cat_0','cat_1'], **classes)
     return [path / (str(i) + '.json') for i in range(0,3)]
 
 # Cell

@@ -2,7 +2,7 @@
 
 __all__ = ['m4_base', 'dummy_data_generator', 'dummy_generator_multi_easy', 'dummy_data_generator_multi', 'TSMulti',
            'get_df', 'add_dct', 'make_meta_file', 'Meta', 'TS', 'get_ts_datapoint', 'get_meta', 'python_type',
-           'reconize_cols', 'make_compact', 'save_row', 'save_df', 'del_create']
+           'reconize_cols', 'make_compact', 'save_row', 'save_df', 'del_create', 'meta_from_path']
 
 # Cell
 from ..core import *
@@ -299,3 +299,15 @@ def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str 
            cat_names = ['cat_0','cat_1'], classes = dict(cat_ts_0={'a','b'}, cat_ts_1={'david','john'},
                                                         cat_0 = {'a','b'}, cat_1= {'adam','rdam'}))
     return [path / (str(i) + '.json') for i in range(0,3)]
+
+# Cell
+def meta_from_path(path:Path):
+    for f in path.glob('*.json'):
+        ts = get_ts_datapoint(f)
+        o ={}
+        for typ in ['cat','ts_cat','ts_con','con']:
+            o.update({k:python_type(v) for k,v in ts[typ].items()})
+        length, classes, col_names, names = reconize_cols(o)
+        o = make_compact(o, *names, length = length)
+        r = make_meta_file(path, classes=classes, col_names = col_names)
+    return r

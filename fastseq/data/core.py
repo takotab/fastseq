@@ -65,15 +65,16 @@ class NormalizeSeq(Transform):
 class NormalizeSeqMulti(ItemTransform):
     """A shell Transformer to normalize `TensorSeqs` inside `TSMulti_` with `NormalizeSeqs`. """
     @delegates(NormalizeSeq.__init__)
-    def __init__(self, n_its=5, **kwargs):
+    def __init__(self, n_its=5, skip=[], **kwargs):
         """`n_its` does not include the ts to predict."""
         self.f = {i:NormalizeSeq(**kwargs) for i in range(n_its)}
         self.n = n_its
+        self.skip = skip
 
     def encodes(self, o):
         r = L()
         for i,a in enumerate(o):
-            if type(a) is not TensorSeq:
+            if type(a) is not TensorSeq or i in self.skip:
                 r.append(a)
             elif i < (self.n-1):
                 r.append(self.f[i](a))
@@ -243,7 +244,6 @@ class MTSDataLoaders(DataLoaders):
         db = DataLoaders(*[MTSDataLoader(ds, get_meta(path), y_name, horizon=horizon, lookback=lookback, step=step,
                                         device=device, vocab=vocab, o2i=o2i, **kwargs)
                            for ds in folders], path=path, device=device)
-
         print({k:db[i].n for i,k in zip(range(len(folders)),
                                         ['Train','Val','Validation','Evaluation',*['ds_'+str(j) for j in range(4,100)]])})
         return db

@@ -138,12 +138,12 @@ def get_df(length = [100,120], use_str = True, classes = {}):
             lst = classes['cat_0']
         else:
             lst = ['a','b'] if use_str else [0,1]
-        dct['cat_0'].append([random.choice(lst) for _ in range(l)])
+        dct['cat_0'].append(random.choice(lst))
         if 'cat_1' in classes:
             lst = classes['cat_1']
         else:
             lst = ['adam','rdam'] if use_str else [0,1]
-        dct['cat_1'].append([random.choice(lst) for _ in range(l)])
+        dct['cat_1'].append(random.choice(lst) )
     return pd.DataFrame(data=dct)
 
 # Cell

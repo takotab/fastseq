@@ -143,6 +143,13 @@ m4_daily/*.csv
 m4_daily.*z
 data/*.csv
 data/m5/*/*.json
+data/m5/*/*/*.json
 data/m5/*/*.ts_meta
 data/m5_tiny/
 data/test_data/
+
+data/m5/calendar.csv
+data/m5/calender_d.csv
+data/m5/sales_train_validation.csv
+data/m5/sample_submission.csv
+data/m5/sell_prices.csv

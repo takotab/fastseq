@@ -115,23 +115,35 @@ import orjson
 class TSMulti(MultiTuple):pass
 
 # Cell
-def get_df(length = [100,120], use_str = True):
+def get_df(length = [100,120], use_str = True, classes = {}):
     dct = {'x':[],'con_ts_1':[],'con_ts_0':[],'cat_ts_1':[],'cat_ts_0':[],'con_0':[],'con_1':[], 'cat_0':[],'cat_1':[]}
     for i, l in enumerate(length):
-        assert int(l/2) == l/2
+#         assert int(l/2) == l/2
         dct['x'].append(np.arange(l))
         dct['con_ts_0'].append(np.arange(l)[None,:])
         dct['con_ts_1'].append(pd.Series(np.arange(l)+np.random.randn(l)))
         dct['con_0'].append(np.random.rand()*2-1)
         dct['con_1'].append(10+np.random.rand()*2)
-        lst = ['a','b'] if use_str else [0,1]
-        dct['cat_ts_0'].append(L(lst*int(l/2)))
-        lst = ['david','john'] if use_str else [0,1]
-        dct['cat_ts_1'].append(L(lst*int(l/2)))
-        lst = ['a','b'] if use_str else [0,1]
-        dct['cat_0'].append(lst[i%2])
-        lst = ['adam','rdam'] if use_str else [0,1]
-        dct['cat_1'].append(lst[i%2])
+        if 'cat_ts_0' in classes:
+            lst = classes['cat_ts_0']
+        else:
+            lst = ['a','b'] if use_str else [0,1]
+        dct['cat_ts_0'].append([random.choice(lst) for _ in range(l)])
+        if 'cat_ts_1' in classes:
+            lst = classes['cat_ts_1']
+        else:
+            lst = ['david','john'] if use_str else [0,1]
+        dct['cat_ts_1'].append([random.choice(lst) for _ in range(l)])
+        if 'cat_0' in classes:
+            lst = classes['cat_0']
+        else:
+            lst = ['a','b'] if use_str else [0,1]
+        dct['cat_0'].append([random.choice(lst) for _ in range(l)])
+        if 'cat_1' in classes:
+            lst = classes['cat_1']
+        else:
+            lst = ['adam','rdam'] if use_str else [0,1]
+        dct['cat_1'].append([random.choice(lst) for _ in range(l)])
     return pd.DataFrame(data=dct)
 
 # Cell
@@ -191,7 +203,6 @@ def get_ts_datapoint(f):
     return TS(orjson.loads(open(f,'rb').read()))
 
 def get_meta(path:Path):
-    classes = defaultdict(set)
     f = path / '.ts_meta'
     return Meta(json.load(open(f,'r')))
 

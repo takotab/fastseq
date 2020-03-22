@@ -50,11 +50,14 @@ class SeqTabConv(Module):
             self.n_emb_ts = sum(e.embedding_dim for e in self.embeds_ts)
         else:
             self.n_emb_ts=0
-        self.conv1 = ConvLayer(313, 64, ks = 1, ndim=1)
+        self.conv1 = ConvLayer(315, 64, ks = 1, ndim=1)
         self.conv2 = ConvLayer(64, 1, ks = 1, ndim=1)
         self.scale = SigmoidRange(*y_range)
 
     def forward(self, x, ts_con, ts_cat, cat, con):
+        x1 = torch.cat([x, x[:,0,-28:][:,None,:]],2)
+        x2 = torch.cat([x, x[:,0,:28][:,None,:]],2)
+        x = torch.cat([x1,x2],1)
         if self.n_emb != 0:
             cat = [e(cat[:,i]) for i,e in enumerate(self.embeds)]
             cat = torch.cat(cat, 1)
@@ -64,8 +67,9 @@ class SeqTabConv(Module):
         cat = cat[:,:,None] * torch.ones(ts_con.shape[0], self.n_emb, ts_con.shape[-1]).to(default_device())
         o = torch.ones(ts_con.shape[0], con.shape[1], ts_con.shape[-1]).to(default_device())
         con = con[:,:,None] * o
-        ts = torch.cat([ts_con, ts_cat, cat, con.float()], 1)
-        r = self.conv2(self.conv1(ts))
+        ts = torch.cat([x, ts_con, ts_cat, cat, con.float()], 1)
+        r = self.conv1(ts)
+        r = self.conv2(r)
         return r
 
 # Cell

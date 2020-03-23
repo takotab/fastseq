@@ -330,9 +330,23 @@ def meta_from_path(path:Path):
 
 # Cell
 def _get_classes(self):
-    print(self)
     r = {}
-    for col in [meta['col_names']]:
-        r[col] = self['classes'][col]
+    for k,names in self['col_names'].items():
+        for col in names:
+            if col in self['classes']:
+                r[col] = self['classes'][col]
     return r
 Meta.get_classes = _get_classes
+
+
+# Cell
+def _del_col(self, del_col):
+    r = {}
+    for names,v in self['col_names'].items():
+        r[names] = []
+        for col in v:
+            if del_col != col:
+                r[names].append(col)
+    self['col_names'] = r
+    return r
+Meta.del_col = _del_col

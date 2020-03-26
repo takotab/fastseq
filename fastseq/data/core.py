@@ -246,6 +246,7 @@ class MTSDataLoaders(DataLoaders):
                            for ds in folders], path=path, device=device)
         print({k:db[i].n for i,k in zip(range(len(folders)),
                                         ['Train','Val','Validation','Evaluation',*['ds_'+str(j) for j in range(4,100)]])})
+        db.train.shuffle = True
         return db
 
 @delegates(MTSDataLoaders._from_folders_list)

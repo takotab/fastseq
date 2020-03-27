@@ -157,3 +157,4 @@ data/m5/calender_d.csv
 data/m5/sales_train_validation.csv
 data/m5/sample_submission.csv
 data/m5/sell_prices.csv
+data/m5_micro/rows*/*

@@ -8,9 +8,9 @@ from fastcore.imports import *
 from fastai2.basics import *
 from fastai2.data.transforms import *
 from fastai2.tabular.core import *
-from .data.all import *
+# from fastseq.data.all import *
 from .core import *
-from .data.all import *
+# from fastseq.data.all import *
 
 # Cell
 def add_days(df_sales, days = 28*2, fill = -1):

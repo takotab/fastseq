@@ -138,11 +138,13 @@ import orjson
 class TSMulti(MultiTuple):pass
 
 # Cell
-def get_df(length = [100,120], use_str = True, classes = {}):
+def get_df(length = [100,120], use_str = True, classes = {}, square = False, spike = False):
     dct = {'x':[],'con_ts_1':[],'con_ts_0':[],'cat_ts_1':[],'cat_ts_0':[],'con_0':[],'con_1':[], 'cat_0':[],'cat_1':[]}
     for i, l in enumerate(length):
-#         assert int(l/2) == l/2
-        dct['x'].append(np.arange(l))
+        if square:
+            dct['x'].append(np.arange(l)**2)
+        else:
+            dct['x'].append(np.arange(l))
         dct['con_ts_0'].append(np.arange(l)[None,:])
         dct['con_ts_1'].append(pd.Series(np.arange(l)+np.random.randn(l)))
         dct['con_0'].append(np.random.rand()*2-1)
@@ -150,8 +152,12 @@ def get_df(length = [100,120], use_str = True, classes = {}):
         if 'cat_ts_0' in classes:
             lst = classes['cat_ts_0']
         else:
-            lst = ['a','b'] if use_str else [0,1]
-        dct['cat_ts_0'].append([random.choice(lst) for _ in range(l)])
+            lst = ['a','b'] if use_str else [1,0]
+
+        c_ts = [random.choice(lst) for _ in range(l)]
+        if spike:
+            dct['x'][i] = [a*c for a,c in zip(dct['x'][i], c_ts)]
+        dct['cat_ts_0'].append(c_ts)
         if 'cat_ts_1' in classes:
             lst = classes['cat_ts_1']
         else:
@@ -206,7 +212,16 @@ def make_meta_file(path, **kwargs):
     return _save_dct(f,dct)
 
 # Cell
-class Meta(dict):pass
+class Meta(dict):
+    def __str__(self):
+        s = ''
+        for k,v in self.items():
+            if type(v) == dict:
+                o={col: L(o) for col,o in v.items()}
+                s += f"{k}:\t{o} \n\n"
+            else:
+                s += f"{k}:{v}\n\n"
+        return s
 
 class TS(dict):
     @classmethod
@@ -228,9 +243,9 @@ class TS(dict):
         for k,v in self.items():
             if type(v) == dict:
                 o={col: L(o) for col,o in v.items()}
-                s += f"{k}:{o} \n"
+                s += f"{k}:\t{o} \n\n"
             else:
-                s += f"{k}:{v}"
+                s += f"{k}:{v}\n\n"
         return s
 
 def get_ts_datapoint(f) -> TS:
@@ -302,6 +317,7 @@ def reconize_cols(datapoint:dict, con_names=None, cat_names=None, ts_con_names=N
             for _v in set(v):
                 classes[k].add(_v)
         else:
+            print(k,type(v))
             raise TypeError(type(v), type(v[0]))
 
     col_names = {k:list(set(v)) for k,v in zip('con_names, cat_names, ts_con_names, ts_cat_names'.split(', '),
@@ -324,8 +340,8 @@ def save_row(row, path:Path, fname='1', **kwargs):
     if fname[-5:] is not '.json': fname += '.json'
     o = {k:python_type(v) for k,v in dict(row).items()}
     length, classes, col_names, names = reconize_cols(o, **kwargs)
-    o = make_compact(o, *names, length = length)
     make_meta_file(path, classes=classes, col_names = col_names)
+    o = make_compact(o, *names, length = length)
     open(path / fname,'wb').write(orjson.dumps(o, ))
     return path / fname
 
@@ -336,16 +352,18 @@ def save_df(df:pd.DataFrame, path:Path, **kwargs):
         save_row(row, path, fname=str(i), **kwargs)
 
 # Cell
-def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True, classes =None):
+def del_create(length = [80, 80, 80], path = Path('../data/test_data'), use_str = True, classes =None, **kwargs):
     if classes is None:
         classes = dict(cat_ts_0=['a','b'], cat_ts_1=['david','john'],
                         cat_0 = ['a','b'], cat_1= ['adam','rdam'])
 
-    df = get_df(length, use_str, classes = (classes if use_str else {}))
+    df = get_df(length, use_str, classes = (classes if use_str else {}),**kwargs)
     if path.exists(): path.delete()
     path.mkdir()
-    save_df(df, path, ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0', 'cat_ts_1'] ],
-           cat_names = ['cat_0','cat_1'], classes=classes)
+    save_df(df, path,
+            ts_cat_names = [o for o in list(df.columns) if o in ['cat_ts_0', 'cat_ts_1'] ],
+            cat_names = ['cat_0','cat_1'],
+            classes=classes)
     return [path / (str(i) + '.json') for i in range(0,3)]
 
 # Cell

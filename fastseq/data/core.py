@@ -238,6 +238,8 @@ class MTSDataLoaders(DataLoaders):
             p = Pipeline(*procs)
             for files in folders:
                 p(files)
+
+        vocab, o2i = make_vocab(path)
         if norm and 'after_batch' not in kwargs:
             kwargs.update({'after_batch':L(NormalizeSeqMulti(n_its=5))})
 
@@ -250,19 +252,17 @@ class MTSDataLoaders(DataLoaders):
         return db
 
 @delegates(MTSDataLoaders._from_folders_list)
-def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, procs = [], train_start =None,
-                 **kwargs):
+def from_m5_path(cls, path:Path, y_name:str, horizon:int, lookback = None, verbose = False, procs = [],
+                 train_start =None, **kwargs):
     """Create `MTSDataLoaders` from a path.
     Defaults to splitting the data according to the M5 compitetion.
     """
     lookback = ifnone(lookback, horizon * 3)
-    vocab, o2i = make_vocab(path)
     train, val, validation, evalu = split_for_m5(path, lookback, horizon, verbose = verbose,
                                                  train_start = train_start)
     return cls._from_folders_list(folders = [train, val, validation, evalu],
                                   y_name= y_name, horizon= horizon, lookback = lookback,
-                                  vocab=vocab, o2i=o2i, path = path,
-                                  procs =L(procs),**kwargs)
+                                  path = path, procs =L(procs),**kwargs)
 MTSDataLoaders.from_m5_path = classmethod(from_m5_path)
 
 

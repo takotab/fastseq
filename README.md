@@ -2,6 +2,11 @@
 > A way to use fastai with sequence data
 
 
+<a href="https://colab.research.google.com/github/takotab/fastseq/blob/master/nbs/index.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+
+
+
 ## Installing
 
 Please install [fastai2](https://dev.fast.ai/#Installing) according to the instructions.
@@ -51,7 +56,7 @@ data.show_batch()
 ```
 
 
-![png](docs/images/output_8_0.png)
+![png](docs/images/output_9_0.png)
 
 
 ```python
@@ -75,7 +80,7 @@ learn.lr_find()
 
 
 
-![png](docs/images/output_10_2.png)
+![png](docs/images/output_11_2.png)
 
 
 ```python
@@ -166,11 +171,11 @@ learn.recorder.plot_sched()
 
 
 
-![png](docs/images/output_11_1.png)
+![png](docs/images/output_12_1.png)
 
 
 
-![png](docs/images/output_11_2.png)
+![png](docs/images/output_12_2.png)
 
 
 ```python
@@ -182,7 +187,7 @@ learn.show_results(0)
 
 
 
-![png](docs/images/output_12_1.png)
+![png](docs/images/output_13_1.png)
 
 
 ```python
@@ -194,7 +199,7 @@ learn.show_results(1)
 
 
 
-![png](docs/images/output_13_1.png)
+![png](docs/images/output_14_1.png)
 
 
 ```python
@@ -237,11 +242,11 @@ learn.recorder.plot_sched()
 
 
 
-![png](docs/images/output_14_1.png)
+![png](docs/images/output_15_1.png)
 
 
 
-![png](docs/images/output_14_2.png)
+![png](docs/images/output_15_2.png)
 
 
 ## Interperation
@@ -461,5 +466,5 @@ interp.plot_top_losses(3, combine_stack=True)
 ```
 
 
-![png](docs/images/output_18_0.png)
+![png](docs/images/output_19_0.png)
 

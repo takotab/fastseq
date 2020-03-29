@@ -28,7 +28,7 @@ def linspace(lookback, horizon,device=None):
 def make_base(u_in, layers,use_bn,ps):
     sizes = L(u_in) + layers
     ps = ifnone(ps, L([0]) * len(layers))
-    actns = [MishJit() for _ in range(len(sizes)-1)]
+    actns = [nn.ReLU() for _ in range(len(sizes)-1)]
     _layers = [LinBnDrop(sizes[i], sizes[i+1], bn=use_bn, p=p, act=a)
                    for i,(p,a) in enumerate(zip(ps, actns))]
     return nn.Sequential(*_layers)

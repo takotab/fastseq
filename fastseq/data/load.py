@@ -120,15 +120,15 @@ class TSDataLoader(TfmdDL):
 from fastai2.vision.data import get_grid
 
 @typedispatch
-def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,rows=None, cols=None, figsize=None, **kwargs):
-    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
+def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,nrows=None, ncols=None, figsize=None, **kwargs):
+    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), nrows=nrows, ncols=ncols, add_vert=1, figsize=figsize)
     ctxs = show_batch[object](x, y, samples=samples, ctxs=ctxs, max_n=max_n, **kwargs)
     return ctxs
 
 # Cell
 @typedispatch
-def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9,rows=None, cols=None, figsize=None, **kwargs):
-    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), rows=rows, cols=cols, add_vert=1, figsize=figsize)
+def show_results(x: TensorSeq, y, samples, outs, ctxs=None, max_n=9,nrows=None, ncols=None, figsize=None, **kwargs):
+    if ctxs is None: ctxs = get_grid(min(len(samples), max_n), nrows=nrows, ncols=ncols, add_vert=1, figsize=figsize)
     for i in range(len(outs[0])):
         ctxs = [TSTensorSeqy(b ,m='*r', label='pred').show(ctx=c, **kwargs) for b,c,_ in zip(outs.itemgot(i),ctxs,range(max_n))]
     for i in range(len(samples[0])):

@@ -22,7 +22,7 @@ class NBeatsInterpretation():
     def from_learner(cls, learn, ds_idx=1, dl=None, act=None):
         "Construct interpretatio object from a learner"
         if dl is None: dl = learn.dls[ds_idx]
-        res = learn.get_preds(dl=dl, with_input=True, with_loss=True, with_decoded=True, act=None)
+        res = learn.get_preds(dl=dl, with_input=True, with_loss=True, with_decoded=True, act=None, reorder=False)
         dct = learn.model.dct
         return cls(dl, *res, dct=dct)
 

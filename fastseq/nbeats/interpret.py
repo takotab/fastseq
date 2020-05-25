@@ -80,7 +80,7 @@ def plot_top_losses(self, k, largest=True, **kwargs):
 
         b = inps + tuple(o[idx] for o in (self.targs if is_listy(self.targs) else (self.targs,)))
         x,y,its = self.dl._pre_show_batch(b, max_n=k)
-        full_every_block = [{k:self.dl.after_batch.decode((o[i,None,:]))[0][0][0] for k,o in full_every_block = self.full_every_block .items()} for i in idx]
+        full_every_block = [{k:self.dl.after_batch.decode((o[i,None,:]))[0][0][0] for k,o in self.full_every_block .items()} for i in idx]
         b_out = inps + tuple(o[idx] for o in (self.decoded if is_listy(self.decoded) else (self.decoded,)))
         x1,y1,outs = self.dl._pre_show_batch(b_out, max_n=k)
 #         return self.preds[idx], full_every_block

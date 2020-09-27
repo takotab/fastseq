@@ -6,7 +6,7 @@ __all__ = ['m4_base', 'dummy_data_generator']
 from ..core import *
 from fastcore.utils import *
 from fastcore.imports import *
-from fastai2.basics import *
+from fastai.basics import *
 
 # Cell
 m4_base = "https://motionnet-m4-dataset.s3.eu-central-1.amazonaws.com/"

@@ -5,7 +5,7 @@ __all__ = ['TSeries', 'no_emp_dim', 'show_graph', 'test_graph_exists', 'TensorSe
 
 # Cell
 from fastcore.all import *
-from fastai2.basics import *
+from fastai.basics import *
 import pandas as pd
 import numpy as np
 
@@ -13,7 +13,6 @@ import numpy as np
 class TSeries(TensorBase):pass
 
 # Cell
-
 def no_emp_dim(x):
     if len(x.shape)==1 :
         x = x[None,:]
@@ -47,14 +46,18 @@ def test_graph_exists(ax):
     assert ax
 
 # Cell
+def _get_meta(self, attr:str, default):
+    return default if not hasattr(self, '_meta') else self._meta.get(attr,default)
+
 class TensorSeq(TensorBase):
     def show(self, ctx=None, **kwargs):
         return show_graph(self, ctx=ctx, **kwargs)
+    def _get_meta(self, attr:str, default):
+        return _get_meta(self, attr, default)
 
 # Cell
 class TSTensorSeq(TensorSeq): pass
 class TSTensorSeqy(TensorSeq):
-
     @classmethod
     def create(cls, t)->None:
         "Convert an array or a list of points `t` to a `Tensor`"
@@ -65,9 +68,9 @@ class TSTensorSeqy(TensorSeq):
             del kwargs['figsize']
         array = np.array(self.cpu())
         array = no_emp_dim(array)
-        x_len = self._meta.get('x_len',0)
-        m = self._meta.get('m','*g')
-        label = self._meta.get('label','y')
+        x_len = _get_meta(self, 'x_len',0)
+        m = _get_meta(self, 'm', "*g")
+        label = _get_meta(self,'label','y')
         t = np.arange(x_len,x_len+array.shape[1])[None,:]
         ctx.plot(t.T, array.T, m, label=label, **kwargs)
         ctx.legend()
@@ -76,13 +79,13 @@ class TSTensorSeqy(TensorSeq):
 TSTensorSeqy.loss_func = MSELossFlat()
 
 # Cell
-from fastai2.vision.data import *
+from fastai.vision.data import *
 
 @delegates(subplots)
 def show_graphs(arrays, rows=None, cols=None, figsize=None, titles=None, **kwargs):
     "Show all images `arrays` as subplots with `rows` using `titles`"
     if titles is None: titles = [None]*len(arrays)
-    axs = get_grid(len(arrays), rows=rows, cols=cols, add_vert=1, figsize=figsize)
+    axs = get_grid(len(arrays), nrows=rows, ncols=cols, add_vert=1, figsize=figsize)
     for a,t,ax in zip(arrays, titles, axs):
         ctx = show_graph(a[0], ax=ax, title=t)
         for y in a[1:]:

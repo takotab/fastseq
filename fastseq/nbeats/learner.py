@@ -5,10 +5,10 @@ __all__ = ['nbeats_learner']
 # Cell
 from fastcore.utils import *
 from fastcore.imports import *
-from fastai2.basics import *
-from fastai2.callback.hook import num_features_model
-from fastai2.callback.all import *
-from fastai2.torch_core import *
+from fastai.basics import *
+from fastai.callback.hook import num_features_model
+from fastai.callback.all import *
+from fastai.torch_core import *
 from torch.autograd import Variable
 from ..all import *
 
@@ -16,7 +16,7 @@ from .model import *
 from .callbacks import *
 
 # Cell
-# from fastai2.basics import *
+# from fastai.basics import *
 # from fastseq.all import *
 
 @delegates(NBeatsNet.__init__)

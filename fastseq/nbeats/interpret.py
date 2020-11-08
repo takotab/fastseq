@@ -5,7 +5,7 @@ __all__ = ['NBeatsInterpretation', 'add_stack', 'add_stack_full', 'plot_top_loss
 # Cell
 from ..all import *
 from ..data.external import *
-from fastai2.basics import *
+from fastai.basics import *
 from .learner import *
 from .callbacks import *
 
@@ -17,7 +17,7 @@ from .callbacks import _get_key_from_nested_dct
 class NBeatsInterpretation():
     "Interpretation base class, can be inherited for task specific Interpretation classes"
     def __init__(self, dl, inputs, preds, targs, decoded, losses, full_every_block = None):
-        store_attr(self, "dl,inputs,preds,targs,decoded,losses,full_every_block")
+        store_attr( "dl,inputs,preds,targs,decoded,losses,full_every_block")
 
     @classmethod
     def from_learner(cls, learn, ds_idx=1, dl=None, act=None):

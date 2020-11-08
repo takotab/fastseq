@@ -12,6 +12,7 @@ from fastai.data.transforms import *
 from fastai.tabular.core import *
 
 # Cell
+# from typing import Tuple
 class NormalizeTS(ItemTransform):
     "Normalize the Time-Series."
     def __init__(self, verbose=False, make_ones=True, eps=1e-7, mean = None):
@@ -36,23 +37,20 @@ class NormalizeTS(ItemTransform):
                 print(o[0])
                 print(f"made {self.s < self.eps*10} to ones due to setting `make_ones`")
                 print(f"m:{self.m}\n s:{self.s}")
-        return Tuple([(o[i]-self.m)/self.s for i in range(len(o))])
+        return tuple([(o[i]-self.m)/self.s for i in range(len(o))])
 
     def decodes(self, o):
         if o[0].is_cuda:
             self.m, self.s = to_device(self.m,'cuda'), to_device(self.s,'cuda')
             if sum([a.is_cuda for a in o]) != len(o):
-                o = Tuple([to_device(a,'cuda') for a in o])
+                o = tuple([to_device(a,'cuda') for a in o])
         else:
             if sum([a.is_cuda==False for a in o]) != len(o):
-                o = Tuple([to_cpu(a) for a in o])
+                o = tuple([to_cpu(a) for a in o])
             self.m, self.s = to_cpu(self.m), to_cpu(self.s)
         if self.verbose:
             print('decodes',type(o),[a.shape for a in o], 'shape m/s',self.m.shape)
-        return Tuple([(o[i]*self.s)+self.m for i in range(len(o))])
-
-
-
+        return tuple([(o[i]*self.s)+self.m for i in range(len(o))])
 
 # Cell
 def concat_ts_list(train, val):
@@ -92,6 +90,7 @@ def make_test_pct(items:L(), pct:float):
     return train, val
 
 # Cell
+from .load import *
 class TSDataLoaders(DataLoaders):
     @classmethod
     @delegates(TSDataLoader.__init__)

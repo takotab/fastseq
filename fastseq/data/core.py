@@ -7,9 +7,9 @@ from .load import *
 from ..core import *
 from fastcore.all import *
 from fastcore.imports import *
-from fastai2.basics import *
-from fastai2.data.transforms import *
-from fastai2.tabular.core import *
+from fastai.basics import *
+from fastai.data.transforms import *
+from fastai.tabular.core import *
 
 # Cell
 class NormalizeTS(ItemTransform):
@@ -21,7 +21,7 @@ class NormalizeTS(ItemTransform):
 
         `mean` will set a mean instead of the mean of the x value.
         """
-        store_attr(self,'verbose, make_ones, eps, mean')
+        store_attr('verbose, make_ones, eps, mean')
         self.m, self.s = 0, 0
 
     def encodes(self, o):

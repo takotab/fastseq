@@ -6,10 +6,10 @@ __all__ = ['CombinedLoss', 'NBeatsLossPart', 'NBeatsBackward', 'NBeatsForward', 
 # Cell
 from fastcore.utils import *
 from fastcore.imports import *
-from fastai2.basics import *
-from fastai2.callback.hook import num_features_model
-from fastai2.callback.all import *
-from fastai2.torch_core import *
+from fastai.basics import *
+from fastai.callback.hook import num_features_model
+from fastai.callback.all import *
+from fastai.torch_core import *
 from torch.autograd import Variable
 from ..all import *
 
@@ -37,7 +37,7 @@ def CombinedLoss(loss_func, lookback, ratio = [1,1]):
 class NBeatsLossPart(Metric):
     "The loss according to the `loss_func` on a particular part of the time-serie."
     def __init__(self, start, end, name, *args, loss_func=None, **kwargs):
-        store_attr(self,"start,end,loss_func")
+        store_attr("start,end,loss_func")
         self._name = name
 
     def reset(self):           self.total,self.count = 0.,0

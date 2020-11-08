@@ -7,9 +7,9 @@ from ..core import *
 from .external import *
 from fastcore.utils import *
 from fastcore.imports import *
-from fastai2.basics import *
-from fastai2.data.transforms import *
-from fastai2.tabular.core import *
+from fastai.basics import *
+from fastai.data.transforms import *
+from fastai.tabular.core import *
 
 # Cell
 import numpy as np
@@ -117,7 +117,7 @@ class TSDataLoader(TfmdDL):
 
 # Cell
 
-from fastai2.vision.data import get_grid
+from fastai.vision.data import get_grid
 
 @typedispatch
 def show_batch(x: TensorSeq, y, samples, ctxs=None, max_n=10,nrows=None, ncols=None, figsize=None, **kwargs):

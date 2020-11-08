@@ -6,11 +6,11 @@ __all__ = ['linspace', 'make_base', 'Block', 'SeasonalityModel', 'SeasonalityBlo
 # Cell
 from fastcore.utils import *
 from fastcore.imports import *
-from fastai2.basics import *
-from fastai2.callback.hook import num_features_model
-from fastai2.callback.all import *
-from fastai2.layers import *
-from fastai2.torch_core import *
+from fastai.basics import *
+from fastai.callback.hook import num_features_model
+from fastai.callback.all import *
+from fastai.layers import *
+from fastai.torch_core import *
 from torch.autograd import Variable
 from ..all import *
 
@@ -115,7 +115,7 @@ class SeasonalityBlock(Block):
         self, layers:L, thetas_dim:int, device, lookback=10, horizon=5, use_bn=True, season = None,
             bn_final=False, ps:L=None, share_thetas=True, y_range=[-.5,.5], att=True, scale_exp = 4, stand_alone=False, base = None, **kwargs
     ):
-        store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
+        store_attr("y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
         half_dim =self.thetas_dim//2 if self.thetas_dim%2 == 0 else self.thetas_dim//2+1
         s = 1*scale_exp**-(torch.arange(float(half_dim))).to(self.device)
         if self.thetas_dim %2 == 0:
@@ -164,7 +164,7 @@ class TrendBlock(Block):
         self, layers:L, device, thetas_dim, lookback=10, horizon=5, use_bn=True,
         bn_final=False, ps:L=None, share_thetas=True, y_range=[-.1, .1], att = True, scale_exp = 10,stand_alone=False,base=None,**kwargs
     ):
-        store_attr(self,"y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
+        store_attr("y_range,device,layers,thetas_dim,use_bn,ps,lookback,horizon,bn_final,share_thetas,att,stand_alone,base" )
         self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
 #         self.scale = 1*scale_exp**-(torch.arange(float(self.thetas_dim))).to(self.device)
         self.thetas_dim = self.thetas_dim*2
@@ -221,7 +221,7 @@ class NBeatsNet(Module):
     ):
         thetas_dim = ifnone(thetas_dim,[default_thetas[o] for o in L(stack_types)])
         stack_types= L(stack_types)
-        store_attr(self,'device,horizon,lookback,layers,nb_blocks_per_stack,share_weights_in_layers,stack_types,thetas_dim,device,kwargs')
+        store_attr('device,horizon,lookback,layers,nb_blocks_per_stack,share_weights_in_layers,stack_types,thetas_dim,device,kwargs')
         self.stacks = []
         self._str = "| N-Beats\n"
 

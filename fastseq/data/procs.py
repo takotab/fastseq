@@ -58,6 +58,18 @@ class CatProc():
 from fastai2.tabular import *
 
 # Cell
+def _fix_meta(ts:dict, path:Path):
+    o = {}
+    for k,v in ts.items():
+        if k[0] is not '_':
+            try:
+                o.update({col:python_type(o) for col, o in v.items()})
+            except:
+                print(k,v)
+                assert False
+    length, classes, col_names, names = reconize_cols(o)
+    make_meta_file(path, classes = classes, col_names = col_names)
+
 class DateProc:
     def __init__(
         self,
@@ -76,29 +88,24 @@ class DateProc:
         self.cat_cols = cat_cols
 
     def __call__(self, files: List[Path]):
-        r = []
+        print(files)
         _, ts = self._setup(files[0],with_ts=True)
-        o = {}
-        for k,v in ts.items():
-            if k[0] is not '_':
-                try:
-                    o.update({col:python_type(o) for col, o in v.items()})
-                except:
-                    print(k,v)
-                    assert False
-        length, classes, col_names, names = reconize_cols(o)
-        make_meta_file(self.path, classes = classes, col_names = col_names)
+        _fix_meta(ts, self.path)
         self.meta = get_meta(self.path)
 
+        if self.num_of_workers > 1:
+            return multithread_f(self._setup, files, self.num_of_workers)
+
+        r = []
         for i,f in enumerate(files):
             r.append(self._setup(f))
         return r
 
-        # return multithread_f(self._setup, files, self.num_of_workers)
-
     def _setup(self, f: Path, with_ts=False):
         ts = get_ts_datapoint(f)
         df = pd.DataFrame(ts["ts_cat"])
+        if self.cat_cols[-1] in df.columns:
+            return f
         df = add_datepart(df, self.field_name)
 
         ts["ts_cat"].update({k: list(v.astype(str)) for k, v in dict(df).items() if k in self.cat_cols})

@@ -99,6 +99,15 @@ index = {"Path.copy": "00_core.ipynb",
          "NBeatsForward": "11_metrics.ipynb",
          "LossPart": "11_metrics.ipynb",
          "ForcastLoss": "11_metrics.ipynb",
+         "pad_start": "12_model.rnn.ipynb",
+         "average_week": "11_model.conv.ipynb",
+         "emb_sz_rule": "12_model.rnn.ipynb",
+         "get_emb_sz": "12_model.rnn.ipynb",
+         "SeqTabConv": "12_model.rnn.ipynb",
+         "dct": "12_model.rnn.ipynb",
+         "pad_end": "11_model.conv.ipynb",
+         "compare": "12_compare.ipynb",
+         "hello": "test.ipynb"}
 
 modules = ["core.py",
            "m5.py",
@@ -110,7 +119,8 @@ modules = ["core.py",
            "metrics.py",
            "model/conv.py",
            "compare.py",
-           "tab/model.py"]
+           "tab/model.py",
+           "model/test.py"]
 
 doc_url = "https://takotab.github.io/fastseq/"
 
